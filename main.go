@@ -1,19 +1,31 @@
+/*
+==================================================================================
+Copyright (c) 2023 Samsung Electronics Co., Ltd. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+	http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==================================================================================
+*/
 package main
 
 import (
 	"fmt"
+
 	"example.com/mmes/apis"
 )
 
 func main() {
-
 	fmt.Println("Starting api..")
-	//Start apis declared in apis/mmets_apis.go
-	//The mmes_apis will have a structure to hold instance of core/s3_manager
-	//mmes_will use this se3 instance to all other se core functing
-	//s3_manager would have aninstance of s3.session, which will be
-	//confifured with aws credentials
-	mmes_api := &apis.Mmes_apis{}
+	mmes := &apis.MMESApis{}
 
-	fmt.Println(mmes_api)
+	fmt.Println(mmes)
 }
