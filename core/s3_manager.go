@@ -45,7 +45,7 @@ endpoints connection details.
 func NewS3Manager() *S3Manager {
 	endpoint := os.Getenv("S3_URL")
 	accessKey := os.Getenv("S3_ACCESS_KEY")
-	secretAccessKey := os.Getenv("S3_SECRETE_KEY")
+	secretAccessKey := os.Getenv("S3_SECRET_KEY")
 
 	config := aws.Config{
 		Endpoint:         aws.String(endpoint),
@@ -71,8 +71,9 @@ func (s3manager *S3Manager) CreateBucket(bucketName string) {
 	println("Bucket created : ", bucketName)
 }
 
-func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string) {
+func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string) []byte {
 
+	var response []byte
 	getInputs := &s3.GetObjectInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(objectName),
@@ -82,25 +83,13 @@ func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string
 
 	if err != nil {
 		fmt.Println("Error, can't get fetch object..")
-		return
+		return response
 	} else {
 		fmt.Println("Successfully retrieved object...")
 	}
-
-	outputFile, error := os.Create(bucketName + ".json")
-	if error != nil {
-		fmt.Println("Could not create local file ")
-		return
-	}
-	defer outputFile.Close()
-	_, wrerr := io.Copy(outputFile, result.Body)
-
-	if wrerr != nil {
-		fmt.Println("Failed to write bucket object in to a localfile")
-	} else {
-		fmt.Println("Successfully, written bucket object to localfile")
-	}
-
+	//TODO : Error handling
+	response, err = io.ReadAll(result.Body)
+	return response
 }
 
 func (s3manager *S3Manager) DeleteBucket(client *s3.S3, objectName string, bucketName string) {

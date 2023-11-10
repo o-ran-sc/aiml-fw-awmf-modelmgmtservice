@@ -42,7 +42,7 @@ func init() {
 	fmt.Println("Starting api server...")
 	router := gin.Default()
 
-	router.GET("/getModel", GetModel)
+	router.GET("/getModelInfo", GetModelInfo)
 	router.POST("/createModel", CreateModel)
 	router.Run(os.Getenv("MMES_URL"))
 	fmt.Println("Started api server...")
@@ -78,10 +78,33 @@ func CreateModel(cont *gin.Context) {
 	})
 }
 
+/*
+This API retrieves model info for given model name
+input :
+
+	Model name : string
+*/
+func GetModelInfo(cont *gin.Context) {
+	fmt.Println("Fetching model")
+	bodyBytes, _ := io.ReadAll(cont.Request.Body)
+	//TODO Error checking of request is not in json, i.e. etra ',' at EOF
+	jsonMap := make(map[string]interface{})
+	json.Unmarshal(bodyBytes, &jsonMap)
+	model_name := jsonMap["model-name"].(string)
+	fmt.Println("The request model name: ", model_name)
+
+	s3_manager := core.NewS3Manager()
+	model_info := s3_manager.GetBucketObject(model_name+"_info.json", model_name)
+	cont.JSON(http.StatusOK, gin.H{
+		"code":    http.StatusOK,
+		"message": string(model_info),
+	})
+
+}
+
 func GetModel(cont *gin.Context) {
 	fmt.Println("Fetching model")
-	//s3_manager.GetBucketObject(modelInfo.ModelName+"_info.json", modelInfo.ModelName)
-	cont.IndentedJSON(http.StatusOK, "Model stored ")
+	cont.IndentedJSON(http.StatusOK, " ")
 }
 
 func UpdateModel() {
