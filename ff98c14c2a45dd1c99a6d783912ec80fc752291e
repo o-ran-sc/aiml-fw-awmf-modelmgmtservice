@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1743ede_36a3dd69",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1001949
+      },
+      "writtenOn": "2023-11-10T06:38:06Z",
+      "side": 1,
+      "message": "We also might need to give github link, once it is committed to gerrit/github",
+      "revId": "ff98c14c2a45dd1c99a6d783912ec80fc752291e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2db10d40_397e2eda",
+        "filename": "config.env",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1001949
+      },
+      "writtenOn": "2023-11-10T06:38:06Z",
+      "side": 1,
+      "message": "Please check the typo S3_SECRETE_KEY",
+      "revId": "ff98c14c2a45dd1c99a6d783912ec80fc752291e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02bf06ea_89ee1cb7",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1001949
+      },
+      "writtenOn": "2023-11-10T06:38:06Z",
+      "side": 1,
+      "message": "Please check the typo S3_SECRETE_KEY",
+      "revId": "ff98c14c2a45dd1c99a6d783912ec80fc752291e",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
