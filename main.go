@@ -19,11 +19,13 @@ package main
 
 import (
 	"fmt"
+
 	"example.com/mmes/apis"
 )
 
 func main() {
 	fmt.Println("Starting api..")
 	mmes := &apis.MMESApis{}
+
 	fmt.Println(mmes)
 }

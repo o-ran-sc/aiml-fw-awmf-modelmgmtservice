@@ -71,6 +71,9 @@ func (s3manager *S3Manager) CreateBucket(bucketName string) {
 	println("Bucket created : ", bucketName)
 }
 
+// objectName : Name of file/object under given bucket
+// bucketName : Name of s3 bucket
+// TODO: Return error
 func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string) []byte {
 
 	var response []byte
@@ -120,7 +123,7 @@ func (s3manager *S3Manager) DeleteBucketObject(client *s3.S3, objectName string,
 	return true
 }
 
-func (s3manager *S3Manager) UploadFile(dataBytes [] byte, file_name string, bucketName string) {
+func (s3manager *S3Manager) UploadFile(dataBytes []byte, file_name string, bucketName string) {
 
 	dataReader := bytes.NewReader(dataBytes) //bytes.Reader is type of io.ReadSeeker
 	params := &s3.PutObjectInput{
