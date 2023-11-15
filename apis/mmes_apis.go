@@ -18,7 +18,6 @@ limitations under the License.
 package apis
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -43,12 +42,14 @@ func init() {
 	router := gin.Default()
 
 	router.GET("/getModelInfo", GetModelInfo)
-	router.POST("/createModel", CreateModel)
+	router.POST("/registerModel", RegisterModel)
+	router.MaxMultipartMemory = 8 << 20 //8 Mb
+	router.POST("/uploadModel/:modelName", UploadModel)
 	router.Run(os.Getenv("MMES_URL"))
 	fmt.Println("Started api server...")
 }
 
-func CreateModel(cont *gin.Context) {
+func RegisterModel(cont *gin.Context) {
 	fmt.Println("Creating model...")
 	bodyBytes, _ := io.ReadAll(cont.Request.Body)
 
@@ -61,16 +62,15 @@ func CreateModel(cont *gin.Context) {
 	}
 	fmt.Println(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
 
-	//modelInfo.RAppId = "newRappId-1" Update Unmarshalled struct as per need
+	//Update Unmarshalled struct as per need, e.g. modelInfo.RAppId = "newRappId-1"
 	//Need to convert struct to json to create a io.ReadSeeker instance
 	//to insert in to a bucket as file/body
-	modelInfo_json, err := json.Marshal(modelInfo)
-	modelinfo_reader := bytes.NewReader(modelInfo_json) //bytes.Reader is type of io.ReadSeeker
+	modelInfoBytes, err := json.Marshal(modelInfo)
 
 	//TODO Create singleton for s3_manager
 	s3_manager := core.NewS3Manager()
 	s3_manager.CreateBucket(modelInfo.ModelName)
-	s3_manager.UploadFile(modelinfo_reader, modelInfo.ModelName+"_info.json", modelInfo.ModelName)
+	s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+"_info.json", modelInfo.ModelName)
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -95,11 +95,31 @@ func GetModelInfo(cont *gin.Context) {
 
 	s3_manager := core.NewS3Manager()
 	model_info := s3_manager.GetBucketObject(model_name+"_info.json", model_name)
+
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": string(model_info),
 	})
 
+}
+
+// API to upload the trained model in zip format
+func UploadModel(cont *gin.Context) {
+	fmt.Println("Uploading model API ...")
+	modelName := cont.Param("modelName")
+	//TODO convert multipart.FileHeader to []byted
+	fileHeader, _ := cont.FormFile("file")
+	file, _ := fileHeader.Open()
+	//TODO: Handle error response
+	defer file.Close()
+	byteFile, _ := io.ReadAll((file))
+
+	fmt.Println("Uploading model : ", modelName)
+	fmt.Println("Recieved file name :", fileHeader.Filename)
+
+	s3_manager := core.NewS3Manager()
+	s3_manager.UploadFile(byteFile, fileHeader.Filename, modelName)
+	cont.String(http.StatusOK, fmt.Sprintf("'%s' uploaded!", fileHeader.Filename))
 }
 
 func GetModel(cont *gin.Context) {

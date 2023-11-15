@@ -120,12 +120,13 @@ func (s3manager *S3Manager) DeleteBucketObject(client *s3.S3, objectName string,
 	return true
 }
 
-func (s3manager *S3Manager) UploadFile(data *bytes.Reader, file_name string, bucketName string) {
+func (s3manager *S3Manager) UploadFile(dataBytes [] byte, file_name string, bucketName string) {
 
+	dataReader := bytes.NewReader(dataBytes) //bytes.Reader is type of io.ReadSeeker
 	params := &s3.PutObjectInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(file_name),
-		Body:   data,
+		Body:   dataReader,
 	}
 	_, err := s3manager.S3Client.PutObject(params)
 	if err != nil {
