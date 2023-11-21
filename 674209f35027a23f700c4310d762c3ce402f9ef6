@@ -1,0 +1,8 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Code-Review+2: Joseph Thaliath <jo.thaliath@samsung.com>
+Verified+1: Joseph Thaliath <jo.thaliath@samsung.com>
+Submitted-by: Joseph Thaliath <jo.thaliath@samsung.com>
+Submitted-at: Tue, 21 Nov 2023 11:29:13 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/aiml-fw/awmf/modelmgmtservice/+/12070
+Project: aiml-fw/awmf/modelmgmtservice
+Branch: refs/heads/master
