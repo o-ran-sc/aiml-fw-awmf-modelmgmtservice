@@ -43,6 +43,7 @@ func init() {
 
 	router.POST("/registerModel", RegisterModel)
 	router.GET("/getModelInfo", GetModelInfo)
+	router.GET("/getModelInfo/:modelName", GetModelInfoByName)
 	router.MaxMultipartMemory = 8 << 20 //8 Mb
 	router.POST("/uploadModel/:modelName", UploadModel)
 	router.GET("/downloadModel/:modelName", DownloadModel)
@@ -105,29 +106,47 @@ func GetModelInfo(cont *gin.Context) {
 
 }
 
-// API to upload the trained model in zip format
-// TODO : Model version as input
-func UploadModel(cont *gin.Context) {
-	fmt.Println("Uploading model API ...")
-	modelName := cont.Param("modelName")
-	//TODO convert multipart.FileHeader to []byted
-	fileHeader, _ := cont.FormFile("file")
-	//TODO : Accept only .zip file for trained model
-	file, _ := fileHeader.Open()
-	//TODO: Handle error response
-	defer file.Close()
-	byteFile, _ := io.ReadAll((file))
+/*
+	Provides the model details by param model name
 
-	fmt.Println("Uploading model : ", modelName)
-	fmt.Println("Recieved file name :", fileHeader.Filename)
+*/
+func GetModelInfoByName (cont *gin.Context){
+	fmt.Println("Get model info by name API ...")
+	modelName := cont.Param("modelName")
 
 	s3_manager := core.NewS3Manager()
-	s3_manager.UploadFile(byteFile, modelName+"_model.zip", modelName)
+	model_info := s3_manager.GetBucketObject(modelName+"_info.json", modelName)
+
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
-		"message": string("Model uploaded successfully.."),
+		"message": string(model_info),
 	})
 }
+
+// API to upload the trained model in zip format
+// TODO : Model version as input
+
+	func UploadModel(cont *gin.Context) {
+		fmt.Println("Uploading model API ...")
+		modelName := cont.Param("modelName")
+		//TODO convert multipart.FileHeader to []byted
+		fileHeader, _ := cont.FormFile("file")
+		//TODO : Accept only .zip file for trained model
+		file, _ := fileHeader.Open()
+		//TODO: Handle error response
+		defer file.Close()
+		byteFile, _ := io.ReadAll((file))
+
+		fmt.Println("Uploading model : ", modelName)
+		fmt.Println("Recieved file name :", fileHeader.Filename)
+
+		s3_manager := core.NewS3Manager()
+		s3_manager.UploadFile(byteFile, modelName+"_model.zip", modelName)
+		cont.JSON(http.StatusOK, gin.H{
+			"code":    http.StatusOK,
+			"message": string("Model uploaded successfully.."),
+		})
+	}
 
 /*
 API to download the trained model from s3 bucket
