@@ -19,11 +19,13 @@ package core
 
 import (
 	"bytes"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
@@ -34,6 +36,11 @@ type S3Manager struct {
 	//Which will be used by all s3 bucket related operatios,
 	//using fuction to struct binding
 	S3Client *s3.S3
+}
+
+type S3Error struct {
+	msg  string
+	code int
 }
 
 /*
@@ -63,12 +70,21 @@ func NewS3Manager() *S3Manager {
 
 }
 
-func (s3manager *S3Manager) CreateBucket(bucketName string) {
-	_, err := s3manager.S3Client.CreateBucket(&s3.CreateBucketInput{Bucket: aws.String(bucketName)})
-	if err != nil {
-		panic(err)
+// Creates s3 bucket for given bucketName, optionally
+// returns named error err
+func (s3manager *S3Manager) CreateBucket(bucketName string) (err error) {
+	_, s3Err := s3manager.S3Client.CreateBucket(&s3.CreateBucketInput{Bucket: aws.String(bucketName)})
+
+	if s3Err != nil {
+		fmt.Println(s3Err)
+		//Convert the aws to get the code/error msg for api response
+		if aerr, ok := s3Err.(awserr.Error); ok {
+			err = errors.New(aerr.Message())
+			return
+		}
 	}
 	println("Bucket created : ", bucketName)
+	return nil
 }
 
 // objectName : Name of file/object under given bucket

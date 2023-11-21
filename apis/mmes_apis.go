@@ -52,6 +52,9 @@ func init() {
 }
 
 func RegisterModel(cont *gin.Context) {
+	var returnCode int = http.StatusCreated
+	var responseMsg string = "Model registered successfully"
+
 	fmt.Println("Creating model...")
 	bodyBytes, _ := io.ReadAll(cont.Request.Body)
 
@@ -65,21 +68,25 @@ func RegisterModel(cont *gin.Context) {
 			"code":    http.StatusBadRequest,
 			"message": string("Can not parse input data, provide mandatory details"),
 		})
-		return
+		//return
+	} else {
+		fmt.Println(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
+		modelInfoBytes, _ := json.Marshal(modelInfo)
+
+		//TODO Create singleton for s3_manager
+		s3_manager := core.NewS3Manager()
+		s3Err := s3_manager.CreateBucket(modelInfo.ModelName)
+		if s3Err == nil {
+			s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_PREFIX"), modelInfo.ModelName)
+		} else {
+			returnCode = http.StatusInternalServerError
+			responseMsg = s3Err.Error()
+		}
+		cont.JSON(returnCode, gin.H{
+			"code":    returnCode,
+			"message": responseMsg,
+		})
 	}
-	fmt.Println(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
-	modelInfoBytes, err := json.Marshal(modelInfo)
-
-	//TODO Create singleton for s3_manager
-	s3_manager := core.NewS3Manager()
-	s3_manager.CreateBucket(modelInfo.ModelName)
-
-	s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_PREFIX"), modelInfo.ModelName)
-
-	cont.JSON(http.StatusCreated, gin.H{
-		"code":    http.StatusCreated,
-		"message": string("Model details stored sucessfully"),
-	})
 }
 
 /*
@@ -104,7 +111,6 @@ func GetModelInfo(cont *gin.Context) {
 		"code":    http.StatusOK,
 		"message": string(model_info),
 	})
-
 }
 
 /*
