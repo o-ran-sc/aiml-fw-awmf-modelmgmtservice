@@ -59,24 +59,25 @@ func RegisterModel(cont *gin.Context) {
 	//Need to unmarshal JSON to Struct, to access request
 	//data such as model name, rapp id etc
 	err := json.Unmarshal(bodyBytes, &modelInfo)
-	if err != nil {
+	if err != nil || modelInfo.ModelName == "" {
 		fmt.Println("Error in unmarshalling")
+		cont.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": string("Can not parse input data, provide mandatory details"),
+		})
+		return
 	}
 	fmt.Println(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
-
-	//modelInfo.RAppId = "newRappId-1" Update Unmarshalled struct as per need
-	//Need to convert struct to json to create a io.ReadSeeker instance
-	//to insert in to a bucket as file/body
 	modelInfoBytes, err := json.Marshal(modelInfo)
-	//modelinfo_reader := bytes.NewReader(modelInfo_json) //bytes.Reader is type of io.ReadSeeker
 
 	//TODO Create singleton for s3_manager
 	s3_manager := core.NewS3Manager()
 	s3_manager.CreateBucket(modelInfo.ModelName)
-	s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+"_info.json", modelInfo.ModelName)
 
-	cont.JSON(http.StatusOK, gin.H{
-		"code":    http.StatusOK,
+	s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_PREFIX"), modelInfo.ModelName)
+
+	cont.JSON(http.StatusCreated, gin.H{
+		"code":    http.StatusCreated,
 		"message": string("Model details stored sucessfully"),
 	})
 }
@@ -97,7 +98,7 @@ func GetModelInfo(cont *gin.Context) {
 	fmt.Println("The request model name: ", model_name)
 
 	s3_manager := core.NewS3Manager()
-	model_info := s3_manager.GetBucketObject(model_name+"_info.json", model_name)
+	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_PREFIX"), model_name)
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -107,15 +108,14 @@ func GetModelInfo(cont *gin.Context) {
 }
 
 /*
-	Provides the model details by param model name
-
+Provides the model details by param model name
 */
-func GetModelInfoByName (cont *gin.Context){
+func GetModelInfoByName(cont *gin.Context) {
 	fmt.Println("Get model info by name API ...")
 	modelName := cont.Param("modelName")
 
 	s3_manager := core.NewS3Manager()
-	model_info := s3_manager.GetBucketObject(modelName+"_info.json", modelName)
+	model_info := s3_manager.GetBucketObject(modelName+os.Getenv("INFO_FILE_PREFIX"), modelName)
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -126,27 +126,27 @@ func GetModelInfoByName (cont *gin.Context){
 // API to upload the trained model in zip format
 // TODO : Model version as input
 
-	func UploadModel(cont *gin.Context) {
-		fmt.Println("Uploading model API ...")
-		modelName := cont.Param("modelName")
-		//TODO convert multipart.FileHeader to []byted
-		fileHeader, _ := cont.FormFile("file")
-		//TODO : Accept only .zip file for trained model
-		file, _ := fileHeader.Open()
-		//TODO: Handle error response
-		defer file.Close()
-		byteFile, _ := io.ReadAll((file))
+func UploadModel(cont *gin.Context) {
+	fmt.Println("Uploading model API ...")
+	modelName := cont.Param("modelName")
+	//TODO convert multipart.FileHeader to []byted
+	fileHeader, _ := cont.FormFile("file")
+	//TODO : Accept only .zip file for trained model
+	file, _ := fileHeader.Open()
+	//TODO: Handle error response
+	defer file.Close()
+	byteFile, _ := io.ReadAll((file))
 
-		fmt.Println("Uploading model : ", modelName)
-		fmt.Println("Recieved file name :", fileHeader.Filename)
+	fmt.Println("Uploading model : ", modelName)
+	fmt.Println("Recieved file name :", fileHeader.Filename)
 
-		s3_manager := core.NewS3Manager()
-		s3_manager.UploadFile(byteFile, modelName+"_model.zip", modelName)
-		cont.JSON(http.StatusOK, gin.H{
-			"code":    http.StatusOK,
-			"message": string("Model uploaded successfully.."),
-		})
-	}
+	s3_manager := core.NewS3Manager()
+	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_NAME_PREFIX"), modelName)
+	cont.JSON(http.StatusOK, gin.H{
+		"code":    http.StatusOK,
+		"message": string("Model uploaded successfully.."),
+	})
+}
 
 /*
 API to download the trained model from s3 bucket
@@ -155,7 +155,7 @@ Input: model name in path params as "modelName"
 func DownloadModel(cont *gin.Context) {
 	fmt.Println("Download model API ...")
 	modelName := cont.Param("modelName")
-	fileName := modelName + "_model.zip"
+	fileName := modelName + os.Getenv("MODEL_NAME_PREFIX")
 	s3_manager := core.NewS3Manager()
 	fileByes := s3_manager.GetBucketObject(fileName, modelName)
 
