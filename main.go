@@ -18,14 +18,13 @@ limitations under the License.
 package main
 
 import (
-	"fmt"
-
 	"example.com/mmes/apis"
+	"example.com/mmes/logging"
 )
 
 func main() {
-	fmt.Println("Starting api..")
+	logging.INFO("Starting api..")
 	mmes := &apis.MMESApis{}
 
-	fmt.Println(mmes)
+	_ = mmes
 }
