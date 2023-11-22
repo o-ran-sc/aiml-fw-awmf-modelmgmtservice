@@ -10,11 +10,12 @@ var warnLogger *log.Logger
 var errorLogger *log.Logger
 
 func init() {
+	//TODO add current timestamp as file prefix to retain the old log file
 	logFile, fileErr := os.Create(os.Getenv("LOG_FILE_NAME"))
 	if fileErr != nil {
 		log.Fatal("Can not start MMES service,issue in creating log file")
 	}
-	flags := log.Ldate | log.Ltime 
+	flags := log.Ldate | log.Ltime
 	infoLogger = log.New(logFile, "INFO:", flags)
 	warnLogger = log.New(logFile, "WARN:", flags)
 	errorLogger = log.New(logFile, "ERROR:", flags)

@@ -73,7 +73,7 @@ func RegisterModel(cont *gin.Context) {
 		modelInfoBytes, _ := json.Marshal(modelInfo)
 
 		//TODO Create singleton for s3_manager
-		s3_manager := core.NewS3Manager()
+		s3_manager := core.GetS3ManagerInstance()
 		s3Err := s3_manager.CreateBucket(modelInfo.ModelName)
 		if s3Err == nil {
 			s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_PREFIX"), modelInfo.ModelName)
@@ -103,7 +103,17 @@ func GetModelInfo(cont *gin.Context) {
 	model_name := jsonMap["model-name"].(string)
 	logging.INFO("The request model name: ", model_name)
 
-	s3_manager := core.NewS3Manager()
+	s3_manager := core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	go core.GetS3ManagerInstance()
+	
 	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_PREFIX"), model_name)
 
 	cont.JSON(http.StatusOK, gin.H{
@@ -119,7 +129,7 @@ func GetModelInfoByName(cont *gin.Context) {
 	logging.INFO("Get model info by name API ...")
 	modelName := cont.Param("modelName")
 
-	s3_manager := core.NewS3Manager()
+	s3_manager := core.GetS3ManagerInstance()
 	model_info := s3_manager.GetBucketObject(modelName+os.Getenv("INFO_FILE_PREFIX"), modelName)
 
 	cont.JSON(http.StatusOK, gin.H{
@@ -143,7 +153,7 @@ func UploadModel(cont *gin.Context) {
 	byteFile, _ := io.ReadAll((file))
 
 	logging.INFO("Uploading model : ", modelName)
-	s3_manager := core.NewS3Manager()
+	s3_manager := core.GetS3ManagerInstance()
 	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_PREFIX"), modelName)
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -159,7 +169,7 @@ func DownloadModel(cont *gin.Context) {
 	logging.INFO("Download model API ...")
 	modelName := cont.Param("modelName")
 	fileName := modelName + os.Getenv("MODEL_FILE_PREFIX")
-	s3_manager := core.NewS3Manager()
+	s3_manager := core.GetS3ManagerInstance()
 	fileByes := s3_manager.GetBucketObject(fileName, modelName)
 
 	//Return file in api reponse using byte slice

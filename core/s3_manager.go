@@ -23,6 +23,8 @@ import (
 	"io"
 	"os"
 
+	"sync"
+
 	"example.com/mmes/logging"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -31,11 +33,29 @@ import (
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
+var Lock = &sync.Mutex{}
+var s3MgrInstance *S3Manager
+
 type S3Manager struct {
 	//S3Client has s3 endpoint connection pointer,
 	//Which will be used by all s3 bucket related operatios,
 	//using fuction to struct binding
 	S3Client *s3.S3
+}
+
+// Singleton for S3Manager
+func GetS3ManagerInstance() *S3Manager {
+	Lock.Lock()
+	defer Lock.Unlock()
+
+	if s3MgrInstance == nil {
+		logging.INFO("Creating single instance for S3Manager")
+		s3MgrInstance = newS3Manager()
+	} else {
+		logging.WARN("S3Manager instance already exists")
+	}
+
+	return s3MgrInstance
 }
 
 type S3Error struct {
@@ -49,7 +69,7 @@ the struct instance hold pointer to s3.S3 connection, which is
 preconfigured using enviroment variables, such as aws s3
 endpoints connection details.
 */
-func NewS3Manager() *S3Manager {
+func newS3Manager() *S3Manager {
 	endpoint := os.Getenv("S3_URL")
 	accessKey := os.Getenv("S3_ACCESS_KEY")
 	secretAccessKey := os.Getenv("S3_SECRET_KEY")
