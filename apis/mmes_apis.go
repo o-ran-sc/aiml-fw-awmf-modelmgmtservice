@@ -19,12 +19,12 @@ package apis
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 	"os"
 
 	"example.com/mmes/core"
+	"example.com/mmes/logging"
 	"github.com/gin-gonic/gin"
 )
 
@@ -38,7 +38,7 @@ type MMESApis struct {
 }
 
 func init() {
-	fmt.Println("Starting api server...")
+	logging.INFO("Starting api server...")
 	router := gin.Default()
 
 	router.POST("/registerModel", RegisterModel)
@@ -48,14 +48,14 @@ func init() {
 	router.POST("/uploadModel/:modelName", UploadModel)
 	router.GET("/downloadModel/:modelName", DownloadModel)
 	router.Run(os.Getenv("MMES_URL"))
-	fmt.Println("Started api server...")
+	logging.INFO("Started api server...")
 }
 
 func RegisterModel(cont *gin.Context) {
 	var returnCode int = http.StatusCreated
 	var responseMsg string = "Model registered successfully"
 
-	fmt.Println("Creating model...")
+	logging.INFO("Creating model...")
 	bodyBytes, _ := io.ReadAll(cont.Request.Body)
 
 	var modelInfo ModelInfo
@@ -63,14 +63,13 @@ func RegisterModel(cont *gin.Context) {
 	//data such as model name, rapp id etc
 	err := json.Unmarshal(bodyBytes, &modelInfo)
 	if err != nil || modelInfo.ModelName == "" {
-		fmt.Println("Error in unmarshalling")
+		logging.ERROR("Error in unmarshalling")
 		cont.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": string("Can not parse input data, provide mandatory details"),
 		})
-		//return
 	} else {
-		fmt.Println(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
+		logging.INFO(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
 		modelInfoBytes, _ := json.Marshal(modelInfo)
 
 		//TODO Create singleton for s3_manager
@@ -96,13 +95,13 @@ input :
 	Model name : string
 */
 func GetModelInfo(cont *gin.Context) {
-	fmt.Println("Fetching model")
+	logging.INFO("Fetching model")
 	bodyBytes, _ := io.ReadAll(cont.Request.Body)
 	//TODO Error checking of request is not in json, i.e. etra ',' at EOF
 	jsonMap := make(map[string]interface{})
 	json.Unmarshal(bodyBytes, &jsonMap)
 	model_name := jsonMap["model-name"].(string)
-	fmt.Println("The request model name: ", model_name)
+	logging.INFO("The request model name: ", model_name)
 
 	s3_manager := core.NewS3Manager()
 	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_PREFIX"), model_name)
@@ -117,7 +116,7 @@ func GetModelInfo(cont *gin.Context) {
 Provides the model details by param model name
 */
 func GetModelInfoByName(cont *gin.Context) {
-	fmt.Println("Get model info by name API ...")
+	logging.INFO("Get model info by name API ...")
 	modelName := cont.Param("modelName")
 
 	s3_manager := core.NewS3Manager()
@@ -133,7 +132,7 @@ func GetModelInfoByName(cont *gin.Context) {
 // TODO : Model version as input
 
 func UploadModel(cont *gin.Context) {
-	fmt.Println("Uploading model API ...")
+	logging.INFO("Uploading model API ...")
 	modelName := cont.Param("modelName")
 	//TODO convert multipart.FileHeader to []byted
 	fileHeader, _ := cont.FormFile("file")
@@ -143,11 +142,9 @@ func UploadModel(cont *gin.Context) {
 	defer file.Close()
 	byteFile, _ := io.ReadAll((file))
 
-	fmt.Println("Uploading model : ", modelName)
-	fmt.Println("Recieved file name :", fileHeader.Filename)
-
+	logging.INFO("Uploading model : ", modelName)
 	s3_manager := core.NewS3Manager()
-	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_NAME_PREFIX"), modelName)
+	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_PREFIX"), modelName)
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": string("Model uploaded successfully.."),
@@ -159,9 +156,9 @@ API to download the trained model from s3 bucket
 Input: model name in path params as "modelName"
 */
 func DownloadModel(cont *gin.Context) {
-	fmt.Println("Download model API ...")
+	logging.INFO("Download model API ...")
 	modelName := cont.Param("modelName")
-	fileName := modelName + os.Getenv("MODEL_NAME_PREFIX")
+	fileName := modelName + os.Getenv("MODEL_FILE_PREFIX")
 	s3_manager := core.NewS3Manager()
 	fileByes := s3_manager.GetBucketObject(fileName, modelName)
 
@@ -172,16 +169,16 @@ func DownloadModel(cont *gin.Context) {
 }
 
 func GetModel(cont *gin.Context) {
-	fmt.Println("Fetching model")
+	logging.INFO("Fetching model")
 	cont.IndentedJSON(http.StatusOK, " ")
 }
 
 func UpdateModel() {
-	fmt.Println("Updating model...")
+	logging.INFO("Updating model...")
 	return
 }
 
 func DeleteModel() {
-	fmt.Println("Deleting model...")
+	logging.INFO("Deleting model...")
 	return
 }

@@ -20,10 +20,10 @@ package core
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"io"
 	"os"
 
+	"example.com/mmes/logging"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -76,7 +76,7 @@ func (s3manager *S3Manager) CreateBucket(bucketName string) (err error) {
 	_, s3Err := s3manager.S3Client.CreateBucket(&s3.CreateBucketInput{Bucket: aws.String(bucketName)})
 
 	if s3Err != nil {
-		fmt.Println(s3Err)
+		logging.ERROR(s3Err)
 		//Convert the aws to get the code/error msg for api response
 		if aerr, ok := s3Err.(awserr.Error); ok {
 			err = errors.New(aerr.Message())
@@ -101,11 +101,10 @@ func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string
 	defer result.Body.Close()
 
 	if err != nil {
-		fmt.Println("Error, can't get fetch object..")
+		logging.ERROR("Error, can't get fetch object..")
 		return response
-	} else {
-		fmt.Println("Successfully retrieved object...")
 	}
+	logging.INFO("Successfully retrieved object...")
 	//TODO : Error handling
 	response, err = io.ReadAll(result.Body)
 	return response
@@ -118,9 +117,9 @@ func (s3manager *S3Manager) DeleteBucket(client *s3.S3, objectName string, bucke
 			Bucket: aws.String(bucketName),
 		}
 		client.DeleteBucket(deleteBucketInput)
-		fmt.Println("Bucket deleted successfully..")
+		logging.INFO("Bucket deleted successfully..")
 	} else {
-		fmt.Println("Failed to delete the Bucket ...")
+		logging.ERROR("Failed to delete the Bucket ...")
 	}
 
 }
@@ -132,10 +131,10 @@ func (s3manager *S3Manager) DeleteBucketObject(client *s3.S3, objectName string,
 	}
 	_, err := client.DeleteObject(deleteInput)
 	if err != nil {
-		fmt.Println("Can not delete the bucket object")
+		logging.WARN("Can not delete the bucket object")
 		return false
 	}
-	fmt.Println("Object deleted successfully..")
+	logging.INFO("Object deleted successfully..")
 	return true
 }
 
@@ -149,18 +148,18 @@ func (s3manager *S3Manager) UploadFile(dataBytes []byte, file_name string, bucke
 	}
 	_, err := s3manager.S3Client.PutObject(params)
 	if err != nil {
-		fmt.Println("Error in uploading file to bucket ", err)
+		logging.ERROR("Error in uploading file to bucket ", err)
 	}
-	fmt.Println("File uploaded to bucket ", bucketName)
+	logging.INFO("File uploaded to bucket ", bucketName)
 }
 
 func (s3manager *S3Manager) ListBucket(client *s3.S3) {
 	input := &s3.ListBucketsInput{}
 	result, err := client.ListBuckets(input)
 	if err != nil {
-		fmt.Println(err.Error())
+		logging.ERROR(err.Error())
 	}
-	fmt.Println(result)
+	logging.INFO(result)
 }
 
 // Return list of objects in the buckets
