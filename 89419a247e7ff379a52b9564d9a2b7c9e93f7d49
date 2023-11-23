@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d1df246_3989ab0e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001940
+      },
+      "writtenOn": "2023-11-23T04:01:37Z",
+      "side": 1,
+      "message": "It was not indented, missed to remove it after testing, fixed in patch 2",
+      "revId": "89419a247e7ff379a52b9564d9a2b7c9e93f7d49",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
