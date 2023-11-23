@@ -16,6 +16,24 @@
       "message": "Can you explain why `go core.GetS3ManagerInstance()` is called several times in this function?",
       "revId": "9a37c398e045f59cf60a95e6036bef5074988e8a",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "32466afb_be194bb6",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1001940
+      },
+      "writtenOn": "2023-11-23T04:04:22Z",
+      "side": 1,
+      "message": "It was not indented, missed to remove it after testing, fixed in patch 2",
+      "parentUuid": "728173e3_bdd94493",
+      "revId": "9a37c398e045f59cf60a95e6036bef5074988e8a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
