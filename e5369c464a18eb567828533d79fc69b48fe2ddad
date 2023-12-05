@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b4dc0b3_16180c1a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001940
+      },
+      "writtenOn": "2023-12-05T06:52:14Z",
+      "side": 1,
+      "message": "Changing license year in another check-in as there is some issue in my local git",
+      "revId": "e5369c464a18eb567828533d79fc69b48fe2ddad",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69666e6e_be60f94a",
