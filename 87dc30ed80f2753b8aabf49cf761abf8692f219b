@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aac84811_9d0a2996",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001940
+      },
+      "writtenOn": "2023-12-05T06:53:22Z",
+      "side": 1,
+      "message": "Changed License year and added container tags",
+      "revId": "87dc30ed80f2753b8aabf49cf761abf8692f219b",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
