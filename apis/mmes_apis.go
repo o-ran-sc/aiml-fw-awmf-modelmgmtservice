@@ -46,7 +46,7 @@ func init() {
 	router.GET("/getModelInfo/:modelName", GetModelInfoByName)
 	router.MaxMultipartMemory = 8 << 20 //8 Mb
 	router.POST("/uploadModel/:modelName", UploadModel)
-	router.GET("/downloadModel/:modelName", DownloadModel)
+	router.GET("/downloadModel/:modelName/model.zip", DownloadModel)
 	router.Run(os.Getenv("MMES_URL"))
 	logging.INFO("Started api server...")
 }
@@ -76,7 +76,7 @@ func RegisterModel(cont *gin.Context) {
 		s3_manager := core.GetS3ManagerInstance()
 		s3Err := s3_manager.CreateBucket(modelInfo.ModelName)
 		if s3Err == nil {
-			s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_PREFIX"), modelInfo.ModelName)
+			s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelName)
 		} else {
 			returnCode = http.StatusInternalServerError
 			responseMsg = s3Err.Error()
@@ -104,7 +104,8 @@ func GetModelInfo(cont *gin.Context) {
 	logging.INFO("The request model name: ", model_name)
 
 	s3_manager := core.GetS3ManagerInstance()
-	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_PREFIX"), model_name)
+
+	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_POSTFIX"), model_name)
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -120,7 +121,7 @@ func GetModelInfoByName(cont *gin.Context) {
 	modelName := cont.Param("modelName")
 
 	s3_manager := core.GetS3ManagerInstance()
-	model_info := s3_manager.GetBucketObject(modelName+os.Getenv("INFO_FILE_PREFIX"), modelName)
+	model_info := s3_manager.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -144,7 +145,7 @@ func UploadModel(cont *gin.Context) {
 
 	logging.INFO("Uploading model : ", modelName)
 	s3_manager := core.GetS3ManagerInstance()
-	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_PREFIX"), modelName)
+	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_POSTFIX"), modelName)
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": string("Model uploaded successfully.."),
@@ -158,13 +159,13 @@ Input: model name in path params as "modelName"
 func DownloadModel(cont *gin.Context) {
 	logging.INFO("Download model API ...")
 	modelName := cont.Param("modelName")
-	fileName := modelName + os.Getenv("MODEL_FILE_PREFIX")
+	fileName := modelName + os.Getenv("MODEL_FILE_POSTFIX")
 	s3_manager := core.GetS3ManagerInstance()
 	fileByes := s3_manager.GetBucketObject(fileName, modelName)
 
 	//Return file in api reponse using byte slice
 	cont.Header("Content-Disposition", "attachment;"+fileName)
-	cont.Header("Content-Type", "application/octet-stream")
+	cont.Header("Content-Type", "application/zip")
 	cont.Data(http.StatusOK, "application/octet", fileByes)
 }
 
