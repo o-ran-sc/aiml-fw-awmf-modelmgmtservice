@@ -46,7 +46,7 @@ func init() {
 	router.GET("/getModelInfo/:modelName", GetModelInfoByName)
 	router.MaxMultipartMemory = 8 << 20 //8 Mb
 	router.POST("/uploadModel/:modelName", UploadModel)
-	router.GET("/downloadModel/:modelName", DownloadModel)
+	router.GET("/downloadModel/:modelName/model.zip", DownloadModel)
 	router.Run(os.Getenv("MMES_URL"))
 	logging.INFO("Started api server...")
 }
@@ -102,7 +102,6 @@ func GetModelInfo(cont *gin.Context) {
 	json.Unmarshal(bodyBytes, &jsonMap)
 	model_name := jsonMap["model-name"].(string)
 	logging.INFO("The request model name: ", model_name)
-
 	s3_manager := core.GetS3ManagerInstance()
 	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_PREFIX"), model_name)
 
@@ -164,7 +163,7 @@ func DownloadModel(cont *gin.Context) {
 
 	//Return file in api reponse using byte slice
 	cont.Header("Content-Disposition", "attachment;"+fileName)
-	cont.Header("Content-Type", "application/octet-stream")
+	cont.Header("Content-Type", "application/zip")
 	cont.Data(http.StatusOK, "application/octet", fileByes)
 }
 
