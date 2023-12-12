@@ -1,0 +1,6 @@
+---
+project_cfg: oran
+project: aiml-fw/awmf/modelmgmtservice
+
+# Change this to ReleaseBranchName to modify the header
+version: latest
