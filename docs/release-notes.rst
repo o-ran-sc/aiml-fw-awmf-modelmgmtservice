@@ -41,7 +41,7 @@ I Release
 |                                      |                                                       |
 +--------------------------------------+-------------------------------------------------------+
 | **Repo/commit-ID**                   | aiml-fw/awmf/modelmgmtservice                         |
-|                                      |                                                       |
+|                                      | /9310c67f6446c77ca9803db316a44046a36c5978             |
 +--------------------------------------+-------------------------------------------------------+
 | **Release designation**              | I release                                             |
 |                                      |                                                       |
@@ -49,6 +49,6 @@ I Release
 | **Release date**                     | 2023-12-29                                            |
 |                                      |                                                       |
 +--------------------------------------+-------------------------------------------------------+
-| **Purpose of the delivery**          | Model Management Service provide API interfaces to    |
+| **Purpose of the delivery**          | Initial version of Model Management Service to        |
 |                                      | manage life cycle of trained AIML models              |
 +--------------------------------------+-------------------------------------------------------+
