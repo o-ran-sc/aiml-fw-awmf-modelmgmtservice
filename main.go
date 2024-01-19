@@ -18,8 +18,8 @@ limitations under the License.
 package main
 
 import (
-	"example.com/mmes/apis"
-	"example.com/mmes/logging"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 )
 
 func main() {

@@ -23,8 +23,8 @@ import (
 	"net/http"
 	"os"
 
-	"example.com/mmes/core"
-	"example.com/mmes/logging"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"github.com/gin-gonic/gin"
 )
 

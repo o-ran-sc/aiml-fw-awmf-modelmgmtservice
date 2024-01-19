@@ -1,4 +1,4 @@
-module example.com/mmes
+module gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice
 
 go 1.21.3
 
