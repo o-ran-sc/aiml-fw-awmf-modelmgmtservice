@@ -18,13 +18,10 @@ limitations under the License.
 package main
 
 import (
-	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
+	_ "gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 )
 
 func main() {
 	logging.INFO("Starting api..")
-	mmes := &apis.MMESApis{}
-
-	_ = mmes
 }
