@@ -38,6 +38,15 @@ committers:
       email: 's.jaisawal@samsung.com'
       company: 'Samsung Electronics'
       id: 's.jaisawal'
+    - name: 'subhash kumar singh'
+      email: 'subh.singh@samsung.com'
+      company: 'Samsung Electronics'
+      id: 'subhash_singh'
+    - name: 'Rajdeep Singh'
+      email: 'rajdeep.sin@samsung.com'
+      company: 'Samsung Electronics'
+      id: 'rajdeep11'
+      timezone: 'Asia/Seoul'
 tsc:
     # yamllint disable rule:line-length
     approval: 'https://wiki.o-ran-sc.org/display/TOC#ORANSCTechnicalOversightCommittee(TOC)-20230921'
