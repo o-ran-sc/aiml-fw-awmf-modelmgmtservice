@@ -34,8 +34,14 @@ type ModelInfo struct {
 	Metainfo  map[string]interface{} `json:"meta-info"`
 }
 
+var s3_manager *core.S3Manager
+
 func init() {
 	logging.INFO("Starting api server...")
+
+	// set up the s3 manager
+	s3_manager = core.GetS3ManagerInstance()
+
 	router := gin.Default()
 
 	router.POST("/registerModel", RegisterModel)
@@ -69,8 +75,6 @@ func RegisterModel(cont *gin.Context) {
 		logging.INFO(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
 		modelInfoBytes, _ := json.Marshal(modelInfo)
 
-		//TODO Create singleton for s3_manager
-		s3_manager := core.GetS3ManagerInstance()
 		s3Err := s3_manager.CreateBucket(modelInfo.ModelName)
 		if s3Err == nil {
 			s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelName)
@@ -100,8 +104,6 @@ func GetModelInfo(cont *gin.Context) {
 	model_name := jsonMap["model-name"].(string)
 	logging.INFO("The request model name: ", model_name)
 
-	s3_manager := core.GetS3ManagerInstance()
-
 	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_POSTFIX"), model_name)
 
 	cont.JSON(http.StatusOK, gin.H{
@@ -117,7 +119,6 @@ func GetModelInfoByName(cont *gin.Context) {
 	logging.INFO("Get model info by name API ...")
 	modelName := cont.Param("modelName")
 
-	s3_manager := core.GetS3ManagerInstance()
 	model_info := s3_manager.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
 
 	cont.JSON(http.StatusOK, gin.H{
@@ -141,7 +142,6 @@ func UploadModel(cont *gin.Context) {
 	byteFile, _ := io.ReadAll((file))
 
 	logging.INFO("Uploading model : ", modelName)
-	s3_manager := core.GetS3ManagerInstance()
 	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_POSTFIX"), modelName)
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -157,7 +157,6 @@ func DownloadModel(cont *gin.Context) {
 	logging.INFO("Download model API ...")
 	modelName := cont.Param("modelName")
 	fileName := modelName + os.Getenv("MODEL_FILE_POSTFIX")
-	s3_manager := core.GetS3ManagerInstance()
 	fileByes := s3_manager.GetBucketObject(fileName, modelName)
 
 	//Return file in api reponse using byte slice
@@ -173,10 +172,8 @@ func GetModel(cont *gin.Context) {
 
 func UpdateModel() {
 	logging.INFO("Updating model...")
-	return
 }
 
 func DeleteModel() {
 	logging.INFO("Deleting model...")
-	return
 }
