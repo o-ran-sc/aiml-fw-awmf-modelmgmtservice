@@ -1,0 +1,9 @@
+Code-Review+2: SANDEEP KUMAR JAISAWAL <s.jaisawal@samsung.com>
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Code-Review+1: Rajdeep Singh <rajdeep.sin@samsung.com>
+Submitted-by: SANDEEP KUMAR JAISAWAL <s.jaisawal@samsung.com>
+Submitted-at: Tue, 30 Jan 2024 09:14:33 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/aiml-fw/awmf/modelmgmtservice/+/12453
+Project: aiml-fw/awmf/modelmgmtservice
+Branch: refs/heads/master
