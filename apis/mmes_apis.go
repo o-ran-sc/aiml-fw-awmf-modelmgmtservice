@@ -34,9 +34,6 @@ type ModelInfo struct {
 	Metainfo  map[string]interface{} `json:"meta-info"`
 }
 
-type MMESApis struct {
-}
-
 func init() {
 	logging.INFO("Starting api server...")
 	router := gin.Default()
