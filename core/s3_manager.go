@@ -54,7 +54,7 @@ type DBMgr interface {
 }
 
 // Singleton for S3Manager
-func GetS3ManagerInstance() *S3Manager {
+func GetDBManagerInstance() DBMgr {
 	Lock.Lock()
 	defer Lock.Unlock()
 
@@ -64,7 +64,6 @@ func GetS3ManagerInstance() *S3Manager {
 	} else {
 		logging.WARN("S3Manager instance already exists")
 	}
-
 	return s3MgrInstance
 }
 
@@ -123,15 +122,16 @@ func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string
 		Key:    aws.String(objectName),
 	}
 	result, err := s3manager.S3Client.GetObject(getInputs)
-	defer result.Body.Close()
-
 	if err != nil {
 		logging.ERROR("Error, can't get fetch object..")
 		return response
 	}
+	defer result.Body.Close()
 	logging.INFO("Successfully retrieved object...")
-	//TODO : Error handling
 	response, err = io.ReadAll(result.Body)
+	if err != nil {
+		logging.ERROR("Recived error while reading body:", err)
+	}
 	return response
 }
 
@@ -188,5 +188,5 @@ func (s3manager *S3Manager) ListBucket() {
 }
 
 // Return list of objects in the buckets
-func GetBucketItems(bucketName string) {
+func (S3Manager *S3Manager) GetBucketItems(bucketName string) {
 }

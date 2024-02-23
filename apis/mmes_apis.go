@@ -34,13 +34,13 @@ type ModelInfo struct {
 	Metainfo  map[string]interface{} `json:"meta-info"`
 }
 
-var s3_manager *core.S3Manager
+var dbmgr core.DBMgr
 
 func init() {
 	logging.INFO("Starting api server...")
 
-	// set up the s3 manager
-	s3_manager = core.GetS3ManagerInstance()
+	// set up the db manager
+	dbmgr = core.GetDBManagerInstance()
 
 	router := gin.Default()
 
@@ -75,12 +75,12 @@ func RegisterModel(cont *gin.Context) {
 		logging.INFO(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
 		modelInfoBytes, _ := json.Marshal(modelInfo)
 
-		s3Err := s3_manager.CreateBucket(modelInfo.ModelName)
-		if s3Err == nil {
-			s3_manager.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelName)
+		err := dbmgr.CreateBucket(modelInfo.ModelName)
+		if err == nil {
+			dbmgr.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelName)
 		} else {
 			returnCode = http.StatusInternalServerError
-			responseMsg = s3Err.Error()
+			responseMsg = err.Error()
 		}
 		cont.JSON(returnCode, gin.H{
 			"code":    returnCode,
@@ -104,7 +104,7 @@ func GetModelInfo(cont *gin.Context) {
 	model_name := jsonMap["model-name"].(string)
 	logging.INFO("The request model name: ", model_name)
 
-	model_info := s3_manager.GetBucketObject(model_name+os.Getenv("INFO_FILE_POSTFIX"), model_name)
+	model_info := dbmgr.GetBucketObject(model_name+os.Getenv("INFO_FILE_POSTFIX"), model_name)
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -119,7 +119,7 @@ func GetModelInfoByName(cont *gin.Context) {
 	logging.INFO("Get model info by name API ...")
 	modelName := cont.Param("modelName")
 
-	model_info := s3_manager.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
+	model_info := dbmgr.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
@@ -142,7 +142,7 @@ func UploadModel(cont *gin.Context) {
 	byteFile, _ := io.ReadAll((file))
 
 	logging.INFO("Uploading model : ", modelName)
-	s3_manager.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_POSTFIX"), modelName)
+	dbmgr.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_POSTFIX"), modelName)
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": string("Model uploaded successfully.."),
@@ -150,14 +150,14 @@ func UploadModel(cont *gin.Context) {
 }
 
 /*
-API to download the trained model from s3 bucket
+API to download the trained model from  bucket
 Input: model name in path params as "modelName"
 */
 func DownloadModel(cont *gin.Context) {
 	logging.INFO("Download model API ...")
 	modelName := cont.Param("modelName")
 	fileName := modelName + os.Getenv("MODEL_FILE_POSTFIX")
-	fileByes := s3_manager.GetBucketObject(fileName, modelName)
+	fileByes := dbmgr.GetBucketObject(fileName, modelName)
 
 	//Return file in api reponse using byte slice
 	cont.Header("Content-Disposition", "attachment;"+fileName)
