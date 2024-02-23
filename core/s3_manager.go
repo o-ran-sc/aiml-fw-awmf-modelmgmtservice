@@ -43,6 +43,16 @@ type S3Manager struct {
 	S3Client *s3.S3
 }
 
+type DBMgr interface {
+	CreateBucket(bucketName string) (err error)
+	GetBucketObject(objectName string, bucketName string) []byte
+	DeleteBucket(client *s3.S3, objectName string, bucketName string)
+	DeleteBucketObject(client *s3.S3, objectName string, bucketName string) bool
+	UploadFile(dataBytes []byte, file_name string, bucketName string)
+	ListBucket()
+	GetBucketItems(bucketName string)
+}
+
 // Singleton for S3Manager
 func GetS3ManagerInstance() *S3Manager {
 	Lock.Lock()
@@ -56,11 +66,6 @@ func GetS3ManagerInstance() *S3Manager {
 	}
 
 	return s3MgrInstance
-}
-
-type S3Error struct {
-	msg  string
-	code int
 }
 
 /*
@@ -173,9 +178,9 @@ func (s3manager *S3Manager) UploadFile(dataBytes []byte, file_name string, bucke
 	logging.INFO("File uploaded to bucket ", bucketName)
 }
 
-func (s3manager *S3Manager) ListBucket(client *s3.S3) {
+func (s3manager *S3Manager) ListBucket() {
 	input := &s3.ListBucketsInput{}
-	result, err := client.ListBuckets(input)
+	result, err := s3manager.S3Client.ListBuckets(input)
 	if err != nil {
 		logging.ERROR(err.Error())
 	}
@@ -184,5 +189,4 @@ func (s3manager *S3Manager) ListBucket(client *s3.S3) {
 
 // Return list of objects in the buckets
 func GetBucketItems(bucketName string) {
-
 }
