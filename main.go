@@ -18,10 +18,22 @@ limitations under the License.
 package main
 
 import (
-	_ "gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
+	"net/http"
+	"os"
+	"time"
+
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
 )
 
 func main() {
+	router := routers.InitRouter()
+	server := http.Server{
+		Addr:         os.Getenv("MMES_URL"),
+		Handler:      router,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
 	logging.INFO("Starting api..")
+	server.ListenAndServe()
 }

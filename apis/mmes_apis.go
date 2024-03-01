@@ -36,24 +36,6 @@ type ModelInfo struct {
 
 var dbmgr core.DBMgr
 
-func init() {
-	logging.INFO("Starting api server...")
-
-	// set up the db manager
-	dbmgr = core.GetDBManagerInstance()
-
-	router := gin.Default()
-
-	router.POST("/registerModel", RegisterModel)
-	router.GET("/getModelInfo", GetModelInfo)
-	router.GET("/getModelInfo/:modelName", GetModelInfoByName)
-	router.MaxMultipartMemory = 8 << 20 //8 Mb
-	router.POST("/uploadModel/:modelName", UploadModel)
-	router.GET("/downloadModel/:modelName/model.zip", DownloadModel)
-	router.Run(os.Getenv("MMES_URL"))
-	logging.INFO("Started api server...")
-}
-
 func RegisterModel(cont *gin.Context) {
 	var returnCode int = http.StatusCreated
 	var responseMsg string = "Model registered successfully"
