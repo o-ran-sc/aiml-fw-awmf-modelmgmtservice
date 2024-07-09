@@ -15,30 +15,50 @@ See the License for the specific language governing permissions and
 limitations under the License.
 ==================================================================================
 */
-package main
+package apis_test
 
 import (
 	"net/http"
+	"net/http/httptest"
 	"os"
-	"time"
+	"strings"
+	"testing"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
-	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
-func main() {
-	router := routers.InitRouter(
-		apis.NewMmeApiHandler(
-			core.GetDBManagerInstance(),
-		))
-	server := http.Server{
-		Addr:         os.Getenv("MMES_URL"),
-		Handler:      router,
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+var registerModelBody = `{
+	"model-name": "test-model",
+	"rapp-id": "1234",
+	"meta-info": {
+		"a": "b"
 	}
-	logging.INFO("Starting api..")
-	server.ListenAndServe()
+}`
+
+type dbMgrMock struct {
+	mock.Mock
+	core.DBMgr
+}
+
+func (d *dbMgrMock) CreateBucket(bucketName string) (err error) {
+	args := d.Called(bucketName)
+	return args.Error(0)
+}
+
+func (d *dbMgrMock) UploadFile(dataBytes []byte, file_name string, bucketName string) {
+}
+func TestRegisterModel(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	dbMgrMockInst := new(dbMgrMock)
+	dbMgrMockInst.On("CreateBucket", "test-model").Return(nil)
+	handler := apis.NewMmeApiHandler(dbMgrMockInst)
+	router := routers.InitRouter(handler)
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/registerModel", strings.NewReader(registerModelBody))
+	router.ServeHTTP(w, req)
+	assert.Equal(t, 201, w.Code)
 }
