@@ -25,7 +25,9 @@ WORKDIR ${MME_DIR}
 # Copy sources into the container
 COPY . .
 # Install dependencies from go.mod
-RUN go get
+RUN go mod tidy
+
+RUN LOG_FILE_NAME=testing.log go test ./...
 
 #Build all packages from current dir into bin 
 RUN go build -o mme_bin .
