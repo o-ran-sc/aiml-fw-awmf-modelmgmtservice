@@ -22,15 +22,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() *gin.Engine {
+func InitRouter(handler *apis.MmeApiHandler) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
-	r.POST("/registerModel", apis.RegisterModel)
-	r.GET("/getModelInfo", apis.GetModelInfo)
-	r.GET("/getModelInfo/:modelName", apis.GetModelInfoByName)
-	r.POST("/uploadModel/:modelName", apis.UploadModel)
-	r.GET("/downloadModel/:modelName/model.zip", apis.DownloadModel)
+	r.POST("/registerModel", handler.RegisterModel)
+	r.GET("/getModelInfo", handler.GetModelInfo)
+	r.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
+	r.POST("/uploadModel/:modelName", handler.UploadModel)
+	r.GET("/downloadModel/:modelName/model.zip", handler.DownloadModel)
 	return r
 }
