@@ -22,12 +22,17 @@ import (
 	"os"
 	"time"
 
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
 )
 
 func main() {
-	router := routers.InitRouter()
+	router := routers.InitRouter(
+		apis.NewMmeApiHandler(
+			core.GetDBManagerInstance(),
+		))
 	server := http.Server{
 		Addr:         os.Getenv("MMES_URL"),
 		Handler:      router,
