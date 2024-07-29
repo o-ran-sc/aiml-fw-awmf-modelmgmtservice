@@ -16,7 +16,7 @@
 #
 # ==================================================================================
 #Base Image
-FROM golang:1.21
+FROM golang:1.21-alpine AS builder
 
 # location in the container
 ENV MME_DIR /home/app/
@@ -32,8 +32,17 @@ RUN LOG_FILE_NAME=testing.log go test ./...
 #Build all packages from current dir into bin 
 RUN go build -o mme_bin .
 
+FROM alpine:latest
+
+RUN apk update && apk add bash
+RUN apk add --no-cache bash
+
+WORKDIR /app
+
+COPY --from=builder /home/app/mme_bin .
+
 #Start the app
-ENTRYPOINT [ "sh", "-c", "${MME_DIR}/mme_bin"]
+ENTRYPOINT ["/app/mme_bin"]
 
 #Expose the ports for external communication
 EXPOSE 8082
