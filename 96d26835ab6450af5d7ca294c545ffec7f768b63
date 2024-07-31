@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00f4daae_d48315d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-07-31T01:16:45Z",
+      "side": 1,
+      "message": "Thank you for your contribution! Please take a look at my review comments.",
+      "revId": "96d26835ab6450af5d7ca294c545ffec7f768b63",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45af7d65_64af0930",
+        "filename": "Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-07-31T01:16:45Z",
+      "side": 1,
+      "message": "I think it would be better to specify one particular version, not the latest, to configure the same environment.",
+      "revId": "96d26835ab6450af5d7ca294c545ffec7f768b63",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22dba6bb_e30a7132",
+        "filename": "Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-07-31T01:16:45Z",
+      "side": 1,
+      "message": "Have you verified this? The path doesn\u0027t seem to be the same as before.",
+      "revId": "96d26835ab6450af5d7ca294c545ffec7f768b63",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
