@@ -33,6 +33,24 @@
       "message": "@gyuyoung park could you please produce the result for size so that we could record this result (please let us know the procedure to compare).",
       "revId": "76cdfd05482b9fbf9cd30c396df809e28f047d40",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "987de56c_ebe9ee96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-01T15:30:49Z",
+      "side": 1,
+      "message": "Hello, Thank you for your review. Here is my procedure.\n\n1. Check previous image size\n```\nsudo nerdctl images --namespace k8s.io | grep model\n\n nexus3.o-ran-sc.org:10002/o-ran-sc/aiml-fw-awmf-modelmgmtservice-docker          \u003cnone\u003e                                             02be5bd2ce0a    13 days ago       linux/amd64    1.6 GiB      479.8 MiB\n```\n\n2. Apply this code to Dockerfile of modelmgmtservice and build modelmgmtservice image\n```\nsudo nerdctl images --namespace k8s.io | grep model\nmodelmgmtservice                                                                 1.0.0                                              11c9e9c67999    2 hours ago       linux/amd64    24.8 MiB     10.6 MiB \n```\n\nI just used multi-stage builds technique to dockerfile for reducing the image size\nThanks!",
+      "parentUuid": "737ccb66_858ad8a0",
+      "revId": "76cdfd05482b9fbf9cd30c396df809e28f047d40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
