@@ -16,6 +16,23 @@
       "message": "I left my answer, please review again. Thanks a lot!",
       "revId": "76cdfd05482b9fbf9cd30c396df809e28f047d40",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "737ccb66_858ad8a0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-08-01T14:43:19Z",
+      "side": 1,
+      "message": "@gyuyoung park could you please produce the result for size so that we could record this result (please let us know the procedure to compare).",
+      "revId": "76cdfd05482b9fbf9cd30c396df809e28f047d40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
