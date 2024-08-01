@@ -18,6 +18,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c749610e_8ad586f9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-01T02:09:23Z",
+      "side": 1,
+      "message": "Thanks! I checked the comments, and left some answer.",
+      "parentUuid": "00f4daae_d48315d7",
+      "revId": "96d26835ab6450af5d7ca294c545ffec7f768b63",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "45af7d65_64af0930",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "50ef229d_216d7673",
+        "filename": "Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-01T02:09:23Z",
+      "side": 1,
+      "message": "Oh! im sorry, i made mistake of pushing the \u0027DONE\u0027 button... Now i uploaded the new Dockerfile image that contains \u0027alpine:3.20\u0027. Please review again.",
+      "parentUuid": "45af7d65_64af0930",
+      "revId": "96d26835ab6450af5d7ca294c545ffec7f768b63",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "22dba6bb_e30a7132",
         "filename": "Dockerfile",
         "patchSetId": 1
@@ -48,6 +84,24 @@
       "writtenOn": "2024-07-31T01:16:45Z",
       "side": 1,
       "message": "Have you verified this? The path doesn\u0027t seem to be the same as before.",
+      "revId": "96d26835ab6450af5d7ca294c545ffec7f768b63",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6ee54d_24fe7897",
+        "filename": "Dockerfile",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-01T02:09:23Z",
+      "side": 1,
+      "message": "Thank you for your review!, I\u0027ve already confirmed the result and also confirmed the new version. I changed \u0027WORKDIR\u0027 to \u0027/app\u0027 in 2 pahse stage, so that\u0027s why the last \u0027ENTRYPOINT\u0027 path is different. But this image is work well.\n\nI left some logs below.\n\n1. After building the image.\n\n```\nsudo nerdctl images --namespace k8s.io | grep modelmgmtservice\nmodelmgmtservice                                                                 1.0.3                                              3b9a53de7b94    47 hours ago    linux/amd64    29.3 MiB     13.6 MiB\n```\n\n2. After changing the image to the deployment of modelmgmtservice. \n\n```\nkubectl exec -it -n traininghost modelmgmtservice-5ccdd49cf8-mh6tq -- ls\nmme_bin   mmes.log\n\nkubectl exec -it -n traininghost modelmgmtservice-5ccdd49cf8-mh6tq -- ps aux\nPID   USER     TIME  COMMAND\n    1 root      0:00 /app/mme_bin\n   68 root      0:00 ps aux\n```\ni found the \u0027mme_bin\u0027 which is go-binary of modelmgmtserver and process.\n\n3. I also call some REST API\n\n```\ncurl --location \u0027http://localhost:32006/registerModel\u0027 \\\n      --header \u0027Content-Type: application/json\u0027 \\\n      --data \u0027{\n         \"model-name\":\"qoe3\",\n         \"rapp-id\": \"rapp_4\",\n         \"meta-info\" :\n         {\n             \"accuracy\":\"90\",\n             \"model-type\":\"timeseries\",\n             \"feature-list\":[\"pdcpBytesDl\",\"pdcpBytesUl\"]\n         }\n      }\u0027 -v\n      \n...\n\u003c HTTP/1.1 201 Created\n\u003c Content-Type: application/json; charset\u003dutf-8\n\u003c Date: Wed, 31 Jul 2024 13:14:10 GMT\n\u003c Content-Length: 54\n\u003c \n* Connection #0 to host localhost left intact\n{\"code\":201,\"message\":\"Model registered successfully\"}\n\n...\ncurl http://localhost:32006/getModelInfo/qoe3\n\n{\"code\":200,\"message\":\"{\\\"model-name\\\":\\\"qoe3\\\",\\\"rapp-id\\\":\\\"rapp_4\\\",\\\"meta-info\\\":{\\\"accuracy\\\":\\\"90\\\",\\\"feature-list\\\":[\\\"pdcpBytesDl\\\",\\\"pdcpBytesUl\\\"],\\\"model-type\\\":\\\"timeseries\\\"}}\"}\n```\n\nPlease review again, Really thanks a lot.",
+      "parentUuid": "22dba6bb_e30a7132",
       "revId": "96d26835ab6450af5d7ca294c545ffec7f768b63",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
