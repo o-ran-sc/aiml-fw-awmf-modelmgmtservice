@@ -51,6 +51,41 @@
       "parentUuid": "737ccb66_858ad8a0",
       "revId": "76cdfd05482b9fbf9cd30c396df809e28f047d40",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da87b92a_f7e626b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-02T05:36:18Z",
+      "side": 1,
+      "message": "LGTM! Thanks for your contribution!",
+      "revId": "76cdfd05482b9fbf9cd30c396df809e28f047d40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18d87b77_c5483953",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-02T05:36:18Z",
+      "side": 1,
+      "message": "@subhash, you can see the result from the jira.\nhttps://jira.o-ran-sc.org/browse/AIMLFW-116",
+      "parentUuid": "987de56c_ebe9ee96",
+      "revId": "76cdfd05482b9fbf9cd30c396df809e28f047d40",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
