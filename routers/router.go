@@ -32,5 +32,6 @@ func InitRouter(handler *apis.MmeApiHandler) *gin.Engine {
 	r.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
 	r.POST("/uploadModel/:modelName", handler.UploadModel)
 	r.GET("/downloadModel/:modelName/model.zip", handler.DownloadModel)
+	r.GET("/getModelInfoList", handler.GetModelInfoList)
 	return r
 }
