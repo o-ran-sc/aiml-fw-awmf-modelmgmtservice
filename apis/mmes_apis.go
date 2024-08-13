@@ -168,3 +168,35 @@ func (m *MmeApiHandler) UpdateModel() {
 func (m *MmeApiHandler) DeleteModel() {
 	logging.INFO("Deleting model...")
 }
+
+type ModelInfoResponseModel struct {
+	Name string `json:"name"`
+	Data string `json:"data"`
+}
+
+func (m *MmeApiHandler) GetModelInfoList(cont *gin.Context) {
+	logging.INFO("List all model API")
+	bucketList, err := m.dbmgr.ListBucket()
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("Error occurred, send status code: ", statusCode)
+		cont.JSON(statusCode, gin.H{
+			"code":    statusCode,
+			"message": "Unexpected Error in server, you can't get model information list",
+		})
+		return
+	}
+
+	modelInfoListRespModel := []ModelInfoResponseModel{}
+	for _, bucket := range bucketList {
+		modelInfoListRespModel = append(modelInfoListRespModel, ModelInfoResponseModel{
+			Name: bucket.Name,
+			Data: bucket.Data,
+		})
+	}
+
+	cont.JSON(http.StatusOK, gin.H{
+		"code":    http.StatusOK,
+		"message": modelInfoListRespModel,
+	})
+}

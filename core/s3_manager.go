@@ -49,7 +49,7 @@ type DBMgr interface {
 	DeleteBucket(client *s3.S3, objectName string, bucketName string)
 	DeleteBucketObject(client *s3.S3, objectName string, bucketName string) bool
 	UploadFile(dataBytes []byte, file_name string, bucketName string)
-	ListBucket()
+	ListBucket() ([]ModelInfo, error)
 	GetBucketItems(bucketName string)
 }
 
@@ -178,13 +178,30 @@ func (s3manager *S3Manager) UploadFile(dataBytes []byte, file_name string, bucke
 	logging.INFO("File uploaded to bucket ", bucketName)
 }
 
-func (s3manager *S3Manager) ListBucket() {
+func (s3manager *S3Manager) ListBucket() ([]ModelInfo, error) {
 	input := &s3.ListBucketsInput{}
 	result, err := s3manager.S3Client.ListBuckets(input)
+
 	if err != nil {
-		logging.ERROR(err.Error())
+		logging.ERROR("Can't get bucket list in s3 ", err)
+		return []ModelInfo{}, err
 	}
-	logging.INFO(result)
+
+	modelInfoList := []ModelInfo{}
+	for _, bucket := range result.Buckets {
+		modelName := ""
+		if bucket.Name != nil {
+			modelName = *bucket.Name
+		}
+
+		bucketObject := s3manager.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
+		modelInfoList = append(modelInfoList, ModelInfo{
+			Name: modelName,
+			Data: string(bucketObject),
+		})
+	}
+
+	return modelInfoList, nil
 }
 
 // Return list of objects in the buckets
