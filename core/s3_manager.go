@@ -45,11 +45,11 @@ type S3Manager struct {
 
 type DBMgr interface {
 	CreateBucket(bucketName string) (err error)
-	GetBucketObject(objectName string, bucketName string) []byte
+	GetBucketObject(objectName string, bucketName string) BucketObject
 	DeleteBucket(client *s3.S3, objectName string, bucketName string)
 	DeleteBucketObject(client *s3.S3, objectName string, bucketName string) bool
 	UploadFile(dataBytes []byte, file_name string, bucketName string)
-	ListBucket()
+	ListBucket(bucketObjPostfix string) ([]Bucket, error)
 	GetBucketItems(bucketName string)
 }
 
@@ -114,7 +114,7 @@ func (s3manager *S3Manager) CreateBucket(bucketName string) (err error) {
 // objectName : Name of file/object under given bucket
 // bucketName : Name of s3 bucket
 // TODO: Return error
-func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string) []byte {
+func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string) BucketObject {
 
 	var response []byte
 	getInputs := &s3.GetObjectInput{
@@ -178,13 +178,34 @@ func (s3manager *S3Manager) UploadFile(dataBytes []byte, file_name string, bucke
 	logging.INFO("File uploaded to bucket ", bucketName)
 }
 
-func (s3manager *S3Manager) ListBucket() {
+func (s3manager *S3Manager) ListBucket(bucketObjPostfix string) ([]Bucket, error) {
 	input := &s3.ListBucketsInput{}
-	result, err := s3manager.S3Client.ListBuckets(input)
+	listBucketsOutput, err := s3manager.S3Client.ListBuckets(input)
+
 	if err != nil {
-		logging.ERROR(err.Error())
+		logging.ERROR("Can't get bucket list in s3 ", err)
+		return []Bucket{}, err
 	}
-	logging.INFO(result)
+
+	BucketList := []Bucket{}
+	for _, bucket := range listBucketsOutput.Buckets {
+		bucketName := ""
+		if bucket.Name != nil {
+			bucketName = *bucket.Name
+		}
+
+		bucketObject := s3manager.GetBucketObject(bucketName+bucketObjPostfix, bucketName)
+		if len(bucketObject) == 0 {
+			continue
+		}
+
+		BucketList = append(BucketList, Bucket{
+			Name:   bucketName,
+			Object: bucketObject,
+		})
+	}
+
+	return BucketList, nil
 }
 
 // Return list of objects in the buckets

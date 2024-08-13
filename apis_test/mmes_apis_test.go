@@ -18,6 +18,9 @@ limitations under the License.
 package apis_test
 
 import (
+	"encoding/json"
+	"errors"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -51,6 +54,12 @@ func (d *dbMgrMock) CreateBucket(bucketName string) (err error) {
 
 func (d *dbMgrMock) UploadFile(dataBytes []byte, file_name string, bucketName string) {
 }
+
+func (d *dbMgrMock) ListBucket(bucketObjPostfix string) ([]core.Bucket, error) {
+	args := d.Called()
+	return args.Get(0).([]core.Bucket), args.Error(1)
+}
+
 func TestRegisterModel(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 	dbMgrMockInst := new(dbMgrMock)
@@ -61,4 +70,67 @@ func TestRegisterModel(t *testing.T) {
 	req, _ := http.NewRequest("POST", "/registerModel", strings.NewReader(registerModelBody))
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 201, w.Code)
+}
+
+func TestWhenSuccessGetModelInfoList(t *testing.T) {
+	// Setting ENV
+	os.Setenv("LOG_FILE_NAME", "testing")
+
+	// Setting Mock
+	dbMgrMockInst := new(dbMgrMock)
+	dbMgrMockInst.On("ListBucket").Return([]core.Bucket{
+		{
+			Name:   "qoe",
+			Object: []byte(registerModelBody),
+		},
+	}, nil)
+
+	handler := apis.NewMmeApiHandler(dbMgrMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/getModelInfo", nil)
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	body, _ := io.ReadAll(response.Body)
+
+	var modelInfoListResp struct {
+		Code    int                      `json:"code"`
+		Message []apis.ModelInfoResponse `json:"message"`
+	}
+	json.Unmarshal(body, &modelInfoListResp)
+
+	assert.Equal(t, 200, responseRecorder.Code)
+	assert.Equal(t, 200, modelInfoListResp.Code)
+	assert.Equal(t, registerModelBody, modelInfoListResp.Message[0].Data)
+}
+
+func TestWhenFailGetModelInfoList(t *testing.T) {
+	// Setting ENV
+	os.Setenv("LOG_FILE_NAME", "testing")
+
+	// Setting Mock
+	dbMgrMockInst := new(dbMgrMock)
+	dbMgrMockInst.On("ListBucket").Return([]core.Bucket{}, errors.New("Test: Fail GetModelInfoList"))
+
+	handler := apis.NewMmeApiHandler(dbMgrMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/getModelInfo", nil)
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	body, _ := io.ReadAll(response.Body)
+
+	var modelInfoListResp struct {
+		Code    int                      `json:"code"`
+		Message []apis.ModelInfoResponse `json:"message"`
+	}
+	json.Unmarshal(body, &modelInfoListResp)
+
+	assert.Equal(t, 500, responseRecorder.Code)
+	assert.Equal(t, 500, modelInfoListResp.Code)
+	assert.Equal(t, 0, len(modelInfoListResp.Message))
 }
