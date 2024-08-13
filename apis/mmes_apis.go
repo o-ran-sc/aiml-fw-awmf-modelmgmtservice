@@ -34,6 +34,11 @@ type ModelInfo struct {
 	Metainfo  map[string]interface{} `json:"meta-info"`
 }
 
+type ModelInfoResponse struct {
+	Name string `json:"name"`
+	Data string `json:"data"`
+}
+
 type MmeApiHandler struct {
 	dbmgr core.DBMgr
 }
@@ -81,25 +86,32 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 }
 
 /*
-This API retrieves model info for given model name
-input :
-
-	Model name : string
+This API retrieves model info list managed in modelmgmtservice
 */
 func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
-	logging.INFO("Fetching model")
-	bodyBytes, _ := io.ReadAll(cont.Request.Body)
-	//TODO Error checking of request is not in json, i.e. etra ',' at EOF
-	jsonMap := make(map[string]interface{})
-	json.Unmarshal(bodyBytes, &jsonMap)
-	model_name := jsonMap["model-name"].(string)
-	logging.INFO("The request model name: ", model_name)
+	logging.INFO("List all model API")
+	bucketList, err := m.dbmgr.ListBucket(os.Getenv("INFO_FILE_POSTFIX"))
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("Error occurred, send status code: ", statusCode)
+		cont.JSON(statusCode, gin.H{
+			"code":    statusCode,
+			"message": "Unexpected Error in server, you can't get model information list",
+		})
+		return
+	}
 
-	model_info := m.dbmgr.GetBucketObject(model_name+os.Getenv("INFO_FILE_POSTFIX"), model_name)
+	modelInfoListResp := []ModelInfoResponse{}
+	for _, bucket := range bucketList {
+		modelInfoListResp = append(modelInfoListResp, ModelInfoResponse{
+			Name: bucket.Name,
+			Data: string(bucket.Object),
+		})
+	}
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
-		"message": string(model_info),
+		"message": modelInfoListResp,
 	})
 }
 
@@ -110,11 +122,15 @@ func (m *MmeApiHandler) GetModelInfoByName(cont *gin.Context) {
 	logging.INFO("Get model info by name API ...")
 	modelName := cont.Param("modelName")
 
-	model_info := m.dbmgr.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
+	bucketObj := m.dbmgr.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
+	modelInfoListResp := ModelInfoResponse{
+		Name: modelName,
+		Data: string(bucketObj),
+	}
 
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
-		"message": string(model_info),
+		"message": modelInfoListResp,
 	})
 }
 
