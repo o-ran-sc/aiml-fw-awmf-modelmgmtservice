@@ -71,6 +71,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a592f78_de383c7c",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-08-14T15:29:47Z",
+      "side": 1,
+      "message": "Do you think it should be byte ? \nActually there are two byte of object is getting stored\n1. modelInfo\n2. model(zip)",
+      "range": {
+        "startLine": 174,
+        "startChar": 1,
+        "endLine": 174,
+        "endChar": 26
+      },
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0bfcce5b_0f1fcf8e",
         "filename": "apis/mmes_apis.go",
         "patchSetId": 2
@@ -171,6 +194,75 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "3c082b80_b98f67f8",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca0d9fb1_43cc8329",
+        "filename": "core/model.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-08-14T15:29:47Z",
+      "side": 1,
+      "message": "Could we make it to byte",
+      "range": {
+        "startLine": 5,
+        "startChar": 1,
+        "endLine": 5,
+        "endChar": 12
+      },
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fd3d36c_bde42b79",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-08-14T15:29:47Z",
+      "side": 1,
+      "message": "Here we are considering all the buckets as model, which I think not correct.\nE.g. listBuckets() may return bucket where we store model/ metadata/ pipeline and it\u0027s log.\n\nCould you check once how model related buckets could be uniquely identified. May be a sample execution will give some good idea.",
+      "range": {
+        "startLine": 191,
+        "startChar": 24,
+        "endLine": 191,
+        "endChar": 38
+      },
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f9ab52c_dab0e19e",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-08-14T15:29:47Z",
+      "side": 1,
+      "message": "convert this to constant",
+      "range": {
+        "startLine": 197,
+        "startChar": 65,
+        "endLine": 197,
+        "endChar": 82
+      },
       "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
