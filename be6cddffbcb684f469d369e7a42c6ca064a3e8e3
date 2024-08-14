@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "10918f9e_22c1a9e0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T05:11:59Z",
+      "side": 1,
+      "message": "Thank you for your contribution! Please take a look at my comments.",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0bfcce5b_0f1fcf8e",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T05:11:59Z",
+      "side": 1,
+      "message": "What about having an array of `ModelInfo` instead of creating ModelInfoResponseModel?",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3db273e0_f02f111a",
+        "filename": "core/model.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T05:11:59Z",
+      "side": 1,
+      "message": "`ModelInfo` of core package seems to play the same role as [`ModelInfo`](https://gerrit.o-ran-sc.org/r/gitweb?p\u003daiml-fw/awmf/modelmgmtservice.git;a\u003dblob;f\u003dapis/mmes_apis.go;h\u003ddbff0982abce93298d8265cbff1372296ca145af;hb\u003dHEAD#l31) of apis package, so it would be better to use [`ModelInfo`](https://gerrit.o-ran-sc.org/r/gitweb?p\u003daiml-fw/awmf/modelmgmtservice.git;a\u003dblob;f\u003dapis/mmes_apis.go;h\u003ddbff0982abce93298d8265cbff1372296ca145af;hb\u003dHEAD#l31) of apis package.",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "505797a4_7d142ebd",
+        "filename": "routers/router.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T05:11:59Z",
+      "side": 1,
+      "message": "It seems that `/getModelInfo` can be used to deliver the model list instead of creating a new interface, since `TM` currently does not use `/getModelInfo` and performs the same function as `/getModelInfo:modelname`.",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
