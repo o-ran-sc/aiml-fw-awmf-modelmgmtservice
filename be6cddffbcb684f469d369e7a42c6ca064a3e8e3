@@ -35,6 +35,40 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "922dbd73_145bc9ae",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T09:23:34Z",
+      "side": 1,
+      "message": "My ideas may not be correct. Let\u0027s wait other committers\u0027 review comments too!",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65838c9b_1decae9f",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T09:23:34Z",
+      "side": 1,
+      "message": "Please move this struct toward the other struct above.",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0bfcce5b_0f1fcf8e",
@@ -66,6 +100,24 @@
       "side": 1,
       "message": "Thank you for your reviews!\n\nThe reason why i distinguished between `ModelInfo` and `ModelInfoResponsModel` is for decoupling dependency between these two domain layers.\n\nI thought this project has two domain\n 1. HTTP API Layer -\u003e handle a requests and send responses\n 2. Database Layer -\u003e handle database API\n \n \u0027ModelInfo\u0027 is a model of \u0027Database Layer\u0027 and \u0027ModelInfoResponseModel\u0027 is a response model of \u0027HTTP API Layer\u0027. i think, this distinction has the following effects.\n\nFirst, These two models look like the same scheme, but these two can be different with the perspectives of domain. Such as, \u0027ModelInfo\u0027 can have some database properties like id, date etc, and \u0027ModelInfoResponseModel\u0027 can extract the properties of \u0027ModelInfo\u0027 for client. \n\nSecond, these two models could have different \u0027key(or property name)\u0027 but same \u0027value\u0027 depending on the viewpoint with their aspect, Of course, the opposite is possible. Such as, in database aspects \u0027model\u0027 is just \u0027bucket\u0027, but \u0027bucket\u0027 will be \u0027model from HTTP API perspective.\n\nLastly, Decoupling makes program more flexible. The changes about model struct in database not affects the HTTP API Layer response body. \n\nThanks to your review, I realize i have to change struct from `ModelInfo` to `Bucket` to match with database perspective like below. because current \u0027ModelInfo\u0027 struct name seems like HTTP API layer\u0027s model.\n\n```go\ntype Bucket struct {\n\tName   string\n\tObject string\n}\n```\n\nAlso i have to change the method definition as below\n```go\nListBucket() ([]Bucket , error)\n```\n\nIt makes more reasonable with the perspectives of database domain\n\nIf you think this decoupling is unnecessary and have too much redundancies, I always open to change the code with your review!!",
       "parentUuid": "0bfcce5b_0f1fcf8e",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d8fddf_babc3f76",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T09:23:34Z",
+      "side": 1,
+      "message": "I agree with your idea to change the struct from `ModelInfo` to `Bucket`. \nWhen it comes to `ModelInfoResponsModel`, you\u0027ve got a point. However, in order to do so, I think the result of `/getModelInfo/:modelName` API should be applied in the same way. Also it would be better to change the struct name to `ModelInfoResponse` since the word, `model`, is used twice.",
+      "parentUuid": "215046fd_886eb66f",
       "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
@@ -105,6 +157,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc869a7d_88d4f669",
+        "filename": "core/model.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T09:23:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c082b80_b98f67f8",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "505797a4_7d142ebd",
@@ -136,6 +206,24 @@
       "side": 1,
       "message": "Yes!, I really agree with your review.\n\nCould i overwrite the \u0027handler.GetModelInfo\u0027 with my \u0027handler.GetModelInfoList\u0027 code?",
       "parentUuid": "505797a4_7d142ebd",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f310fc96_8d1f5654",
+        "filename": "routers/router.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-14T09:23:34Z",
+      "side": 1,
+      "message": "I think you can do that.",
+      "parentUuid": "0792a8d1_9ccd0a56",
       "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
