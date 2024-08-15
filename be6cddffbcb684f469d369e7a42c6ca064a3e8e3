@@ -224,6 +224,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d2cbbe2a_eed17f9c",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-15T05:50:10Z",
+      "side": 1,
+      "message": "Yes, you can. But `TM` code should also be changed according to the response format change.",
+      "parentUuid": "8a9ee049_75bc7c44",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3db273e0_f02f111a",
         "filename": "core/model.go",
         "patchSetId": 2

@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3ec3fb8_93eb1715",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-15T05:50:10Z",
+      "side": 1,
+      "message": "Please revise this comment.",
+      "revId": "9c1cc5d3b3a0889cd3aad6b9b76530f3a9ad927d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c55011b_84e94ceb",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-15T05:50:10Z",
+      "side": 1,
+      "message": "Is it okay to run the code from here even though `bucketName` is empty?",
+      "revId": "9c1cc5d3b3a0889cd3aad6b9b76530f3a9ad927d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
