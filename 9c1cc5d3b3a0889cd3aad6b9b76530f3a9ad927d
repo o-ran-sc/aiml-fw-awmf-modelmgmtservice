@@ -53,6 +53,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38328aa2_cd115d90",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-15T23:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8be8f82_2a24cd67",
+      "revId": "9c1cc5d3b3a0889cd3aad6b9b76530f3a9ad927d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c55011b_84e94ceb",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Yes, but it\u0027d be better not to execute this line when `bucketName` has empty string. It makes code mode readable and robust",
       "parentUuid": "4c55011b_84e94ceb",
+      "revId": "9c1cc5d3b3a0889cd3aad6b9b76530f3a9ad927d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "83fb8299_2c6b9e42",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-08-15T23:44:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7b761bb1_5a587fd1",
       "revId": "9c1cc5d3b3a0889cd3aad6b9b76530f3a9ad927d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
