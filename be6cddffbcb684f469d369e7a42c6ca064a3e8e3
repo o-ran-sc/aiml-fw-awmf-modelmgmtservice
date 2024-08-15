@@ -242,6 +242,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a5f2ce1f_bfcd1ea0",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-15T06:31:31Z",
+      "side": 1,
+      "message": "I got it, i found this code in tm\n\n- aiml-fw-awmf-tm/trainingmgr/common\n/trainingmgr_operations.py\n```py\nurl \u003d\"http://\"+str(model_management_service_ip)+\":\"+str(model_management_service_port)+\"/getModelInfo/{}\".format(model_name\n```\n\nAfter this modelmgmtservice feature is admited, i\u0027ll immediately modify the tm and test it.",
+      "parentUuid": "8a9ee049_75bc7c44",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3db273e0_f02f111a",
         "filename": "core/model.go",
         "patchSetId": 2
@@ -330,6 +348,30 @@
       "side": 1,
       "message": "Okay, I\u0027m gonna change \u0027Data\u0027 field as []byte!",
       "parentUuid": "ca0d9fb1_43cc8329",
+      "range": {
+        "startLine": 5,
+        "startChar": 1,
+        "endLine": 5,
+        "endChar": 12
+      },
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "976ac5c3_a108170d",
+        "filename": "core/model.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-15T06:31:31Z",
+      "side": 1,
+      "message": "I upload new code! Could you review again please?\n\nI modified \u0027ModelInfo\u0027 struct as following\n```go\ntype BucketObject []byte\n\ntype Bucket struct {\n\tName   string\n\tObject BucketObject\n}\n```\n\nBecause i think \u0027ModelInfo\u0027 was not appropriate in database perspective, so i modified the struct name as \u0027Bucket\u0027.",
+      "parentUuid": "cebaa991_c88f979e",
       "range": {
         "startLine": 5,
         "startChar": 1,
@@ -483,6 +525,24 @@
       "side": 1,
       "message": "I think you can do that.",
       "parentUuid": "0792a8d1_9ccd0a56",
+      "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f811b3de_d7006e52",
+        "filename": "routers/router.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-15T06:31:31Z",
+      "side": 1,
+      "message": "i update new code and put some results for reference\n\n- curl localhost:32006/getModelInfo | jq\n```json\n{\n  \"code\": 200,\n  \"message\": [\n    {\n      \"name\": \"gyu\",\n      \"data\": \"{\\\"model-name\\\":\\\"gyu\\\",\\\"rapp-id\\\":\\\"rapp_gyu\\\",\\\"meta-info\\\":{\\\"accuracy\\\":\\\"99\\\",\\\"feature-list\\\":[\\\"pdcpBytesDl\\\",\\\"pdcpBytesUl\\\"],\\\"model-type\\\":\\\"timeseries\\\"}}\"\n    },\n    {\n      \"name\": \"qoe1\",\n      \"data\": \"{\\\"model-name\\\":\\\"qoe1\\\",\\\"rapp-id\\\":\\\"rapp_1\\\",\\\"meta-info\\\":{\\\"accuracy\\\":\\\"90\\\",\\\"feature-list\\\":[\\\"pdcpBytesDl\\\",\\\"pdcpBytesUl\\\"],\\\"model-type\\\":\\\"timeseries\\\"}}\"\n    },\n    {\n      \"name\": \"qoe3\",\n      \"data\": \"{\\\"model-name\\\":\\\"qoe3\\\",\\\"rapp-id\\\":\\\"rapp_4\\\",\\\"meta-info\\\":{\\\"accuracy\\\":\\\"90\\\",\\\"feature-list\\\":[\\\"pdcpBytesDl\\\",\\\"pdcpBytesUl\\\"],\\\"model-type\\\":\\\"timeseries\\\"}}\"\n    }\n  ]\n}\n```\n\n- curl localhost:32006/getModelInfo/qoe1 | jq\n```json\n{\n  \"code\": 200,\n  \"message\": {\n    \"name\": \"qoe1\",\n    \"data\": \"{\\\"model-name\\\":\\\"qoe1\\\",\\\"rapp-id\\\":\\\"rapp_1\\\",\\\"meta-info\\\":{\\\"accuracy\\\":\\\"90\\\",\\\"feature-list\\\":[\\\"pdcpBytesDl\\\",\\\"pdcpBytesUl\\\"],\\\"model-type\\\":\\\"timeseries\\\"}}\"\n  }\n}\n```",
+      "parentUuid": "f310fc96_8d1f5654",
       "revId": "be6cddffbcb684f469d369e7a42c6ca064a3e8e3",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
