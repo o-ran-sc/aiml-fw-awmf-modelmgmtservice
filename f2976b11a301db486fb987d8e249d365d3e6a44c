@@ -18,6 +18,23 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5c30536_c2706926",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-21T04:13:52Z",
+      "side": 1,
+      "message": "Thank you for your review! I left my opinion, please review my comments!",
+      "revId": "f2976b11a301db486fb987d8e249d365d3e6a44c",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "519eafb7_e30b7265",
@@ -31,6 +48,30 @@
       "writtenOn": "2024-08-20T17:09:58Z",
       "side": 1,
       "message": "Do you think, if we introduce convention to store info_file and model file at bucket level itself then we could avoid complex logic to check every bucket.\n\nLet me know your thoughts.",
+      "range": {
+        "startLine": 196,
+        "startChar": 2,
+        "endLine": 199,
+        "endChar": 3
+      },
+      "revId": "f2976b11a301db486fb987d8e249d365d3e6a44c",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfe9b7ee_58903571",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-21T04:13:52Z",
+      "side": 1,
+      "message": "Yes. but i\u0027m not sure whether it\u0027ll be better or not.\n\n## Model perspective (Current)\nwhen we have A model and B model, database has two bucket like this.  \n\n```\n--A Model bucket(A model name)-    --B Model bucket(A model name)-\n|                             |    |                             |\n| -----A Model File Object--- |    | -----B Model File Object--- |\n| |      A model file       | |    | |      B model file       | |\n| --------------------------- |    | --------------------------- |\n|                             |    |                             |\n| ----A Model Info Object---- |    | ----B Model Info Object---- |\n| |      A model info       | |    | |      B model info       | |\n| --------------------------- |    | --------------------------- |\n|                             |    |                             |\n-------------------------------    -------------------------------\n```\n\u0027model file\u0027 and \u0027model info\u0027 are identified by \u0027postfix\u0027 in bucket (MODEL_FILE_POSTFIX, INFO_FILE_POSTFIX)\n\n### pros\n1. \u0027Model\u0027 perspective design\n2. we can get/update specific model bucket easily by key \u0027model_name\u0027\n\n### cons\n1. If we want to get model file list or model info list, we should retrieve all buckets and filter them.\n2. If another bucket is added(not related \u0027model\u0027, such as \u0027rApp\u0027 bucket), it will be hard to sort buckets related with model(\u0027A model bucket\u0027, \u0027B model bucket\u0027).\n\n## Model \u0027properties\u0027 perspective (your suggestion)\n\nif we have convention to store \u0027info_file\u0027 and \u0027model_file\u0027 at bucket level, it looks like\n```\n-Model Info bucket(Model Info)-    -Model File bucket(Model File)-\n|                             |    |                             |\n| -----A Model Info Object--- |    | -----A Model File Object--- |\n| |      A model info       | |    | |      A model file       | |\n| --------------------------- |    | --------------------------- |\n|                             |    |                             |\n| ----B Model Info Object---- |    | ----B Model File Object---- |\n| |      B model info       | |    | |      B model File       | |\n| --------------------------- |    | --------------------------- |\n|                             |    |                             |\n-------------------------------    -------------------------------\n```\n\n### pros\n1. Model \u0027properties\u0027 perspective design\n2. we can easily get all \u0027model info\u0027, \u0027model file\u0027 data list.\n\n### cons\n1. If we want to get specific model data(info, file), we have to retrieve all buckets and filter them to get data we want\n\n## conclusion\nI think the current bucket design is more reasonable now, because current bucket design concentrates on \u0027model\u0027 perspective. But i know what you worry about it, It seems like that the current \u0027ListBucket\u0027 implementation is a little bit complex. So someone who would see this code would be embarrassed. \n\nSo after this feature, i\u0027ll open issue to discuss refactoring modelmgmtservice code and modify this code to make it clear. Additionally i want to get everyone\u0027s opinions about which is better design, i\u0027ll open issue about it",
+      "parentUuid": "519eafb7_e30b7265",
       "range": {
         "startLine": 196,
         "startChar": 2,
