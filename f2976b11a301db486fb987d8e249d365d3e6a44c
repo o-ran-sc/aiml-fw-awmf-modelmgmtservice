@@ -169,6 +169,30 @@
       },
       "revId": "f2976b11a301db486fb987d8e249d365d3e6a44c",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "608a9e4e_acec0247",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-22T14:53:20Z",
+      "side": 1,
+      "message": "Thanks. Here is my plan for work\n1. i will create an issue about \u0027bucket design\u0027 with code to see each design\u0027s pros and cons.\n2. When the bucket design is decided, I\u0027ll modify \u0027modelmgmtservice\u0027 current code according to the design that we decided\n3. Also i\u0027ll create \u0027modelmgmtservice\u0027 API, such as Delete model info, file and etc\n4. Then,I\u0027ll organize some code such as, config data and logger\n\nI think it will take a lot of time and effort, but It\u0027ll be fun to me! If you want to request \u0027modelmgmtservice development\u0027 to me, just feel free to open an issue and tag my name.",
+      "parentUuid": "46286b7e_eac3ff70",
+      "range": {
+        "startLine": 196,
+        "startChar": 2,
+        "endLine": 199,
+        "endChar": 3
+      },
+      "revId": "f2976b11a301db486fb987d8e249d365d3e6a44c",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
