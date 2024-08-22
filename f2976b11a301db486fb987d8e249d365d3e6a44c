@@ -35,6 +35,23 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f78d9dce_e3788564",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-22T11:07:09Z",
+      "side": 1,
+      "message": "That means a lot reviewing this commit! I left my comment.",
+      "revId": "f2976b11a301db486fb987d8e249d365d3e6a44c",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "519eafb7_e30b7265",
@@ -96,6 +113,30 @@
       "side": 1,
       "message": "Hello @Gyuyong Park,\n\nI appreciate your effort to come up with this details.\n\nMy thought is to have two buckets:\n1) INFO_FILE_BUCKET\n2) MODEL_FILE_BUCKET\n\nQuery a single model(given model name \u003cMODEL-NAME\u003e):\nURI for info file: S3://INFO_FILE_BUCKET/\u003cMODEL-NAME\u003e/\u003cMODEL-NAME\u003e_info.json\nURI for model file: S3://INFO_FILE_BUCKET/\u003cMODEL-NAME\u003e/\u003cMODEL-NAME\u003e.zip\n\naws cli s3 ls s3://\u003cbucket\u003e/\u003cMODEL-NAME\u003e\n\n\nQuery all the model/info file:\nURI for info file: S3://$INFO_FILE_BUCKET\nURI for model file: S3://INFO_FILE_BUCKET\n\naws s3api list-objects --bucket \u003cBUCKET\u003e --endpoint-url http://localhost:32080",
       "parentUuid": "dfe9b7ee_58903571",
+      "range": {
+        "startLine": 196,
+        "startChar": 2,
+        "endLine": 199,
+        "endChar": 3
+      },
+      "revId": "f2976b11a301db486fb987d8e249d365d3e6a44c",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19b95904_87072296",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-08-22T11:07:09Z",
+      "side": 1,
+      "message": "Hello @subhash kumar singh. \n\nThank you for your idea!! I totally understand what you describe. But I guess this commit(Implement listing...) is not concern with \u0027bucket design\u0027 detail, this commit only focused on \u0027listing ModelInfo API\u0027 in current bucket design perspective. Also changing code from current bucket design to that you suggest needs to be an overall code changes. \n\nSo i would like to suggest a new \u0027bucket \u0027design\u0027 issue page making some example code that you suggest to compare that code with current code. we need to more discuss \u0027bucket design\u0027 with another and make it clear.\n\nAfter this commit is admitted or abandoned, i\u0027ll create new \u0027bucket design issue\u0027 page and some example code!!",
+      "parentUuid": "a361cfec_ff6d6138",
       "range": {
         "startLine": 196,
         "startChar": 2,
