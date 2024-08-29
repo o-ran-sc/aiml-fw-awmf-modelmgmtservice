@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/config"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	modelDB "gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
@@ -34,6 +35,13 @@ import (
 )
 
 func main() {
+	if err := config.Load(config.NewConfigDataValidator(), config.NewEnvDataLoader(nil)); err != nil {
+		logging.ERROR(err)
+		os.Exit(-1)
+	}
+
+	configManager := config.GetConfigManager()
+	logging.INFO(configManager)
 
 	// setup the database connection
 
@@ -69,7 +77,7 @@ func main() {
 			repo,
 		))
 	server := http.Server{
-		Addr:         os.Getenv("MMES_URL"),
+		Addr:         configManager.App.MMES_URL,
 		Handler:      router,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
