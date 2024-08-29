@@ -19,22 +19,26 @@ package main
 
 import (
 	"net/http"
-	"os"
 	"time"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/config"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
 )
 
 func main() {
+	config.Load(config.NewEnvDataLoader(nil))
+	configManager := config.GetConfigManager()
+	logging.INFO(configManager)
+
 	router := routers.InitRouter(
 		apis.NewMmeApiHandler(
 			core.GetDBManagerInstance(),
 		))
 	server := http.Server{
-		Addr:         os.Getenv("MMES_URL"),
+		Addr:         configManager.App.MMES_URL,
 		Handler:      router,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 10 * time.Second,
