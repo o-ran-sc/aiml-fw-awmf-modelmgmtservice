@@ -35,6 +35,42 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b16caf13_2a05ef41",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-09-02T16:59:53Z",
+      "side": 1,
+      "message": "i\u0027ll left my opinion in the jira comments.",
+      "parentUuid": "b9a73911_2a9d1e3e",
+      "revId": "52b3dd79a77f18612b6f4a83c3019e4c57d74fed",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "22e229f0_0255177b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-09-02T16:59:53Z",
+      "side": 1,
+      "message": "Thanks! I have added some test code for the config package in my new revision. Please review my test code",
+      "parentUuid": "2b5387e0_1f103916",
+      "revId": "52b3dd79a77f18612b6f4a83c3019e4c57d74fed",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "25e76cd5_d0137a79",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-09-02T08:37:38Z",
       "side": 1,
       "message": "I hope this [comments guide](https://tip.golang.org/doc/comment) will be helpful to you.",
+      "revId": "52b3dd79a77f18612b6f4a83c3019e4c57d74fed",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e76bcea_a8aec439",
+        "filename": "config/config_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-09-02T16:59:53Z",
+      "side": 1,
+      "message": "Thanks! I\u0027ll update all the comments after this review has been applied.",
+      "parentUuid": "25e76cd5_d0137a79",
       "revId": "52b3dd79a77f18612b6f4a83c3019e4c57d74fed",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
