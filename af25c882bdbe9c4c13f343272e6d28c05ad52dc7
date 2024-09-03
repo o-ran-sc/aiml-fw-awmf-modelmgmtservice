@@ -16,6 +16,74 @@
       "message": "Please review my new revision!!",
       "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e7951d1_4703add5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-09-03T04:34:21Z",
+      "side": 1,
+      "message": "PTAL",
+      "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "449a0da3_fc8ff8e3",
+        "filename": "config/env_loader.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-09-03T04:34:21Z",
+      "side": 1,
+      "message": "Which is the priority between `defaultData` and `envFilePath`?\nIf `defaultData` is high, please do the `defaultData` job and return the result before doing the `envFilePath` job.",
+      "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e48e9258_db8791f2",
+        "filename": "config/env_loader.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-09-03T04:34:21Z",
+      "side": 1,
+      "message": "I think it is correct to terminate the modelmgmtservice with the error message rather than setting the default values.",
+      "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7636cb83_ca9a585f",
+        "filename": "config/env_loader.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-09-03T04:34:21Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
