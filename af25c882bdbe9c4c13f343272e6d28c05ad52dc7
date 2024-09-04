@@ -122,6 +122,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd4634b5_b1a70086",
+        "filename": "config/env_loader.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-09-04T23:38:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efab96d5_4f07ffec",
+      "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e48e9258_db8791f2",
@@ -159,6 +177,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0f75dcdf_1b573ee4",
+        "filename": "config/env_loader.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-09-04T23:38:23Z",
+      "side": 1,
+      "message": "I agree with your idea to have a configValidator.",
+      "parentUuid": "ed8f19eb_0368f9b3",
+      "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7636cb83_ca9a585f",
         "filename": "config/env_loader.go",
         "patchSetId": 2
@@ -188,6 +224,24 @@
       "side": 1,
       "message": "The answer is the same as #68",
       "parentUuid": "7636cb83_ca9a585f",
+      "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75694a70_ef533a6a",
+        "filename": "config/env_loader.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2024-09-04T23:38:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5a64f35_95fea3f0",
       "revId": "af25c882bdbe9c4c13f343272e6d28c05ad52dc7",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
