@@ -33,6 +33,52 @@
       "message": "LGTM",
       "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4ecaca3_d5c68842",
+        "filename": "config/env_loader.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-09-09T19:32:45Z",
+      "side": 1,
+      "message": "We could provide multiple path to viper using `viper.AddConfigPath()` instead using `os.Readfile()`.",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 4
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "796af5ee_c542401a",
+        "filename": "main.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-09-09T19:32:45Z",
+      "side": 1,
+      "message": "We could provide two loader:\n- AppConfigLoader\n- EnvLoader\n\nWe could use configuration pattern.",
+      "range": {
+        "startLine": 32,
+        "startChar": 56,
+        "endLine": 32,
+        "endChar": 84
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
