@@ -35,6 +35,23 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "68a6f9e6_e4d15367",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-09-10T03:29:28Z",
+      "side": 1,
+      "message": "Thank you for your good comments. I\u0027ve left some comments, please review again!",
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4ecaca3_d5c68842",
@@ -60,6 +77,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "54198dce_ff5b64ac",
+        "filename": "config/env_loader.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-09-10T03:29:28Z",
+      "side": 1,
+      "message": "Yes, I have used it before. The problem with using \u0027viper.AddConfigPath()\u0027 is that when both the path and the file name are given together, such as in \u0027./config.env\u0027, it cannot be read. As far as I remember, i need to give the path, file name, and file extension separately. It was a little bit verbose. So current implementation was made like that because i wanted to read the specific file (\u0027./config.env\u0027) at once. If you want, i can change the current implementation to use \u0027viper.AddConfigPath()\u0027.",
+      "parentUuid": "a4ecaca3_d5c68842",
+      "range": {
+        "startLine": 37,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 4
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "796af5ee_c542401a",
         "filename": "main.go",
         "patchSetId": 4
@@ -71,6 +112,30 @@
       "writtenOn": "2024-09-09T19:32:45Z",
       "side": 1,
       "message": "We could provide two loader:\n- AppConfigLoader\n- EnvLoader\n\nWe could use configuration pattern.",
+      "range": {
+        "startLine": 32,
+        "startChar": 56,
+        "endLine": 32,
+        "endChar": 84
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b751c41e_51b0da01",
+        "filename": "main.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-09-10T03:29:28Z",
+      "side": 1,
+      "message": "I apologize for some confusion with the structure\u0027s name. i think your `configLoader` suggestion is related with configuration data struct in `data.go`. but my initial intentions of `configLoader` was related with \u0027data format\u0027(.json, .env, .yaml etc)\n\n1. config data: that is designed with client usage perspective (client perspective)\n2. loader: load configuration data in various format, such as env, json, yaml, toml and etc. (provider perspective)\n\nI\u0027m planning to use`configLoader` interface as \u0027envDataLoader`, `jsonDataLoader`, `yamlDataLoader` and etc.",
+      "parentUuid": "796af5ee_c542401a",
       "range": {
         "startLine": 32,
         "startChar": 56,
