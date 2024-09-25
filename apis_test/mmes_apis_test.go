@@ -35,10 +35,16 @@ import (
 )
 
 var registerModelBody = `{
-	"model-name": "test-model",
-	"rapp-id": "1234",
+	"id" : "id", 
+	"model-id": {
+		"modelName": "test-model",
+		"modelVersion":"1"
+	},
+	"description": "testing",
 	"meta-info": {
-		"a": "b"
+		"metadata": {
+			"author":"tester"
+		}
 	}
 }`
 
