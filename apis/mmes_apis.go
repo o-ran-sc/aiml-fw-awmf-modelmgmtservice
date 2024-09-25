@@ -28,11 +28,22 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ModelInfo struct {
-	ModelName string                 `json:"model-name"`
-	RAppId    string                 `json:"rapp-id"`
-	Metainfo  map[string]interface{} `json:"meta-info"`
+type Metadata struct {
+	Author	string	`json:"author"`
 }
+
+type ModelInformation struct {
+	Metadata	Metadata	`json:"metadata"`
+	InputDataType	[]float64	`json:"inputdatatypes"`
+	OutputDataType	[]float64	`json:"outputdatatypes"`
+}
+
+type ModelRelatedInformation struct {
+	ModelId		ModelID                 `json:"model-id"`
+	Description	string					`json:"description"`
+	ModelInformation	ModelInformation	`json:"model-information"`
+}
+
 
 type ModelInfoResponse struct {
 	Name string `json:"name"`
@@ -57,23 +68,23 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 	logging.INFO("Creating model...")
 	bodyBytes, _ := io.ReadAll(cont.Request.Body)
 
-	var modelInfo ModelInfo
+	var modelrelatedinfo ModelRelatedInformation
 	//Need to unmarshal JSON to Struct, to access request
 	//data such as model name, rapp id etc
-	err := json.Unmarshal(bodyBytes, &modelInfo)
-	if err != nil || modelInfo.ModelName == "" {
+	err := json.Unmarshal(bodyBytes, &modelrelatedinfo)
+	if err != nil || modelrelatedinfo.ModelId.ModelName == "" {
 		logging.ERROR("Error in unmarshalling")
 		cont.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": string("Can not parse input data, provide mandatory details"),
 		})
 	} else {
-		logging.INFO(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
-		modelInfoBytes, _ := json.Marshal(modelInfo)
-
-		err := m.dbmgr.CreateBucket(modelInfo.ModelName)
+		logging.INFO(string(modelrelatedinfo))
+		modelInfoBytes, _ := json.Marshal(modelrelatedinfo)
+		modelName:= modelrelatedinfo.ModelId.ModelName
+		err := m.dbmgr.CreateBucket(modelName)
 		if err == nil {
-			m.dbmgr.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelName)
+			m.dbmgr.UploadFile(modelInfoBytes, modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
 		} else {
 			returnCode = http.StatusInternalServerError
 			responseMsg = err.Error()
