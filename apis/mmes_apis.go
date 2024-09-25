@@ -26,13 +26,28 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
-type ModelInfo struct {
-	ModelName string                 `json:"model-name"`
-	RAppId    string                 `json:"rapp-id"`
-	Metainfo  map[string]interface{} `json:"meta-info"`
+type Metadata struct {
+	Author string `json:"author"`
 }
+
+type ModelSpec struct {
+	Metadata Metadata `json:"metadata"`
+}
+type ModelID struct {
+	ModelName string `json:"modelName"`
+	modelVersion string `json:"modelVersion"`
+}  
+
+type ModelInfo struct {
+	Id string `json:"id"`
+	ModelId ModelID `json:"model-id,omitempty"`
+	Description string `json:"description"`
+	ModelSpec ModelSpec `json:"meta-info"`
+}
+
 
 type ModelInfoResponse struct {
 	Name string `json:"name"`
@@ -51,8 +66,6 @@ func NewMmeApiHandler(dbMgr core.DBMgr) *MmeApiHandler {
 }
 
 func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
-	var returnCode int = http.StatusCreated
-	var responseMsg string = "Model registered successfully"
 
 	logging.INFO("Creating model...")
 	bodyBytes, _ := io.ReadAll(cont.Request.Body)
@@ -61,26 +74,27 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 	//Need to unmarshal JSON to Struct, to access request
 	//data such as model name, rapp id etc
 	err := json.Unmarshal(bodyBytes, &modelInfo)
-	if err != nil || modelInfo.ModelName == "" {
+	if err != nil || modelInfo.ModelId.ModelName == "" {
 		logging.ERROR("Error in unmarshalling")
 		cont.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": string("Can not parse input data, provide mandatory details"),
 		})
 	} else {
-		logging.INFO(modelInfo.ModelName, modelInfo.RAppId, modelInfo.Metainfo)
+		id := uuid.New()
+		modelInfo.Id = id.String()
 		modelInfoBytes, _ := json.Marshal(modelInfo)
-
-		err := m.dbmgr.CreateBucket(modelInfo.ModelName)
+		err := m.dbmgr.CreateBucket(modelInfo.ModelId.ModelName)
 		if err == nil {
-			m.dbmgr.UploadFile(modelInfoBytes, modelInfo.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelName)
+			m.dbmgr.UploadFile(modelInfoBytes, modelInfo.ModelId.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelId.ModelName)
 		} else {
-			returnCode = http.StatusInternalServerError
-			responseMsg = err.Error()
+			cont.JSON(http.StatusInternalServerError, gin.H{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
 		}
-		cont.JSON(returnCode, gin.H{
-			"code":    returnCode,
-			"message": responseMsg,
+		cont.JSON(http.StatusCreated, gin.H{
+			"modelinfo": modelInfoBytes,
 		})
 	}
 }
