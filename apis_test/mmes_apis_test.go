@@ -29,6 +29,7 @@ import (
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -36,12 +37,12 @@ import (
 
 var registerModelBody = `{
 	"id" : "id", 
-	"model-id": {
+	"modelId": {
 		"modelName": "test-model",
 		"modelVersion":"1"
 	},
 	"description": "testing",
-	"meta-info": {
+	"metaInfo": {
 		"metadata": {
 			"author":"tester"
 		}
@@ -102,8 +103,8 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	body, _ := io.ReadAll(response.Body)
 
 	var modelInfoListResp struct {
-		Code    int                      `json:"code"`
-		Message []apis.ModelInfoResponse `json:"message"`
+		Code    int                        `json:"code"`
+		Message []models.ModelInfoResponse `json:"message"`
 	}
 	json.Unmarshal(body, &modelInfoListResp)
 
@@ -131,8 +132,8 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	body, _ := io.ReadAll(response.Body)
 
 	var modelInfoListResp struct {
-		Code    int                      `json:"code"`
-		Message []apis.ModelInfoResponse `json:"message"`
+		Code    int                        `json:"code"`
+		Message []models.ModelInfoResponse `json:"message"`
 	}
 	json.Unmarshal(body, &modelInfoListResp)
 
