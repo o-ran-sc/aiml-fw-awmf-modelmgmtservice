@@ -25,13 +25,30 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/repository"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
+
+	// setup the database connection
+	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+	if err != nil {
+		logging.ERROR("database not available")
+		os.Exit(-1)
+	}
+
+	// Auto migrate the scheme
+	db.AutoMigrate(&models.ModelInfo{})
+	repo := repository.NewModelInfoRepository(db)
+
 	router := routers.InitRouter(
 		apis.NewMmeApiHandler(
 			core.GetDBManagerInstance(),
+			repo,
 		))
 	server := http.Server{
 		Addr:         os.Getenv("MMES_URL"),
