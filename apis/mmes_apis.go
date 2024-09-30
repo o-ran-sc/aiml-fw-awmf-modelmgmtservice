@@ -25,34 +25,10 @@ import (
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 )
-
-type Metadata struct {
-	Author string `json:"author"`
-}
-
-type ModelSpec struct {
-	Metadata Metadata `json:"metadata"`
-}
-type ModelID struct {
-	ModelName string `json:"modelName"`
-	modelVersion string `json:"modelVersion"`
-}  
-
-type ModelInfo struct {
-	Id string `json:"id"`
-	ModelId ModelID `json:"model-id,omitempty"`
-	Description string `json:"description"`
-	ModelSpec ModelSpec `json:"meta-info"`
-}
-
-
-type ModelInfoResponse struct {
-	Name string `json:"name"`
-	Data string `json:"data"`
-}
 
 type MmeApiHandler struct {
 	dbmgr core.DBMgr
@@ -70,7 +46,7 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 	logging.INFO("Creating model...")
 	bodyBytes, _ := io.ReadAll(cont.Request.Body)
 
-	var modelInfo ModelInfo
+	var modelInfo models.ModelInfo
 	//Need to unmarshal JSON to Struct, to access request
 	//data such as model name, rapp id etc
 	err := json.Unmarshal(bodyBytes, &modelInfo)
@@ -115,9 +91,9 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 		return
 	}
 
-	modelInfoListResp := []ModelInfoResponse{}
+	modelInfoListResp := []models.ModelInfoResponse{}
 	for _, bucket := range bucketList {
-		modelInfoListResp = append(modelInfoListResp, ModelInfoResponse{
+		modelInfoListResp = append(modelInfoListResp, models.ModelInfoResponse{
 			Name: bucket.Name,
 			Data: string(bucket.Object),
 		})
@@ -137,7 +113,7 @@ func (m *MmeApiHandler) GetModelInfoByName(cont *gin.Context) {
 	modelName := cont.Param("modelName")
 
 	bucketObj := m.dbmgr.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
-	modelInfoListResp := ModelInfoResponse{
+	modelInfoListResp := models.ModelInfoResponse{
 		Name: modelName,
 		Data: string(bucketObj),
 	}
