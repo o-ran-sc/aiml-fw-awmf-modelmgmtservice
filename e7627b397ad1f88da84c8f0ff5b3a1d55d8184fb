@@ -106,6 +106,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "014b0113_d8d31e5b",
+        "filename": "config/config_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-09-30T09:48:03Z",
+      "side": 1,
+      "message": "If we return : `err, manager` then it will simplify the code in `main()`.\nAlso I feel `Load()` and `GetConfigManager()` could be merged to one.\n\nLet me know your opinion, I am okay with this design as well.",
+      "range": {
+        "startLine": 36,
+        "startChar": 1,
+        "endLine": 36,
+        "endChar": 11
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4ecaca3_d5c68842",
         "filename": "config/env_loader.go",
         "patchSetId": 4
@@ -153,6 +176,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e38fffbc_57923942",
+        "filename": "config/validator.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-09-30T09:48:03Z",
+      "side": 1,
+      "message": "this will be always empty so may be provide message like :\n\nlog_file_name is not set/available or empty\n\nsame for others.",
+      "range": {
+        "startLine": 33,
+        "startChar": 57,
+        "endLine": 33,
+        "endChar": 78
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "796af5ee_c542401a",
         "filename": "main.go",
         "patchSetId": 4
@@ -193,6 +239,53 @@
         "startChar": 56,
         "endLine": 32,
         "endChar": 84
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "742831e7_40ecf1c4",
+        "filename": "main.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-09-30T09:48:03Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b751c41e_51b0da01",
+      "range": {
+        "startLine": 32,
+        "startChar": 56,
+        "endLine": 32,
+        "endChar": 84
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b18e4a19_bc712143",
+        "filename": "main.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-09-30T09:48:03Z",
+      "side": 1,
+      "message": "use `os.Exit()` instead `panic()`.\n\n\"panic is for you, a bad exit code is for your user\"",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 12
       },
       "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
