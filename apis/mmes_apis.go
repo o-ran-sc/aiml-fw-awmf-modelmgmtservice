@@ -198,3 +198,36 @@ func (m *MmeApiHandler) UpdateModel() {
 func (m *MmeApiHandler) DeleteModel() {
 	logging.INFO("Deleting model...")
 }
+
+func (m *MmeApiHandler) SearchModelInfo(cont *gin.Context){
+	modelName:= cont.Query("modelname")
+	modelVersion:= cont.Query("ver")
+	if modelname == "" {
+		//query all modelinfo stored 
+		cont.JSON(http.StatusOK, gin.H{
+			"code":    http.StatusOK,
+			"message": string("Model uploaded successfully.."),
+		})
+	} else {
+		if modelVersion == "" {
+			// get all modelInfo by model name
+			modelInfoList, err:= m.dbmgr.GetModelInfoByName(modelName)
+		} else{
+			// get all modelInfo by model name and version
+			modelInfoList, err:= m.dbmgr.GetModelInfoByNameAndVersion(modelName, modelVersion)
+		}
+		if err != nil {
+			statusCode := http.StatusInternalServerError
+			logging.ERROR("Error occurred, send status code: ", statusCode)
+			cont.JSON(statusCode, gin.H{
+				"code":    statusCode,
+				"message": "Unexpected Error in server, you can't get model information list",
+			})
+			return
+		}
+
+	}
+	cont.JSON(http.StatusOK, gin.H{
+		"modelinfoList":modelInfoList,
+	})
+}
