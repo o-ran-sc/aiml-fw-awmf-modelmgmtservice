@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f143524a_f7812f37",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2024-10-03T11:52:37Z",
+      "side": 1,
+      "message": "please rename the folder \"repository\" to \"db\" or something more meaningful",
+      "revId": "977f4978dfd7ead8fc7a727188823d570ecc50e8",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
