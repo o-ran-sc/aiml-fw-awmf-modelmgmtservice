@@ -18,6 +18,7 @@ limitations under the License.
 package db
 
 import (
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"gorm.io/gorm"
 )
@@ -33,6 +34,7 @@ func NewModelInfoRepository(db *gorm.DB) *ModelInfoRepository {
 }
 
 func (repo *ModelInfoRepository) Create(modelInfo models.ModelInfo) error {
+	repo.db.Create(modelInfo)
 	return nil
 }
 
@@ -40,14 +42,26 @@ func (repo *ModelInfoRepository) GetByID(id string) (*models.ModelInfo, error) {
 	return nil, nil
 }
 
-func (repo *ModelInfoRepository) GetAll() []models.ModelInfo {
-	return nil
+func (repo *ModelInfoRepository) GetAll() ([]models.ModelInfo, error) {
+	var modelInfos []models.ModelInfo
+	result := repo.db.Find(&modelInfos)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return modelInfos, nil
 }
 
 func (repo *ModelInfoRepository) Update(modelInfo models.ModelInfo) error {
+	if err := repo.db.Save(modelInfo).Error; err != nil {
+		return err
+	}
 	return nil
 }
 
 func (repo *ModelInfoRepository) Delete(id string) error {
+	logging.INFO("id is:", id)
+	if err := repo.db.Delete(&models.ModelInfo{}, "id=?", id).Error; err != nil {
+		return err
+	}
 	return nil
 }

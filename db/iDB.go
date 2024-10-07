@@ -24,7 +24,7 @@ import (
 type IDB interface {
 	Create(modelInfo models.ModelInfo) error
 	GetByID(id string) (*models.ModelInfo, error)
-	GetAll() []models.ModelInfo
+	GetAll() ([]models.ModelInfo, error)
 	Update(modelInfo models.ModelInfo) error
 	Delete(id string) error
 }

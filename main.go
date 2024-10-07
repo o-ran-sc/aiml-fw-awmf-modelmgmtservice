@@ -18,6 +18,7 @@ limitations under the License.
 package main
 
 import (
+	"fmt"
 	"net/http"
 	"os"
 	"time"
@@ -28,14 +29,30 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
-	"gorm.io/driver/sqlite"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
 func main() {
 
 	// setup the database connection
-	db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
+
+	// connection string
+	DSN := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable ",
+		os.Getenv("TM_DB_POSTGRESQL_SERVICE_HOST="),
+		os.Getenv("PG_USER"),
+		os.Getenv("PG_PASSWORD"),
+		os.Getenv("PG_DBNAME"),
+		os.Getenv("TM_DB_POSTGRESQL_SERVICE_PORT"),
+	)
+	// "host=192.168.180.96 user=postgres password=DxzvEpncpL dbname=training_manager_database port=5432 sslmode=disable "
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  DSN,
+		PreferSimpleProtocol: true, // disables implicit prepared statement usage
+	}), &gorm.Config{})
+
+	// db, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
 	if err != nil {
 		logging.ERROR("database not available")
 		os.Exit(-1)
@@ -57,5 +74,8 @@ func main() {
 		WriteTimeout: 10 * time.Second,
 	}
 	logging.INFO("Starting api..")
-	server.ListenAndServe()
+	err = server.ListenAndServe()
+	if err != nil {
+		logging.ERROR("error", err)
+	}
 }

@@ -16,7 +16,7 @@
 #
 # ==================================================================================
 #Base Image
-FROM golang:1.21-alpine AS builder
+FROM golang:1.23.1 AS builder
 
 # location in the container
 ENV MME_DIR /home/app/
@@ -30,16 +30,16 @@ RUN go mod tidy
 RUN LOG_FILE_NAME=testing.log go test ./...
 
 #Build all packages from current dir into bin 
-RUN go build -o mme_bin .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o mme_bin .
 
-FROM alpine:3.20
+FROM alpine:3.20.3
 
 RUN apk update && apk add bash
 RUN apk add --no-cache bash
 
 WORKDIR /app
 
-COPY --from=builder /home/app/mme_bin .
+COPY --from=builder /home/app/mme_bin mme_bin
 
 #Start the app
 ENTRYPOINT ["/app/mme_bin"]
