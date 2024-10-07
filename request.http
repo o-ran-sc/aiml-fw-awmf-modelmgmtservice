@@ -1,0 +1,44 @@
+@host = x.x.x.x:8082
+
+### registraton
+POST http://{{host}}/registerModel
+Content-Type: application/json
+
+{ 
+    "id": "12345", 
+    "model-id": { 
+        "modelName": "TestModel", 
+        "modelVersion": "v1.0" 
+    }, 
+    "description": "This is a test model.", 
+    "meta-info": { 
+        "metadata": { 
+            "author": "John Doe" 
+        } 
+    } 
+}
+
+### Get ModelInfo by ID
+GET http://{{host}}/getModelInfo
+Content-Type: application/json
+
+### updated model
+PUT http://{{host}}/modelInfo/12345
+Content-Type: application/json
+
+{
+  "id": "12345",
+  "model-id": {
+    "modelName": "UpdatedModel",
+    "modelVersion": "v2.0"
+  },
+  "description": "This is an updated model.",
+  "meta-info": {
+    "metadata": {
+      "author": "Jane Doe"
+    }
+  }
+}
+
+### delete modelinfo
+DELETE http://{{host}}/modelInfo/12345
