@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7678bc68_8c058d53",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2024-10-07T09:56:59Z",
+      "side": 1,
+      "message": "no folder of repository",
+      "range": {
+        "startLine": 29,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 65
+      },
+      "revId": "355af451a22b3e835396baf7db89f0d5ae6a2a6d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
