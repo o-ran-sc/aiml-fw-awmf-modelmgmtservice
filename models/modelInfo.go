@@ -23,7 +23,7 @@ type Metadata struct {
 }
 
 type ModelSpec struct {
-	Metadata Metadata `json:"metadata"`
+	Metadata Metadata `json:"metadata" gorm:"embedded"`
 }
 type ModelID struct {
 	ModelName    string `json:"modelName"`
@@ -31,10 +31,10 @@ type ModelID struct {
 }
 
 type ModelInfo struct {
-	Id          string    `json:"id"`
-	ModelId     ModelID   `json:"modelId,omitempty"`
+	Id          string    `json:"id" gorm:"primaryKey"`
+	ModelId     ModelID   `json:"model-id,omitempty" gorm:"embedded"`
 	Description string    `json:"description"`
-	ModelSpec   ModelSpec `json:"metaInfo"`
+	ModelSpec   ModelSpec `json:"meta-info" gorm:"embedded"`
 }
 
 type ModelInfoResponse struct {

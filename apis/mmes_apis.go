@@ -18,7 +18,6 @@ limitations under the License.
 package apis
 
 import (
-	"encoding/json"
 	"io"
 	"net/http"
 	"os"
@@ -28,7 +27,6 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
 )
 
 type MmeApiHandler struct {
@@ -46,36 +44,56 @@ func NewMmeApiHandler(dbMgr core.DBMgr, iDB db.IDB) *MmeApiHandler {
 
 func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 
-	logging.INFO("Creating model...")
-	bodyBytes, _ := io.ReadAll(cont.Request.Body)
-
 	var modelInfo models.ModelInfo
-	//Need to unmarshal JSON to Struct, to access request
-	//data such as model name, rapp id etc
-	err := json.Unmarshal(bodyBytes, &modelInfo)
-	if err != nil || modelInfo.ModelId.ModelName == "" {
-		logging.ERROR("Error in unmarshalling")
+
+	if err := cont.ShouldBindJSON(&modelInfo); err != nil {
 		cont.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": string("Can not parse input data, provide mandatory details"),
+			"error": err.Error(),
 		})
-	} else {
-		id := uuid.New()
-		modelInfo.Id = id.String()
-		modelInfoBytes, _ := json.Marshal(modelInfo)
-		err := m.dbmgr.CreateBucket(modelInfo.ModelId.ModelName)
-		if err == nil {
-			m.dbmgr.UploadFile(modelInfoBytes, modelInfo.ModelId.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelId.ModelName)
-		} else {
-			cont.JSON(http.StatusInternalServerError, gin.H{
-				"code":    http.StatusInternalServerError,
-				"message": err.Error(),
-			})
-		}
-		cont.JSON(http.StatusCreated, gin.H{
-			"modelinfo": modelInfoBytes,
-		})
+		return
 	}
+
+	// TODO: validate the object
+
+	if err := m.iDB.Create(modelInfo); err != nil {
+		logging.ERROR("error", err)
+		return
+	}
+
+	logging.INFO("model is saved.")
+
+	cont.JSON(http.StatusCreated, gin.H{})
+
+	// logging.INFO("Creating model...")
+	// bodyBytes, _ := io.ReadAll(cont.Request.Body)
+
+	// var modelInfo models.ModelInfo
+	// //Need to unmarshal JSON to Struct, to access request
+	// //data such as model name, rapp id etc
+	// err := json.Unmarshal(bodyBytes, &modelInfo)
+	// if err != nil || modelInfo.ModelId.ModelName == "" {
+	// 	logging.ERROR("Error in unmarshalling")
+	// 	cont.JSON(http.StatusBadRequest, gin.H{
+	// 		"code":    http.StatusBadRequest,
+	// 		"message": string("Can not parse input data, provide mandatory details"),
+	// 	})
+	// } else {
+	// 	id := uuid.New()
+	// 	modelInfo.Id = id.String()
+	// 	modelInfoBytes, _ := json.Marshal(modelInfo)
+	// 	err := m.dbmgr.CreateBucket(modelInfo.ModelId.ModelName)
+	// 	if err == nil {
+	// 		m.dbmgr.UploadFile(modelInfoBytes, modelInfo.ModelId.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelId.ModelName)
+	// 	} else {
+	// 		cont.JSON(http.StatusInternalServerError, gin.H{
+	// 			"code":    http.StatusInternalServerError,
+	// 			"message": err.Error(),
+	// 		})
+	// 	}
+	// 	cont.JSON(http.StatusCreated, gin.H{
+	// 		"modelinfo": modelInfoBytes,
+	// 	})
+	// }
 }
 
 /*
@@ -83,29 +101,41 @@ This API retrieves model info list managed in modelmgmtservice
 */
 func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 	logging.INFO("List all model API")
-	bucketList, err := m.dbmgr.ListBucket(os.Getenv("INFO_FILE_POSTFIX"))
+
+	models, err := m.iDB.GetAll()
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		logging.ERROR("Error occurred, send status code: ", statusCode)
-		cont.JSON(statusCode, gin.H{
-			"code":    statusCode,
-			"message": "Unexpected Error in server, you can't get model information list",
+		logging.ERROR("error:", err)
+		cont.JSON(http.StatusInternalServerError, gin.H{
+			"code":    http.StatusInternalServerError,
+			"message": err.Error(),
 		})
 		return
 	}
 
-	modelInfoListResp := []models.ModelInfoResponse{}
-	for _, bucket := range bucketList {
-		modelInfoListResp = append(modelInfoListResp, models.ModelInfoResponse{
-			Name: bucket.Name,
-			Data: string(bucket.Object),
-		})
-	}
+	cont.JSON(http.StatusOK, models)
+	// bucketList, err := m.dbmgr.ListBucket(os.Getenv("INFO_FILE_POSTFIX"))
+	// if err != nil {
+	// 	statusCode := http.StatusInternalServerError
+	// 	logging.ERROR("Error occurred, send status code: ", statusCode)
+	// 	cont.JSON(statusCode, gin.H{
+	// 		"code":    statusCode,
+	// 		"message": "Unexpected Error in server, you can't get model information list",
+	// 	})
+	// 	return
+	// }
 
-	cont.JSON(http.StatusOK, gin.H{
-		"code":    http.StatusOK,
-		"message": modelInfoListResp,
-	})
+	// modelInfoListResp := []models.ModelInfoResponse{}
+	// for _, bucket := range bucketList {
+	// 	modelInfoListResp = append(modelInfoListResp, models.ModelInfoResponse{
+	// 		Name: bucket.Name,
+	// 		Data: string(bucket.Object),
+	// 	})
+	// }
+
+	// cont.JSON(http.StatusOK, gin.H{
+	// 	"code":    http.StatusOK,
+	// 	"message": modelInfoListResp,
+	// })
 }
 
 /*
@@ -170,10 +200,42 @@ func (m *MmeApiHandler) GetModel(cont *gin.Context) {
 	cont.IndentedJSON(http.StatusOK, " ")
 }
 
-func (m *MmeApiHandler) UpdateModel() {
+func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 	logging.INFO("Updating model...")
+	id := c.Param("id")
+	var modelInfo models.ModelInfo
+
+	if err := c.ShouldBindJSON(&modelInfo); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	if id != modelInfo.Id {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "ID in path and body does not match",
+		})
+		return
+	}
+
+	if err := m.iDB.Update(modelInfo); err != nil {
+		logging.ERROR(err)
+		return
+	}
+
+	logging.INFO("model updated")
+	c.JSON(http.StatusOK, gin.H{})
 }
 
-func (m *MmeApiHandler) DeleteModel() {
+func (m *MmeApiHandler) DeleteModel(c *gin.Context) {
 	logging.INFO("Deleting model...")
+	id := c.Param("id")
+	if err := m.iDB.Delete(id); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"message": "modelInfo deleted"})
 }

@@ -19,7 +19,7 @@ package apis_test
 
 import (
 	"encoding/json"
-	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -29,6 +29,8 @@ import (
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
 	"github.com/stretchr/testify/assert"
@@ -67,11 +69,39 @@ func (d *dbMgrMock) ListBucket(bucketObjPostfix string) ([]core.Bucket, error) {
 	return args.Get(0).([]core.Bucket), args.Error(1)
 }
 
+type iDBMock struct {
+	mock.Mock
+	db.IDB
+}
+
+func (i *iDBMock) Create(modelInfo models.ModelInfo) error {
+	args := i.Called(modelInfo)
+	return args.Error(0)
+}
+func (i *iDBMock) GetByID(id string) (*models.ModelInfo, error) {
+	return nil, nil
+}
+func (i *iDBMock) GetAll() ([]models.ModelInfo, error) {
+	args := i.Called()
+	if _, ok := args.Get(1).(error); !ok {
+		return args.Get(0).([]models.ModelInfo), nil
+	} else {
+		var emptyModelInfo []models.ModelInfo
+		return emptyModelInfo, args.Error(1)
+	}
+}
+func (i *iDBMock) Update(modelInfo models.ModelInfo) error {
+	return nil
+}
+func (i *iDBMock) Delete(id string) error {
+	return nil
+}
+
 func TestRegisterModel(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
-	dbMgrMockInst := new(dbMgrMock)
-	dbMgrMockInst.On("CreateBucket", "test-model").Return(nil)
-	handler := apis.NewMmeApiHandler(dbMgrMockInst, nil)
+	iDBMockInst := new(iDBMock)
+	iDBMockInst.On("Create", mock.Anything).Return(nil)
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("POST", "/registerModel", strings.NewReader(registerModelBody))
@@ -84,15 +114,24 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
 	// Setting Mock
-	dbMgrMockInst := new(dbMgrMock)
-	dbMgrMockInst.On("ListBucket").Return([]core.Bucket{
+	iDBmockInst := new(iDBMock)
+	iDBmockInst.On("GetAll").Return([]models.ModelInfo{
 		{
-			Name:   "qoe",
-			Object: []byte(registerModelBody),
+			Id: "1234",
+			ModelId: models.ModelID{
+				ModelName:    "test",
+				ModelVersion: "v1.0",
+			},
+			Description: "this is test modelINfo",
+			ModelSpec: models.ModelSpec{
+				Metadata: models.Metadata{
+					Author: "testing",
+				},
+			},
 		},
 	}, nil)
 
-	handler := apis.NewMmeApiHandler(dbMgrMockInst, nil)
+	handler := apis.NewMmeApiHandler(nil, iDBmockInst)
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
@@ -102,15 +141,12 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	response := responseRecorder.Result()
 	body, _ := io.ReadAll(response.Body)
 
-	var modelInfoListResp struct {
-		Code    int                        `json:"code"`
-		Message []models.ModelInfoResponse `json:"message"`
-	}
-	json.Unmarshal(body, &modelInfoListResp)
+	var modelInfos []models.ModelInfo
+	logging.INFO(modelInfos)
+	json.Unmarshal(body, &modelInfos)
 
 	assert.Equal(t, 200, responseRecorder.Code)
-	assert.Equal(t, 200, modelInfoListResp.Code)
-	assert.Equal(t, registerModelBody, modelInfoListResp.Message[0].Data)
+	assert.Equal(t, 1, len(modelInfos))
 }
 
 func TestWhenFailGetModelInfoList(t *testing.T) {
@@ -118,10 +154,10 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
 	// Setting Mock
-	dbMgrMockInst := new(dbMgrMock)
-	dbMgrMockInst.On("ListBucket").Return([]core.Bucket{}, errors.New("Test: Fail GetModelInfoList"))
+	iDBmockInst2 := new(iDBMock)
+	iDBmockInst2.On("GetAll").Return([]models.ModelInfo{}, fmt.Errorf("db not available"))
 
-	handler := apis.NewMmeApiHandler(dbMgrMockInst, nil)
+	handler := apis.NewMmeApiHandler(nil, iDBmockInst2)
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
@@ -131,13 +167,8 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	response := responseRecorder.Result()
 	body, _ := io.ReadAll(response.Body)
 
-	var modelInfoListResp struct {
-		Code    int                        `json:"code"`
-		Message []models.ModelInfoResponse `json:"message"`
-	}
+	var modelInfoListResp []models.ModelInfo
 	json.Unmarshal(body, &modelInfoListResp)
 
 	assert.Equal(t, 500, responseRecorder.Code)
-	assert.Equal(t, 500, modelInfoListResp.Code)
-	assert.Equal(t, 0, len(modelInfoListResp.Message))
 }
