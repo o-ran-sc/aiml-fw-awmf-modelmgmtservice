@@ -33,6 +33,24 @@
       "message": "What about using camel case to `ModelInfo` like other types?",
       "revId": "5d65ad03d9bbb16b1d9b72d7c540439bbe2098cf",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6770fff_ed954160",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-10-07T07:09:32Z",
+      "side": 1,
+      "message": "I agree, as best practice we should use Camel case for the property name.",
+      "parentUuid": "551f300f_cbf5df3c",
+      "revId": "5d65ad03d9bbb16b1d9b72d7c540439bbe2098cf",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
