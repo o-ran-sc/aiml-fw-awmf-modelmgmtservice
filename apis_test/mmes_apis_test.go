@@ -71,7 +71,7 @@ func TestRegisterModel(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 	dbMgrMockInst := new(dbMgrMock)
 	dbMgrMockInst.On("CreateBucket", "test-model").Return(nil)
-	handler := apis.NewMmeApiHandler(dbMgrMockInst)
+	handler := apis.NewMmeApiHandler(dbMgrMockInst, nil)
 	router := routers.InitRouter(handler)
 	w := httptest.NewRecorder()
 	req, _ := http.NewRequest("POST", "/registerModel", strings.NewReader(registerModelBody))
@@ -92,7 +92,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 		},
 	}, nil)
 
-	handler := apis.NewMmeApiHandler(dbMgrMockInst)
+	handler := apis.NewMmeApiHandler(dbMgrMockInst, nil)
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
@@ -121,7 +121,7 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	dbMgrMockInst := new(dbMgrMock)
 	dbMgrMockInst.On("ListBucket").Return([]core.Bucket{}, errors.New("Test: Fail GetModelInfoList"))
 
-	handler := apis.NewMmeApiHandler(dbMgrMockInst)
+	handler := apis.NewMmeApiHandler(dbMgrMockInst, nil)
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 

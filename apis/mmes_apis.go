@@ -24,6 +24,7 @@ import (
 	"os"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"github.com/gin-gonic/gin"
@@ -32,11 +33,13 @@ import (
 
 type MmeApiHandler struct {
 	dbmgr core.DBMgr
+	iDB   db.IDB
 }
 
-func NewMmeApiHandler(dbMgr core.DBMgr) *MmeApiHandler {
+func NewMmeApiHandler(dbMgr core.DBMgr, iDB db.IDB) *MmeApiHandler {
 	handler := &MmeApiHandler{
 		dbmgr: dbMgr,
+		iDB:   iDB,
 	}
 	return handler
 }
