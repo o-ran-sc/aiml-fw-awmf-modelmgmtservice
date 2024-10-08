@@ -16,6 +16,29 @@
       "message": "looks good",
       "revId": "ff9ef6c0c6811c43cce561c0298af7ea2bb0a292",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8338466_c830a79b",
+        "filename": "request.http",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2024-10-08T09:40:50Z",
+      "side": 1,
+      "message": "you can remove your vm ip",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 27
+      },
+      "revId": "ff9ef6c0c6811c43cce561c0298af7ea2bb0a292",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
