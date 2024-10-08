@@ -1,0 +1,9 @@
+Verified+1: ORAN Required GHA <releng+oran.required.gha@linuxfoundation.org>
+Code-Review+2: Rajdeep Singh <rajdeep.sin@samsung.com>
+Verified+1: ORAN Jobbuilder <releng+oran-jobbuilder@linuxfoundation.org>
+Verified+1: Rajdeep Singh <rajdeep.sin@samsung.com>
+Submitted-by: Rajdeep Singh <rajdeep.sin@samsung.com>
+Submitted-at: Tue, 08 Oct 2024 09:39:43 +0000
+Reviewed-on: https://gerrit.o-ran-sc.org/r/c/aiml-fw/awmf/modelmgmtservice/+/13519
+Project: aiml-fw/awmf/modelmgmtservice
+Branch: refs/heads/master
