@@ -1,0 +1,57 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mme-deployment
+  namespace: traininghost
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mme
+  template:
+    metadata:
+      name: mme-deployment
+      labels:
+        app: mme 
+    spec:
+      containers:
+      - env:
+        - name: S3_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              key: password
+              name: leofs-secret
+        - name: PG_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              key: postgres-password
+              name: tm-db-postgresql
+        envFrom:
+        - configMapRef:
+            name: modelmgmtservice-configmap
+        image: ${IMAGE_NAME}
+        imagePullPolicy: IfNotPresent
+        name: modelmgmtservice
+        ports:
+        - containerPort: 8082
+          name: serviceport
+          protocol: TCP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: modelmgmtservice-configmap
+  namespace: traininghost
+data:
+  INFO_FILE_POSTFIX: _info.json
+  LOG_FILE_NAME: mmes.log
+  MMES_URL: 0.0.0.0:8082
+  MODEL_FILE_POSTFIX: _model.zip
+  S3_ACCESS_KEY: leofs
+  S3_REGION: oranaiml
+  S3_URL: http://leofs.kubeflow:8080
+  PG_USER: postgres
+  PG_HOST: tm-db-postgresql
+  PG_PORT: "5432"
+  PG_DBNAME: training_manager_database
