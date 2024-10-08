@@ -21,6 +21,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"fmt"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
@@ -107,42 +108,101 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 This API retrieves model info list managed in modelmgmtservice
 */
 func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
-	logging.INFO("List all model API")
 
-	models, err := m.iDB.GetAll()
-	if err != nil {
-		logging.ERROR("error:", err)
-		cont.JSON(http.StatusInternalServerError, gin.H{
-			"code":    http.StatusInternalServerError,
-			"message": err.Error(),
-		})
-		return
+	logging.INFO("Get model info ")
+	queryParams := cont.Request.URL.Query()
+	//to check only modelName and modelVersion can be passed.
+	allowedParams := map[string]bool{
+		"modelName": true,
+		"modelVersion": true,
 	}
 
-	cont.JSON(http.StatusOK, models)
-	// bucketList, err := m.dbmgr.ListBucket(os.Getenv("INFO_FILE_POSTFIX"))
-	// if err != nil {
-	// 	statusCode := http.StatusInternalServerError
-	// 	logging.ERROR("Error occurred, send status code: ", statusCode)
-	// 	cont.JSON(statusCode, gin.H{
-	// 		"code":    statusCode,
-	// 		"message": "Unexpected Error in server, you can't get model information list",
-	// 	})
-	// 	return
-	// }
+	for key := range queryParams {
+		if !allowedParams[key] {
+			cont.JSON(http.StatusBadRequest, gin.H{
+				"error": "Only modelName and modelVersion are allowed",
+			})
+			return
+		}
+	}
 
-	// modelInfoListResp := []models.ModelInfoResponse{}
-	// for _, bucket := range bucketList {
-	// 	modelInfoListResp = append(modelInfoListResp, models.ModelInfoResponse{
-	// 		Name: bucket.Name,
-	// 		Data: string(bucket.Object),
-	// 	})
-	// }
+	modelName:= cont.Query("modelName")
+	modelVersion:= cont.Query("modelVersion")
 
-	// cont.JSON(http.StatusOK, gin.H{
-	// 	"code":    http.StatusOK,
-	// 	"message": modelInfoListResp,
-	// })
+	if modelName == "" {
+		//return all modelinfo stored 
+
+		models, err := m.iDB.GetAll()
+		if err != nil {
+			logging.ERROR("error:", err)
+			cont.JSON(http.StatusInternalServerError, gin.H{
+				"code":    http.StatusInternalServerError,
+				"message": err.Error(),
+			})
+			return
+		}
+		cont.JSON(http.StatusOK, models)
+		return
+	} else {
+		if modelVersion == "" {
+			// get all modelInfo by model name
+			modelInfos, err:= m.iDB.GetModelInfoByName(modelName)
+			if err != nil {
+				statusCode := http.StatusInternalServerError
+				logging.ERROR("Error occurred, send status code: ", statusCode)
+				cont.JSON(statusCode, gin.H{
+					"code":    statusCode,
+					"message": "Unexpected Error in server, you can't get model information list",
+				})
+				return
+			}
+			//to check record not found
+			if len(modelInfos)==0{
+				statusCode := http.StatusNotFound
+				errMessage := fmt.Sprintf("Record not found with modelName: %s", modelName)
+				logging.ERROR("Record not found, send status code: ", statusCode)
+				cont.JSON(statusCode, gin.H{
+					"code":    statusCode,
+					"message": errMessage,
+				})
+				return
+			}
+
+			cont.JSON(http.StatusOK, gin.H{
+				"modelinfoList":modelInfos,
+			})
+			return
+
+		} else
+		{
+			// get all modelInfo by model name and version
+			modelInfo, err:= m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
+			if err != nil {
+				statusCode := http.StatusInternalServerError
+				logging.ERROR("Error occurred, send status code: ", statusCode)
+				cont.JSON(statusCode, gin.H{
+					"code":    statusCode,
+					"message": "Unexpected Error in server, you can't get model information list",
+				})
+				return
+			}
+			if modelInfo.Id == ""{
+				statusCode := http.StatusNotFound
+				errMessage := fmt.Sprintf("Record not found with modelName: %s and modelVersion: %s", modelName, modelVersion)
+				logging.ERROR("Record not found, send status code: ", statusCode)
+				cont.JSON(statusCode, gin.H{
+					"code":    statusCode,
+					"message": errMessage,
+				})
+				return
+			}
+
+			cont.JSON(http.StatusOK, gin.H{
+				"modelinfo":modelInfo,
+			})
+			return
+		}
+	}
 }
 
 /*
