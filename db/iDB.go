@@ -25,6 +25,8 @@ type IDB interface {
 	Create(modelInfo models.ModelInfo) error
 	GetByID(id string) (*models.ModelInfo, error)
 	GetAll() ([]models.ModelInfo, error)
+	GetModelInfoByName(modelName string)([]models.ModelInfo, error)
+	GetModelInfoByNameAndVer(modelName string, modelVersion string)(*models.ModelInfo, error)
 	Update(modelInfo models.ModelInfo) error
 	Delete(id string) error
 }

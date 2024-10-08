@@ -65,3 +65,20 @@ func (repo *ModelInfoRepository) Delete(id string) error {
 	}
 	return nil
 }
+func (repo *ModelInfoRepository) GetModelInfoByName(model_name string)([]models.ModelInfo, error){
+	var modelInfos []models.ModelInfo
+	result := repo.db.Where("model_name = ?", model_name).Find(&modelInfos)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return modelInfos, nil
+}
+
+func (repo *ModelInfoRepository) GetModelInfoByNameAndVer(model_name string, model_version string)(*models.ModelInfo, error){
+	var modelInfo models.ModelInfo
+	result := repo.db.Where("model_name = ? AND model_version = ?", model_name, model_version).Find(&modelInfo)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &modelInfo, nil
+}
