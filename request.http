@@ -1,3 +1,4 @@
+### Note: update the vm ip in the host
 @host = x.x.x.x:8082
 
 ### registraton

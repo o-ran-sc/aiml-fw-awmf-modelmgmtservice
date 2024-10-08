@@ -27,6 +27,8 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+
 )
 
 type MmeApiHandler struct {
@@ -53,6 +55,9 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 		return
 	}
 
+	id := uuid.New()
+	modelInfo.Id = id.String()
+
 	// TODO: validate the object
 
 	if err := m.iDB.Create(modelInfo); err != nil {
@@ -62,7 +67,9 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 
 	logging.INFO("model is saved.")
 
-	cont.JSON(http.StatusCreated, gin.H{})
+	cont.JSON(http.StatusCreated, gin.H{
+		"modelInfo": modelInfo,
+	})
 
 	// logging.INFO("Creating model...")
 	// bodyBytes, _ := io.ReadAll(cont.Request.Body)
