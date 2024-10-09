@@ -19,8 +19,16 @@ Content-Type: application/json
     } 
 }
 
-### Get ModelInfo by ID
+### Get All Models info
 GET http://{{host}}/getModelInfo
+Content-Type: application/json
+
+### Get all Models info by name
+GET http://{{host}}/getModelInfo?modelName=TestModel
+Content-Type: application/json
+
+### Get all Models info by name and version
+GET http://{{host}}/getModelInfo?modelName=TestModel&modelVersion=v1.0
 Content-Type: application/json
 
 ### updated model
