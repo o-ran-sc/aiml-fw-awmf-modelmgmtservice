@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a1260ed_3ba6d227",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-10-09T06:31:55Z",
+      "side": 1,
+      "message": "commented a small change.",
+      "revId": "fb99cf3a1bb4dc2db1688a800464c97ee2a77ddb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d0effa6_d146c881",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-10-09T06:31:55Z",
+      "side": 1,
+      "message": "should return empty array if no record found.",
+      "range": {
+        "startLine": 160,
+        "startChar": 3,
+        "endLine": 169,
+        "endChar": 4
+      },
+      "revId": "fb99cf3a1bb4dc2db1688a800464c97ee2a77ddb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
