@@ -156,17 +156,6 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				})
 				return
 			}
-			//to check record not found
-			if len(modelInfos)==0{
-				statusCode := http.StatusNotFound
-				errMessage := fmt.Sprintf("Record not found with modelName: %s", modelName)
-				logging.ERROR("Record not found, send status code: ", statusCode)
-				cont.JSON(statusCode, gin.H{
-					"code":    statusCode,
-					"message": errMessage,
-				})
-				return
-			}
 
 			cont.JSON(http.StatusOK, gin.H{
 				"modelinfoList":modelInfos,
