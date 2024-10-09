@@ -205,6 +205,32 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 	}
 }
 
+func (m *MmeApiHandler) GetModelInfoById(cont *gin.Context) {
+	logging.INFO("Get model info by id ...")
+	id := cont.Param("id")
+	modelInfo, err := m.iDB.GetModelInfoById(id)
+	if err != nil {
+		logging.ERROR("error:", err)
+		cont.JSON(http.StatusInternalServerError, gin.H{
+			"code":    http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+		return
+	}
+	if modelInfo.Id == ""{
+		statusCode := http.StatusNotFound
+		errMessage := fmt.Sprintf("Record not found with id: %s", id)
+		logging.ERROR("Record not found, send status code: ", statusCode)
+		cont.JSON(statusCode, gin.H{
+			"code":    statusCode,
+			"message": errMessage,
+		})
+		return
+	}
+	cont.JSON(http.StatusOK, modelInfo)
+	return
+}
+
 /*
 Provides the model details by param model name
 */

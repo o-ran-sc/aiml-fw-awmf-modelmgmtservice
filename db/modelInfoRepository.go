@@ -82,3 +82,12 @@ func (repo *ModelInfoRepository) GetModelInfoByNameAndVer(modelName string, mode
 	}
 	return &modelInfo, nil
 }
+func (repo *ModelInfoRepository) GetModelInfoById(id string)(*models.ModelInfo, error){
+	logging.INFO("id is:", id)
+	var modelInfo models.ModelInfo
+	result := repo.db.Where("id = ?", id).Find(&modelInfo)
+	if result.Error != nil {
+		return nil, result.Error
+	}
+	return &modelInfo, nil
+}
