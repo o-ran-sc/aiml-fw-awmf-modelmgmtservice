@@ -307,7 +307,9 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 	}
 
 	logging.INFO("model updated")
-	c.JSON(http.StatusOK, gin.H{})
+	c.JSON(http.StatusOK, gin.H{
+		"modelinfo":modelInfo,
+	})
 }
 
 func (m *MmeApiHandler) DeleteModel(c *gin.Context) {

@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "de0e7b8a-9977-4a58-9d84-12527a4bbeae",
+		"name": "aimlfw",
+		"description": "This is the collection of curl request.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "14746060"
+	},
+	"item": [
+		{
+			"name": "tm",
+			"item": [
+				{
+					"name": "experiments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:32002/experiments"
+					},
+					"response": []
+				},
+				{
+					"name": "create feature group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"featureGroupName\":\"testing_influxdb_2\",\"feature_list\":\"pdcpBytesDl,pdcpBytesUl\",\"datalake_source\":\"InfluxSource\",\"enable_Dme\":false,\"Host\":\"my-release-influxdb.default\",\"Port\":\"8086\",\"dmePort\":\"\",\"bucket\":\"pm-bucket\",\"token\":\"asjkahsjdhaksdhaksdha\",\"source_name\":\"\",\"measured_obj_class\":\"\",\"_measurement\":\"liveCell\",\"dbOrg\":\"primary\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32002/featureGroup"
+					},
+					"response": []
+				},
+				{
+					"name": "create trainingjob",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"trainingjob_name\":\"\",\"is_mme\":false,\"model_name\":\"\",\"pipeline_name\":\"pipeline_kfp2.2.0_6\",\"experiment_name\":\"Default\",\"featureGroup_name\":\"\",\"query_filter\":\"\",\"arguments\":{\"epochs\":\"1\",\"trainingjob_name\":\"testing_influxdb_110\"},\"enable_versioning\":false,\"description\":\"testing\",\"pipeline_version\":\"pipeline_kfp2.2.0_6\",\"datalake_source\":\"InfluxSource\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32002/trainingjobs/testing_influxdb_111"
+					},
+					"response": []
+				},
+				{
+					"name": "trainiingjob_by_name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:32002/trainingjobs/testing_influxdb_103/1"
+					},
+					"response": []
+				},
+				{
+					"name": "edit Trainingjob",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"trainingjob_name\":\"my_testing\",\"is_mme\":false,\"model_name\":false,\"pipeline_name\":\"pipeline_kfp2.2.0_6\",\"experiment_name\":\"Default\",\"featureGroup_name\":\"testing_influxdb\",\"query_filter\":\"\",\"arguments\":{\"epochs\":\"1\",\"trainingjob_name\":\"my_testing\"},\"enable_versioning\":false,\"description\":\"testing\",\"pipeline_version\":\"pipeline_kfp2.2.0_6\",\"datalake_source\":\"InfluxSource\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32002/trainingjobs/my_testing"
+					},
+					"response": []
+				},
+				{
+					"name": "start training",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"trainingjobs\":\"my_testing\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32002/trainingjobs/my_testing/training"
+					},
+					"response": []
+				},
+				{
+					"name": "retraining",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"trainingjobs_list\":[{\"trainingjob_name\":\"my_testing\"}]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32002/trainingjobs/retraining"
+					},
+					"response": []
+				},
+				{
+					"name": "trainingjob",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"list\":[{\"trainingjob_name\":\"my_testing_2\",\"version\":1}]}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32002/trainingjobs"
+					},
+					"response": []
+				}
+			],
+			"description": "Collection of all the api requests to Training manager"
+		},
+		{
+			"name": "mme",
+			"item": [
+				{
+					"name": "register model",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\t\"id\":\"id\",\r\n\t\"model-id\": {\r\n\t\t\"modelName\": \"a\", \r\n\t\t\"modelVersion\": \"b\"\r\n\t\t},\r\n\t\"description\": \"testing\",\r\n\t\"model-spce\": {\r\n\t\t\"metadata\": {\r\n\t\t\t\"author\": \"test_object\"\r\n\t\t\t}\r\n\t}\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32006/registerModel"
+					},
+					"response": []
+				},
+				{
+					"name": "model info by modelName and modelVersion",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:32006/getModelInfo?modelName=TestModel3&modelVersion=v1.0",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "32006",
+							"path": [
+								"getModelInfo"
+							],
+							"query": [
+								{
+									"key": "modelName",
+									"value": "TestModel3"
+								},
+								{
+									"key": "modelVersion",
+									"value": "v1.0"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get All model info",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:32006/getModelInfo"
+					},
+					"response": []
+				},
+				{
+					"name": "model info by model name",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:32006/getModelInfo?modelName=TestModel3",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "32006",
+							"path": [
+								"getModelInfo"
+							],
+							"query": [
+								{
+									"key": "modelName",
+									"value": "TestModel3"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update model info",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"12345\",\r\n    \"model-id\": {\r\n        \"modelName\": \"TestModel\",\r\n        \"modelVersion\": \"v2.0\"\r\n    },\r\n    \"description\": \"This is a test model version 2.\",\r\n    \"meta-info\": {\r\n        \"metadata\": {\r\n            \"author\": \"John Doe\"\r\n        }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:32006/modelInfo/12345"
+					},
+					"response": []
+				},
+				{
+					"name": "delete model id",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": "http://localhost:32006/modelInfo/12345"
+					},
+					"response": []
+				},
+				{
+					"name": "get modelinfo by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:32006/modelInfo/abd67618-e06a-41be-a50d-5ee9822294c9"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
