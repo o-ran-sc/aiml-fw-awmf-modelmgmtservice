@@ -16,6 +16,24 @@
       "message": "What about implementing code with camel case?",
       "revId": "d00a6d9cb8108c86a00e5ab567888d54caeeef30",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b426920_b9b59aba",
+        "filename": "db/modelInfoRepository.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2024-10-09T05:04:55Z",
+      "side": 1,
+      "message": "Thank you Taewan for the comment, in the latest patch I have made the changes.",
+      "parentUuid": "5f899954_e1beb359",
+      "revId": "d00a6d9cb8108c86a00e5ab567888d54caeeef30",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
