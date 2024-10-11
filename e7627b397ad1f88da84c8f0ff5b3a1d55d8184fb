@@ -104,6 +104,23 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "499847f5_63598e72",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-10-11T07:02:45Z",
+      "side": 1,
+      "message": "Could you please fix merge conflict.",
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "014b0113_d8d31e5b",
