@@ -146,6 +146,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1706b56f_0368f54e",
+        "filename": "config/config_manager.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-10-15T14:10:43Z",
+      "side": 1,
+      "message": "That\u0027s a good idea! However, I separated GetConfigManager because I want Load to run only once, and I need to access the ConfigManager globally from anywhere. I\u0027ll try writing the code like this, and if it feels awkward, I\u0027ll change it myself.",
+      "parentUuid": "014b0113_d8d31e5b",
+      "range": {
+        "startLine": 36,
+        "startChar": 1,
+        "endLine": 36,
+        "endChar": 11
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a4ecaca3_d5c68842",
         "filename": "config/env_loader.go",
         "patchSetId": 4
@@ -240,6 +264,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afa67ee0_e7801242",
+        "filename": "config/validator.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-10-15T14:10:43Z",
+      "side": 1,
+      "message": "Thanks, I applied that comment to the code.",
+      "parentUuid": "e38fffbc_57923942",
+      "range": {
+        "startLine": 33,
+        "startChar": 57,
+        "endLine": 33,
+        "endChar": 78
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "796af5ee_c542401a",
         "filename": "main.go",
         "patchSetId": 4
@@ -322,6 +370,30 @@
       "writtenOn": "2024-09-30T09:48:03Z",
       "side": 1,
       "message": "use `os.Exit()` instead `panic()`.\n\n\"panic is for you, a bad exit code is for your user\"",
+      "range": {
+        "startLine": 33,
+        "startChar": 2,
+        "endLine": 33,
+        "endChar": 12
+      },
+      "revId": "e7627b397ad1f88da84c8f0ff5b3a1d55d8184fb",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e1944bd_2a113ab8",
+        "filename": "main.go",
+        "patchSetId": 4
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002149
+      },
+      "writtenOn": "2024-10-15T14:10:43Z",
+      "side": 1,
+      "message": "Thanks, I applied that comment to the code.",
+      "parentUuid": "b18e4a19_bc712143",
       "range": {
         "startLine": 33,
         "startChar": 2,
