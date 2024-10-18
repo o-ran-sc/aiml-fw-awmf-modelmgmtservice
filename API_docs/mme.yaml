@@ -173,3 +173,26 @@ paths:
                     example: "Model uploaded successfully."
         '500':
           description: Internal Server Error
+
+  /downloadModel/{modelName}/model.zip:
+    get:
+      tags:
+        - Model Management
+      summary: Download a specific model version as a ZIP file
+      operationId: downloadModel
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Model downloaded successfully
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '500':
+          description: Internal Server Error
