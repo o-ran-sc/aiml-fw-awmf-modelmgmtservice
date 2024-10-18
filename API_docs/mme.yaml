@@ -134,3 +134,42 @@ paths:
           description: Model deleted successfully
         '500':
           description: Internal Server Error
+
+  /uploadModel/{modelName}:
+    post:
+      tags:
+        - Model Management
+      summary: Upload a new version of the model
+      operationId: uploadModel
+      parameters:
+        - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: Model uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  message:
+                    type: string
+                    example: "Model uploaded successfully."
+        '500':
+          description: Internal Server Error
