@@ -196,3 +196,43 @@ paths:
                 format: binary
         '500':
           description: Internal Server Error
+
+components:
+  schemas:
+    Metadata:
+      type: object
+      properties:
+        author:
+          type: string
+          example: "John Doe"
+
+    ModelID:
+      type: object
+      properties:
+        modelName:
+          type: string
+          example: "example-model"
+        modelVersion:
+          type: string
+          example: "v1.0"
+
+    ModelSpec:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/Metadata'
+
+    ModelInfo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        model-id:
+          $ref: '#/components/schemas/ModelID'
+        description:
+          type: string
+          example: "This is an example model description."
+        meta-info:
+          $ref: '#/components/schemas/ModelSpec'
+
