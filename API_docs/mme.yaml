@@ -69,3 +69,68 @@ paths:
           description: Invalid query parameters
         '500':
           description: Internal Server Error
+  /modelInfo/{id}:
+    get:
+      tags:
+        - Model Management
+      summary: Get model info by ID
+      operationId: getModelInfoById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Model information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelInfo'
+        '404':
+          description: Model not found
+        '500':
+          description: Internal Server Error
+
+    put:
+      tags:
+        - Model Management
+      summary: Update model info by ID
+      operationId: updateModel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfo'
+      responses:
+        '200':
+          description: Model updated successfully
+        '400':
+          description: Invalid request body
+        '500':
+          description: Internal Server Error
+
+    delete:
+      tags:
+        - Model Management
+      summary: Delete a model by ID
+      operationId: deleteModel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Model deleted successfully
+        '500':
+          description: Internal Server Error
