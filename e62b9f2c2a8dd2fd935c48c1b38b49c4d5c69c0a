@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef33aa9c_049555ee",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2024-10-18T10:24:48Z",
+      "side": 1,
+      "message": "provided in further commit,",
+      "range": {
+        "startLine": 112,
+        "startChar": 42,
+        "endLine": 112,
+        "endChar": 51
+      },
+      "revId": "e62b9f2c2a8dd2fd935c48c1b38b49c4d5c69c0a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
