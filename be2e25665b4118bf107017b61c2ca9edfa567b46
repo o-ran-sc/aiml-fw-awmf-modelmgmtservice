@@ -22,6 +22,30 @@
       },
       "revId": "be2e25665b4118bf107017b61c2ca9edfa567b46",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1cb18ef_7de0ccad",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002600
+      },
+      "writtenOn": "2024-10-18T10:13:04Z",
+      "side": 1,
+      "message": "added in a later commit: \n13663: Swagger file:components for mme | https://gerrit.o-ran-sc.org/r/r/c/aiml-fw/awmf/modelmgmtservice/+/13663",
+      "parentUuid": "2a11824b_df167ac3",
+      "range": {
+        "startLine": 27,
+        "startChar": 21,
+        "endLine": 27,
+        "endChar": 52
+      },
+      "revId": "be2e25665b4118bf107017b61c2ca9edfa567b46",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
