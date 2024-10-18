@@ -36,3 +36,36 @@ paths:
           description: Invalid request, bad input data
         '500':
           description: Internal Server Error
+
+  /getModelInfo:
+    get:
+      tags:
+        - Model Management
+      summary: Get a list of models or search by modelName and modelVersion
+      operationId: getModelInfo
+      parameters:
+        - name: modelName
+          in: query
+          description: Model name to search
+          required: false
+          schema:
+            type: string
+        - name: modelVersion
+          in: query
+          description: Model version to search
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of models or filtered search results
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelInfo'
+        '400':
+          description: Invalid query parameters
+        '500':
+          description: Internal Server Error
