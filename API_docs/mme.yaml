@@ -11,3 +11,28 @@ servers:
 tags:
   - name: Model Management
     description: Endpoints for managing models
+
+paths:
+  /registerModel:
+    post:
+      tags:
+        - Model Management
+      summary: Register a new model
+      operationId: registerModel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ModelInfo'
+      responses:
+        '200':
+          description: Model registered successfully and returned object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelInfo'
+        '400':
+          description: Invalid request, bad input data
+        '500':
+          description: Internal Server Error
