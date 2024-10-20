@@ -19,6 +19,11 @@ type DBConfigData struct {
 	S3_ACCESS_KEY      string `json:"s3_access_key"`
 	S3_SECRET_KEY      string `json:"s3_secret_key"`
 	S3_REGION          string `json:"s3_region"`
+	PG_USER            string `json:"pg_user"`
+	PG_PASSWORD        string `json:"pg_password"`
+	PG_HOST            string `json:"pg_host"`
+	PG_PORT            string `json:"pg_port"`
+	PG_DBNAME          string `json:"pg_dbname"`
 }
 
 func (d DBConfigData) String() string {

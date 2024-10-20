@@ -42,17 +42,16 @@ func main() {
 
 	configManager := config.GetConfigManager()
 	logging.INFO(configManager)
-
 	// setup the database connection
 
 	// connection string
 	DSN := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=disable ",
-		os.Getenv("PG_HOST"),
-		os.Getenv("PG_USER"),
-		os.Getenv("PG_PASSWORD"),
-		os.Getenv("PG_DBNAME"),
-		os.Getenv("PG_PORT"),
+		configManager.DB.PG_HOST,
+		configManager.DB.PG_USER,
+		configManager.DB.PG_PASSWORD,
+		configManager.DB.PG_DBNAME,
+		configManager.DB.PG_PORT,
 	)
 
 	logging.INFO("Connection string for DB", DSN)

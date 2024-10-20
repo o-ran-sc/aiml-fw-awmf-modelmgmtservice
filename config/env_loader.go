@@ -17,6 +17,11 @@ const (
 	ENV_KEY_DB_S3_REGION          = "S3_REGION"
 	ENV_KEY_DB_INFO_FILE_POSTFIX  = "INFO_FILE_POSTFIX"
 	ENV_KEY_DB_MODEL_FILE_POSTFIX = "MODEL_FILE_POSTFIX"
+	ENV_KEY_DB_PG_HOST            = "PG_HOST"
+	ENV_KEY_DB_PG_PASSWORD        = "PG_PASSWORD"
+	ENV_KEY_DB_PG_USER            = "PG_USER"
+	ENV_KEY_DB_PG_DBNAME          = "PG_DBNAME"
+	ENV_KEY_DB_PG_PORT            = "PG_PORT"
 )
 
 // APP ENV KEY
@@ -72,6 +77,11 @@ func (e *envDataLoader) dbDataLoad(c *configManager) {
 	c.DB.S3_REGION = viper.GetString(ENV_KEY_DB_S3_REGION)
 	c.DB.INFO_FILE_POSTFIX = viper.GetString(ENV_KEY_DB_INFO_FILE_POSTFIX)
 	c.DB.MODEL_FILE_POSTFIX = viper.GetString(ENV_KEY_DB_MODEL_FILE_POSTFIX)
+	c.DB.PG_HOST = viper.GetString(ENV_KEY_DB_PG_HOST)
+	c.DB.PG_USER = viper.GetString(ENV_KEY_DB_PG_USER)
+	c.DB.PG_PASSWORD = viper.GetString(ENV_KEY_DB_PG_PASSWORD)
+	c.DB.PG_DBNAME = viper.GetString(ENV_KEY_DB_PG_DBNAME)
+	c.DB.PG_PORT = viper.GetString(ENV_KEY_DB_PG_PORT)
 }
 
 func (e *envDataLoader) appDataLoad(c *configManager) {
