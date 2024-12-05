@@ -38,17 +38,19 @@ import (
 )
 
 var registerModelBody = `{
-	"id" : "id", 
-	"modelId": {
-		"modelName": "test-model",
-		"modelVersion":"1"
-	},
-	"description": "testing",
-	"metaInfo": {
-		"metadata": {
-			"author":"tester"
-		}
-	}
+	"id" : "id",
+    "modelId": {
+        "modelName": "model3",
+        "modelVersion" : "2"
+    },
+    "description": "hello world2",
+    "modelInformation": {
+        "metadata": {
+            "author": "someone"
+        },
+        "inputDataType": "pdcpBytesDl,pdcpBytesUl,kpi",
+        "outputDataType": "c, d"
+    }
 }`
 
 type dbMgrMock struct {
@@ -74,27 +76,27 @@ type iDBMock struct {
 	db.IDB
 }
 
-func (i *iDBMock) Create(modelInfo models.ModelInfo) error {
+func (i *iDBMock) Create(modelInfo models.ModelRelatedInformation) error {
 	args := i.Called(modelInfo)
 	return args.Error(0)
 }
-func (i *iDBMock) GetByID(id string) (*models.ModelInfo, error) {
+func (i *iDBMock) GetByID(id string) (*models.ModelRelatedInformation, error) {
 	return nil, nil
 }
-func (i *iDBMock) GetAll() ([]models.ModelInfo, error) {
+func (i *iDBMock) GetAll() ([]models.ModelRelatedInformation, error) {
 	args := i.Called()
 	if _, ok := args.Get(1).(error); !ok {
-		return args.Get(0).([]models.ModelInfo), nil
+		return args.Get(0).([]models.ModelRelatedInformation), nil
 	} else {
-		var emptyModelInfo []models.ModelInfo
+		var emptyModelInfo []models.ModelRelatedInformation
 		return emptyModelInfo, args.Error(1)
 	}
 }
-func (i *iDBMock) Update(modelInfo models.ModelInfo) error {
+func (i *iDBMock) Update(modelInfo models.ModelRelatedInformation) error {
 	return nil
 }
-func (i *iDBMock) Delete(id string) error {
-	return nil
+func (i *iDBMock) Delete(id string) (int64, error) {
+	return 1, nil
 }
 
 func TestRegisterModel(t *testing.T) {
@@ -104,7 +106,7 @@ func TestRegisterModel(t *testing.T) {
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/registerModel", strings.NewReader(registerModelBody))
+	req, _ := http.NewRequest("POST", "/model-registrations", strings.NewReader(registerModelBody))
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 201, w.Code)
 }
@@ -115,7 +117,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 
 	// Setting Mock
 	iDBmockInst := new(iDBMock)
-	iDBmockInst.On("GetAll").Return([]models.ModelInfo{
+	iDBmockInst.On("GetAll").Return([]models.ModelRelatedInformation{
 		{
 			Id: "1234",
 			ModelId: models.ModelID{
@@ -123,10 +125,12 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 				ModelVersion: "v1.0",
 			},
 			Description: "this is test modelINfo",
-			ModelSpec: models.ModelSpec{
+			ModelInformation: models.ModelInformation{
 				Metadata: models.Metadata{
-					Author: "testing",
+					Author: "someone",
 				},
+				InputDataType:  "pdcpBytesDl,pdcpBytesUl,kpi",
+				OutputDataType: "c,d",
 			},
 		},
 	}, nil)
@@ -141,7 +145,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	response := responseRecorder.Result()
 	body, _ := io.ReadAll(response.Body)
 
-	var modelInfos []models.ModelInfo
+	var modelInfos []models.ModelRelatedInformation
 	logging.INFO(modelInfos)
 	json.Unmarshal(body, &modelInfos)
 
@@ -155,7 +159,7 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 
 	// Setting Mock
 	iDBmockInst2 := new(iDBMock)
-	iDBmockInst2.On("GetAll").Return([]models.ModelInfo{}, fmt.Errorf("db not available"))
+	iDBmockInst2.On("GetAll").Return([]models.ModelRelatedInformation{}, fmt.Errorf("db not available"))
 
 	handler := apis.NewMmeApiHandler(nil, iDBmockInst2)
 	router := routers.InitRouter(handler)
@@ -167,7 +171,7 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	response := responseRecorder.Result()
 	body, _ := io.ReadAll(response.Body)
 
-	var modelInfoListResp []models.ModelInfo
+	var modelInfoListResp []models.ModelRelatedInformation
 	json.Unmarshal(body, &modelInfoListResp)
 
 	assert.Equal(t, 500, responseRecorder.Code)

@@ -18,18 +18,18 @@ limitations under the License.
 package apis
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
-	"fmt"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
-
 )
 
 type MmeApiHandler struct {
@@ -47,7 +47,7 @@ func NewMmeApiHandler(dbMgr core.DBMgr, iDB db.IDB) *MmeApiHandler {
 
 func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 
-	var modelInfo models.ModelInfo
+	var modelInfo models.ModelRelatedInformation
 
 	if err := cont.ShouldBindJSON(&modelInfo); err != nil {
 		cont.JSON(http.StatusBadRequest, gin.H{
@@ -59,15 +59,24 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 	id := uuid.New()
 	modelInfo.Id = id.String()
 
-	// TODO: validate the object
+	validate := validator.New()
+	if err := validate.Struct(modelInfo); err != nil {
+		cont.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
 
 	if err := m.iDB.Create(modelInfo); err != nil {
 		logging.ERROR("error", err)
+		cont.JSON(http.StatusBadRequest, gin.H{
+			"Error": err.Error(),
+		})
 		return
 	}
 
 	logging.INFO("model is saved.")
-
+	cont.Header("Location", "/model-registrations/"+id.String())
 	cont.JSON(http.StatusCreated, gin.H{
 		"modelInfo": modelInfo,
 	})
@@ -113,7 +122,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 	queryParams := cont.Request.URL.Query()
 	//to check only modelName and modelVersion can be passed.
 	allowedParams := map[string]bool{
-		"modelName": true,
+		"modelName":    true,
 		"modelVersion": true,
 	}
 
@@ -126,11 +135,11 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 		}
 	}
 
-	modelName:= cont.Query("modelName")
-	modelVersion:= cont.Query("modelVersion")
+	modelName := cont.Query("modelName")
+	modelVersion := cont.Query("modelVersion")
 
 	if modelName == "" {
-		//return all modelinfo stored 
+		//return all modelinfo stored
 
 		models, err := m.iDB.GetAll()
 		if err != nil {
@@ -146,7 +155,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 	} else {
 		if modelVersion == "" {
 			// get all modelInfo by model name
-			modelInfos, err:= m.iDB.GetModelInfoByName(modelName)
+			modelInfos, err := m.iDB.GetModelInfoByName(modelName)
 			if err != nil {
 				statusCode := http.StatusInternalServerError
 				logging.ERROR("Error occurred, send status code: ", statusCode)
@@ -158,14 +167,13 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 			}
 
 			cont.JSON(http.StatusOK, gin.H{
-				"modelinfoList":modelInfos,
+				"modelinfoList": modelInfos,
 			})
 			return
 
-		} else
-		{
+		} else {
 			// get all modelInfo by model name and version
-			modelInfo, err:= m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
+			modelInfo, err := m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
 			if err != nil {
 				statusCode := http.StatusInternalServerError
 				logging.ERROR("Error occurred, send status code: ", statusCode)
@@ -175,7 +183,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				})
 				return
 			}
-			if modelInfo.Id == ""{
+			if modelInfo.ModelId.ModelName != modelName && modelInfo.ModelId.ModelVersion != modelVersion {
 				statusCode := http.StatusNotFound
 				errMessage := fmt.Sprintf("Record not found with modelName: %s and modelVersion: %s", modelName, modelVersion)
 				logging.ERROR("Record not found, send status code: ", statusCode)
@@ -187,7 +195,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 			}
 
 			cont.JSON(http.StatusOK, gin.H{
-				"modelinfo":modelInfo,
+				"modelinfo": modelInfo,
 			})
 			return
 		}
@@ -196,7 +204,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 
 func (m *MmeApiHandler) GetModelInfoById(cont *gin.Context) {
 	logging.INFO("Get model info by id ...")
-	id := cont.Param("id")
+	id := cont.Param("modelRegistrationId")
 	modelInfo, err := m.iDB.GetModelInfoById(id)
 	if err != nil {
 		logging.ERROR("error:", err)
@@ -206,7 +214,7 @@ func (m *MmeApiHandler) GetModelInfoById(cont *gin.Context) {
 		})
 		return
 	}
-	if modelInfo.Id == ""{
+	if modelInfo.Id == "" {
 		statusCode := http.StatusNotFound
 		errMessage := fmt.Sprintf("Record not found with id: %s", id)
 		logging.ERROR("Record not found, send status code: ", statusCode)
@@ -284,8 +292,8 @@ func (m *MmeApiHandler) GetModel(cont *gin.Context) {
 
 func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 	logging.INFO("Updating model...")
-	id := c.Param("id")
-	var modelInfo models.ModelInfo
+	id := c.Param("modelRegistrationId")
+	var modelInfo models.ModelRelatedInformation
 
 	if err := c.ShouldBindJSON(&modelInfo); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -308,18 +316,23 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 
 	logging.INFO("model updated")
 	c.JSON(http.StatusOK, gin.H{
-		"modelinfo":modelInfo,
+		"modelinfo": modelInfo,
 	})
 }
 
-func (m *MmeApiHandler) DeleteModel(c *gin.Context) {
-	logging.INFO("Deleting model...")
-	id := c.Param("id")
-	if err := m.iDB.Delete(id); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
+func (m *MmeApiHandler) DeleteModel(cont *gin.Context) {
+	id := cont.Param("modelRegistrationId")
+	logging.INFO("Deleting model... id = ", id)
+	rowsAffected, err := m.iDB.Delete(id)
+	if err != nil {
+		cont.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"message": "modelInfo deleted"})
+	message := "modelInfo deleted"
+	if rowsAffected == 0 {
+		message = fmt.Sprintf("id = %s already doesn't exist in database", id)
+	}
+	cont.JSON(http.StatusOK, gin.H{"message": message})
 }

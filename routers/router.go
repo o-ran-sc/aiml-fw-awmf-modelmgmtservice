@@ -26,12 +26,13 @@ func InitRouter(handler *apis.MmeApiHandler) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	// As per R1-AP v6
+	r.POST("/model-registrations", handler.RegisterModel)
+	r.GET("/model-registrations/:modelRegistrationId", handler.GetModelInfoById)
+	r.PUT("/model-registrations/:modelRegistrationId", handler.UpdateModel)
+	r.DELETE("/model-registrations/:modelRegistrationId", handler.DeleteModel)
 
-	r.POST("/registerModel", handler.RegisterModel)
 	r.GET("/getModelInfo", handler.GetModelInfo)
-	r.PUT("/modelInfo/:id", handler.UpdateModel)
-	r.GET("/modelInfo/:id", handler.GetModelInfoById)
-	r.DELETE("/modelInfo/:id", handler.DeleteModel)
 	r.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
 	r.POST("/uploadModel/:modelName", handler.UploadModel)
 	r.GET("/downloadModel/:modelName/model.zip", handler.DownloadModel)
