@@ -67,7 +67,7 @@ func main() {
 	}
 
 	// Auto migrate the scheme
-	db.AutoMigrate(&models.ModelInfo{})
+	db.AutoMigrate(&models.ModelRelatedInformation{})
 	repo := modelDB.NewModelInfoRepository(db)
 
 	router := routers.InitRouter(

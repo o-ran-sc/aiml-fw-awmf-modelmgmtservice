@@ -19,22 +19,34 @@ limitations under the License.
 package models
 
 type Metadata struct {
-	Author string `json:"author"`
+	Author string `json:"author" validate:"required"`
+	Owner  string `json:"owner"`
 }
 
-type ModelSpec struct {
-	Metadata Metadata `json:"metadata" gorm:"embedded"`
+type TargetEnironment struct {
+	PlatformName    string `json:"platformName" validate:"required"`
+	EnvironmentType string `json:"environmentType" validate:"required"`
+	DependencyList  string `json:"dependencyList" validate:"required"`
+}
+
+type ModelInformation struct {
+	Metadata       Metadata `json:"metadata" gorm:"embedded" validate:"required"`
+	InputDataType  string   `json:"inputDataType" validate:"required"`  // this field will be a Comma Separated List
+	OutputDataType string   `json:"outputDataType" validate:"required"` // this field will be a Comma Separated List
+	// TODO: gorm doesn't support list, need to find the right way
+	// TargetEnvironment []TargetEnironment `json:"targetEnvironment" gorm:"embedded"`
 }
 type ModelID struct {
-	ModelName    string `json:"modelName"`
-	ModelVersion string `json:"modelVersion"`
+	ModelName       string `json:"modelName" validate:"required" gorm:"primaryKey"`
+	ModelVersion    string `json:"modelVersion" validate:"required" gorm:"primaryKey"`
+	ArtifactVersion string `json:"artifactVersion"`
 }
 
-type ModelInfo struct {
-	Id          string    `json:"id" gorm:"primaryKey"`
-	ModelId     ModelID   `json:"model-id,omitempty" gorm:"embedded"`
-	Description string    `json:"description"`
-	ModelSpec   ModelSpec `json:"meta-info" gorm:"embedded"`
+type ModelRelatedInformation struct {
+	ModelId          ModelID          `json:"modelId,omitempty" validate:"required" gorm:"embedded;primaryKey"`
+	Description      string           `json:"description" validate:"required"`
+	ModelInformation ModelInformation `json:"modelInformation" validate:"required" gorm:"embedded"`
+	ModelLocation    string           `json:"modelLocation"`
 }
 
 type ModelInfoResponse struct {

@@ -22,12 +22,12 @@ import (
 )
 
 type IDB interface {
-	Create(modelInfo models.ModelInfo) error
-	GetByID(id string) (*models.ModelInfo, error)
-	GetAll() ([]models.ModelInfo, error)
-	GetModelInfoByName(modelName string)([]models.ModelInfo, error)
-	GetModelInfoByNameAndVer(modelName string, modelVersion string)(*models.ModelInfo, error)
-	GetModelInfoById(id string)(*models.ModelInfo, error)
-	Update(modelInfo models.ModelInfo) error
-	Delete(id string) error
+	Create(modelInfo models.ModelRelatedInformation) error
+	GetByID(id string) (*models.ModelRelatedInformation, error)
+	GetAll() ([]models.ModelRelatedInformation, error)
+	GetModelInfoByName(modelName string) ([]models.ModelRelatedInformation, error)
+	GetModelInfoByNameAndVer(modelName string, modelVersion string) (*models.ModelRelatedInformation, error)
+	GetModelInfoById(id string) (*models.ModelRelatedInformation, error)
+	Update(modelInfo models.ModelRelatedInformation) error
+	Delete(modelName string, modelVersion string) (int64, error)
 }

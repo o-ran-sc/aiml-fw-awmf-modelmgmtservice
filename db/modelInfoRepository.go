@@ -33,17 +33,17 @@ func NewModelInfoRepository(db *gorm.DB) *ModelInfoRepository {
 	}
 }
 
-func (repo *ModelInfoRepository) Create(modelInfo models.ModelInfo) error {
-	repo.db.Create(modelInfo)
-	return nil
+func (repo *ModelInfoRepository) Create(modelInfo models.ModelRelatedInformation) error {
+	result := repo.db.Create(modelInfo)
+	return result.Error
 }
 
-func (repo *ModelInfoRepository) GetByID(id string) (*models.ModelInfo, error) {
+func (repo *ModelInfoRepository) GetByID(id string) (*models.ModelRelatedInformation, error) {
 	return nil, nil
 }
 
-func (repo *ModelInfoRepository) GetAll() ([]models.ModelInfo, error) {
-	var modelInfos []models.ModelInfo
+func (repo *ModelInfoRepository) GetAll() ([]models.ModelRelatedInformation, error) {
+	var modelInfos []models.ModelRelatedInformation
 	result := repo.db.Find(&modelInfos)
 	if result.Error != nil {
 		return nil, result.Error
@@ -51,22 +51,19 @@ func (repo *ModelInfoRepository) GetAll() ([]models.ModelInfo, error) {
 	return modelInfos, nil
 }
 
-func (repo *ModelInfoRepository) Update(modelInfo models.ModelInfo) error {
+func (repo *ModelInfoRepository) Update(modelInfo models.ModelRelatedInformation) error {
 	if err := repo.db.Save(modelInfo).Error; err != nil {
 		return err
 	}
 	return nil
 }
 
-func (repo *ModelInfoRepository) Delete(id string) error {
-	logging.INFO("id is:", id)
-	if err := repo.db.Delete(&models.ModelInfo{}, "id=?", id).Error; err != nil {
-		return err
-	}
-	return nil
+func (repo *ModelInfoRepository) Delete(modelName string, modelVersion string) (int64, error) {
+	result := repo.db.Delete(&models.ModelRelatedInformation{}, "model_name = ? AND model_version = ?", modelName, modelVersion)
+	return result.RowsAffected, result.Error
 }
-func (repo *ModelInfoRepository) GetModelInfoByName(modelName string)([]models.ModelInfo, error){
-	var modelInfos []models.ModelInfo
+func (repo *ModelInfoRepository) GetModelInfoByName(modelName string) ([]models.ModelRelatedInformation, error) {
+	var modelInfos []models.ModelRelatedInformation
 	result := repo.db.Where("model_name = ?", modelName).Find(&modelInfos)
 	if result.Error != nil {
 		return nil, result.Error
@@ -74,17 +71,18 @@ func (repo *ModelInfoRepository) GetModelInfoByName(modelName string)([]models.M
 	return modelInfos, nil
 }
 
-func (repo *ModelInfoRepository) GetModelInfoByNameAndVer(modelName string, modelVersion string)(*models.ModelInfo, error){
-	var modelInfo models.ModelInfo
+func (repo *ModelInfoRepository) GetModelInfoByNameAndVer(modelName string, modelVersion string) (*models.ModelRelatedInformation, error) {
+	var modelInfo models.ModelRelatedInformation
 	result := repo.db.Where("model_name = ? AND model_version = ?", modelName, modelVersion).Find(&modelInfo)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	return &modelInfo, nil
 }
-func (repo *ModelInfoRepository) GetModelInfoById(id string)(*models.ModelInfo, error){
+
+func (repo *ModelInfoRepository) GetModelInfoById(id string) (*models.ModelRelatedInformation, error) {
 	logging.INFO("id is:", id)
-	var modelInfo models.ModelInfo
+	var modelInfo models.ModelRelatedInformation
 	result := repo.db.Where("id = ?", id).Find(&modelInfo)
 	if result.Error != nil {
 		return nil, result.Error
