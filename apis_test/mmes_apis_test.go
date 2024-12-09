@@ -135,7 +135,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/getModelInfo", nil)
+	req, _ := http.NewRequest("GET", "/models", nil)
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()
@@ -161,7 +161,7 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/getModelInfo", nil)
+	req, _ := http.NewRequest("GET", "/models", nil)
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()

@@ -1,12 +1,11 @@
 ### Note: update the vm ip in the host
-@host = x.x.x.x:8082
+@host = 192.168.180.96:32006
 
 ### registraton
 POST http://{{host}}/registerModel
 Content-Type: application/json
 
 { 
-    "id": "12345", 
     "model-id": { 
         "modelName": "TestModel", 
         "modelVersion": "v1.0" 
@@ -20,15 +19,15 @@ Content-Type: application/json
 }
 
 ### Get All Models info
-GET http://{{host}}/getModelInfo
+GET http://{{host}}/models
 Content-Type: application/json
 
 ### Get all Models info by name
-GET http://{{host}}/getModelInfo?modelName=TestModel
+GET http://{{host}}/models?model-name=TestModel
 Content-Type: application/json
 
 ### Get all Models info by name and version
-GET http://{{host}}/getModelInfo?modelName=TestModel&modelVersion=v1.0
+GET http://{{host}}/models?model-name=TestModel&model-version=v1.0
 Content-Type: application/json
 
 ### updated model

@@ -18,10 +18,10 @@ limitations under the License.
 package apis
 
 import (
+	"fmt"
 	"io"
 	"net/http"
 	"os"
-	"fmt"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
@@ -29,7 +29,6 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-
 )
 
 type MmeApiHandler struct {
@@ -113,8 +112,8 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 	queryParams := cont.Request.URL.Query()
 	//to check only modelName and modelVersion can be passed.
 	allowedParams := map[string]bool{
-		"modelName": true,
-		"modelVersion": true,
+		"model-name":    true,
+		"model-version": true,
 	}
 
 	for key := range queryParams {
@@ -126,11 +125,11 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 		}
 	}
 
-	modelName:= cont.Query("modelName")
-	modelVersion:= cont.Query("modelVersion")
+	modelName := cont.Query("model-name")
+	modelVersion := cont.Query("model-version")
 
 	if modelName == "" {
-		//return all modelinfo stored 
+		//return all modelinfo stored
 
 		models, err := m.iDB.GetAll()
 		if err != nil {
@@ -144,9 +143,10 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 		cont.JSON(http.StatusOK, models)
 		return
 	} else {
+		var response []models.ModelInfo
 		if modelVersion == "" {
 			// get all modelInfo by model name
-			modelInfos, err:= m.iDB.GetModelInfoByName(modelName)
+			modelInfos, err := m.iDB.GetModelInfoByName(modelName)
 			if err != nil {
 				statusCode := http.StatusInternalServerError
 				logging.ERROR("Error occurred, send status code: ", statusCode)
@@ -156,16 +156,10 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				})
 				return
 			}
-
-			cont.JSON(http.StatusOK, gin.H{
-				"modelinfoList":modelInfos,
-			})
-			return
-
-		} else
-		{
+			response = append(response, modelInfos...)
+		} else {
 			// get all modelInfo by model name and version
-			modelInfo, err:= m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
+			modelInfo, err := m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
 			if err != nil {
 				statusCode := http.StatusInternalServerError
 				logging.ERROR("Error occurred, send status code: ", statusCode)
@@ -175,7 +169,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				})
 				return
 			}
-			if modelInfo.Id == ""{
+			if modelInfo.Id == "" {
 				statusCode := http.StatusNotFound
 				errMessage := fmt.Sprintf("Record not found with modelName: %s and modelVersion: %s", modelName, modelVersion)
 				logging.ERROR("Record not found, send status code: ", statusCode)
@@ -185,12 +179,9 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				})
 				return
 			}
-
-			cont.JSON(http.StatusOK, gin.H{
-				"modelinfo":modelInfo,
-			})
-			return
+			response = append(response, *modelInfo)
 		}
+		cont.JSON(http.StatusOK, response)
 	}
 }
 
@@ -206,7 +197,7 @@ func (m *MmeApiHandler) GetModelInfoById(cont *gin.Context) {
 		})
 		return
 	}
-	if modelInfo.Id == ""{
+	if modelInfo.Id == "" {
 		statusCode := http.StatusNotFound
 		errMessage := fmt.Sprintf("Record not found with id: %s", id)
 		logging.ERROR("Record not found, send status code: ", statusCode)
@@ -308,7 +299,7 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 
 	logging.INFO("model updated")
 	c.JSON(http.StatusOK, gin.H{
-		"modelinfo":modelInfo,
+		"modelinfo": modelInfo,
 	})
 }
 
