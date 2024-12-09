@@ -32,6 +32,11 @@ import (
 	"github.com/google/uuid"
 )
 
+const (
+	MODELNAME    = "model-name"
+	MODELVERSION = "model-version"
+)
+
 type MmeApiHandler struct {
 	dbmgr core.DBMgr
 	iDB   db.IDB
@@ -122,8 +127,8 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 	queryParams := cont.Request.URL.Query()
 	//to check only modelName and modelVersion can be passed.
 	allowedParams := map[string]bool{
-		"modelName":    true,
-		"modelVersion": true,
+		MODELNAME:    true,
+		MODELVERSION: true,
 	}
 
 	for key := range queryParams {
@@ -135,10 +140,10 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 		}
 	}
 
-	modelName := cont.Query("modelName")
-	modelVersion := cont.Query("modelVersion")
+	modelName := cont.Query(MODELNAME)
+	modelVersion := cont.Query(MODELVERSION)
 
-	if modelName == "" {
+	if modelName == "" && modelVersion == "" {
 		//return all modelinfo stored
 
 		models, err := m.iDB.GetAll()
@@ -166,9 +171,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				return
 			}
 
-			cont.JSON(http.StatusOK, gin.H{
-				"modelinfoList": modelInfos,
-			})
+			cont.JSON(http.StatusOK, modelInfos)
 			return
 
 		} else {
@@ -194,9 +197,8 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				return
 			}
 
-			cont.JSON(http.StatusOK, gin.H{
-				"modelinfo": modelInfo,
-			})
+			response := []models.ModelRelatedInformation{*modelInfo}
+			cont.JSON(http.StatusOK, response)
 			return
 		}
 	}
