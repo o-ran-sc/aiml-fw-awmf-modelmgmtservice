@@ -33,22 +33,27 @@ GET http://{{host}}/models?model-name=TestModel1&model-version=v1.0
 Content-Type: application/json
 
 ### updated model
-PUT http://{{host}}/modelInfo/12345
+PUT http://{{host}}/model-registrations/79a20274-35a6-4f97-a669-8b42b73f087f
 Content-Type: application/json
 
 {
-  "id": "12345",
-  "model-id": {
-    "modelName": "UpdatedModel",
-    "modelVersion": "v2.0"
-  },
-  "description": "This is an updated model.",
-  "meta-info": {
-    "metadata": {
-      "author": "Jane Doe"
-    }
+    "id": "79a20274-35a6-4f97-a669-8b42b73f087f",
+    "modelId": {
+      "modelName": "TestModel1",
+      "modelVersion": "v1.0",
+      "artifactVersion": "1.0.0"
+    },
+    "description": "This is a updated model.",
+    "modelInformation": {
+      "metadata": {
+        "author": "John Doe",
+        "owner": ""
+      },
+      "inputDataType": "pdcp",
+      "outputDataType": "pdcp"
+    },
+    "modelLocation": ""
   }
-}
 
 ### delete modelinfo
 DELETE http://{{host}}/modelInfo/12345
