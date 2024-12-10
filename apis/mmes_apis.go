@@ -325,16 +325,18 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 func (m *MmeApiHandler) DeleteModel(cont *gin.Context) {
 	id := cont.Param("modelRegistrationId")
 	logging.INFO("Deleting model... id = ", id)
-	rowsAffected, err := m.iDB.Delete(id)
+	_, err := m.iDB.Delete(id)
 	if err != nil {
 		cont.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
-	message := "modelInfo deleted"
+
+	/*message := "modelInfo deleted"
 	if rowsAffected == 0 {
 		message = fmt.Sprintf("id = %s already doesn't exist in database", id)
-	}
-	cont.JSON(http.StatusOK, gin.H{"message": message})
+	}*/
+	
+	cont.JSON(http.StatusNoContent, nil)
 }
