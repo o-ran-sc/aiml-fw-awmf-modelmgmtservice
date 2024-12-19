@@ -71,7 +71,9 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 		})
 		return
 	}
-
+    // by default when a model is registered its artifact version is set to 0.0.0
+    modelInfo.ModelId.ArtifactVersion = "0.0.0"
+    
 	if err := m.iDB.Create(modelInfo); err != nil {
 		logging.ERROR("error", err)
 		cont.JSON(http.StatusBadRequest, gin.H{
@@ -337,4 +339,30 @@ func (m *MmeApiHandler) DeleteModel(cont *gin.Context) {
 		message = fmt.Sprintf("id = %s already doesn't exist in database", id)
 	}
 	cont.JSON(http.StatusOK, gin.H{"message": message})
+}
+
+func (m *MmeApiHandler) UpdateArtifact(cont *gin.Context){
+	logging.INFO("Update artifact version of model")
+	// var modelInfo *models.ModelRelatedInformation
+	modelname := cont.Param("modelname")
+	modelversion := cont.Param("modelversion")
+	artifactversion := cont.Param("artifactversion")
+	modelInfo, err := m.iDB.GetModelInfoByNameAndVer(modelname, modelversion)
+	if err != nil {
+		logging.ERROR("error:", err)
+		cont.JSON(http.StatusInternalServerError, gin.H{
+			"code":    http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+		return
+	}
+	modelInfo.ModelId.ArtifactVersion = artifactversion
+	if err := m.iDB.Update(*modelInfo); err != nil {
+		logging.ERROR(err)
+		return
+	}
+	logging.INFO("model updated")
+	cont.JSON(http.StatusOK, gin.H{
+		"modelinfo": modelInfo,
+	})
 }
