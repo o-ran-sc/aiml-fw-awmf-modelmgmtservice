@@ -146,7 +146,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	body, _ := io.ReadAll(response.Body)
 
 	var modelInfos []models.ModelRelatedInformation
-	logging.INFO(modelInfos)
+	logging.INFO("modelinfo", "list:", modelInfos)
 	json.Unmarshal(body, &modelInfos)
 
 	assert.Equal(t, 200, responseRecorder.Code)

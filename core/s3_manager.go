@@ -100,7 +100,7 @@ func (s3manager *S3Manager) CreateBucket(bucketName string) (err error) {
 	_, s3Err := s3manager.S3Client.CreateBucket(&s3.CreateBucketInput{Bucket: aws.String(bucketName)})
 
 	if s3Err != nil {
-		logging.ERROR(s3Err)
+		logging.ERROR("error", "s3Error:", s3Err)
 		//Convert the aws to get the code/error msg for api response
 		if aerr, ok := s3Err.(awserr.Error); ok {
 			err = errors.New(aerr.Message())

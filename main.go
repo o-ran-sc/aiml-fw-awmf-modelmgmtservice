@@ -36,12 +36,12 @@ import (
 
 func main() {
 	if err := config.Load(config.NewConfigDataValidator(), config.NewEnvDataLoader(nil)); err != nil {
-		logging.ERROR(err)
+		logging.ERROR("error in loading config", "error", err)
 		os.Exit(-1)
 	}
 
 	configManager := config.GetConfigManager()
-	logging.INFO(configManager)
+	logging.INFO("config mgr prepared", "configmgr", configManager)
 	// setup the database connection
 
 	// connection string
