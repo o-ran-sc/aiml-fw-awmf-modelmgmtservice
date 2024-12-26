@@ -139,7 +139,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/ai-ml-model-registration/v1/models", nil)
+	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models", nil)
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()
@@ -165,7 +165,7 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/ai-ml-model-registration/v1/models", nil)
+	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models", nil)
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()

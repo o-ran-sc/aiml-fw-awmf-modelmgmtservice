@@ -27,17 +27,21 @@ func InitRouter(handler *apis.MmeApiHandler) *gin.Engine {
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 	api := r.Group("/ai-ml-model-registration/v1")
+    {
+        api.POST("/model-registrations", handler.RegisterModel)
+        api.POST("/model-registrations/updateArtifact/:modelname/:modelversion/:artifactversion", handler.UpdateArtifact)
+        api.GET("/model-registrations/:modelRegistrationId", handler.GetModelInfoById)
+        api.PUT("/model-registrations/:modelRegistrationId", handler.UpdateModel)
+        api.DELETE("/model-registrations/:modelRegistrationId", handler.DeleteModel)
+        api.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
+        api.POST("/uploadModel/:modelName", handler.UploadModel)
+        api.GET("/downloadModel/:modelName/model.zip", handler.DownloadModel)
+    }
 	// As per R1-AP v6
-	api.POST("/model-registrations", handler.RegisterModel)
-	api.POST("/model-registrations/updateArtifact/:modelname/:modelversion/:artifactversion", handler.UpdateArtifact)
-	api.GET("/model-registrations/:modelRegistrationId", handler.GetModelInfoById)
-	api.PUT("/model-registrations/:modelRegistrationId", handler.UpdateModel)
-	api.DELETE("/model-registrations/:modelRegistrationId", handler.DeleteModel)
 
-	api.GET("/models", handler.GetModelInfo)
-
-	api.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
-	api.POST("/uploadModel/:modelName", handler.UploadModel)
-	api.GET("/downloadModel/:modelName/model.zip", handler.DownloadModel)
+    modelDiscovery:= r.Group("/ai-ml-model-discovery/v1")
+    {
+        modelDiscovery.GET("/models", handler.GetModelInfo)
+    }
 	return r
 }
