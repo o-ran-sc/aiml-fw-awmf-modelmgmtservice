@@ -26,17 +26,18 @@ func InitRouter(handler *apis.MmeApiHandler) *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
+	api := r.Group("/ai-ml-model-registration/v1")
 	// As per R1-AP v6
-	r.POST("/model-registrations", handler.RegisterModel)
-	r.POST("/model-registrations/updateArtifact/:modelname/:modelversion/:artifactversion", handler.UpdateArtifact)
-	r.GET("/model-registrations/:modelRegistrationId", handler.GetModelInfoById)
-	r.PUT("/model-registrations/:modelRegistrationId", handler.UpdateModel)
-	r.DELETE("/model-registrations/:modelRegistrationId", handler.DeleteModel)
+	api.POST("/model-registrations", handler.RegisterModel)
+	api.POST("/model-registrations/updateArtifact/:modelname/:modelversion/:artifactversion", handler.UpdateArtifact)
+	api.GET("/model-registrations/:modelRegistrationId", handler.GetModelInfoById)
+	api.PUT("/model-registrations/:modelRegistrationId", handler.UpdateModel)
+	api.DELETE("/model-registrations/:modelRegistrationId", handler.DeleteModel)
 
-	r.GET("/models", handler.GetModelInfo)
+	api.GET("/models", handler.GetModelInfo)
 
-	r.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
-	r.POST("/uploadModel/:modelName", handler.UploadModel)
-	r.GET("/downloadModel/:modelName/model.zip", handler.DownloadModel)
+	api.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
+	api.POST("/uploadModel/:modelName", handler.UploadModel)
+	api.GET("/downloadModel/:modelName/model.zip", handler.DownloadModel)
 	return r
 }

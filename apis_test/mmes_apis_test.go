@@ -106,7 +106,7 @@ func TestRegisterModel(t *testing.T) {
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/model-registrations", strings.NewReader(registerModelBody))
+	req, _ := http.NewRequest("POST", "/ai-ml-model-registration/v1/model-registrations", strings.NewReader(registerModelBody))
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 201, w.Code)
 }
@@ -139,7 +139,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/models", nil)
+	req, _ := http.NewRequest("GET", "/ai-ml-model-registration/v1/models", nil)
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()
@@ -165,7 +165,7 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
-	req, _ := http.NewRequest("GET", "/models", nil)
+	req, _ := http.NewRequest("GET", "/ai-ml-model-registration/v1/models", nil)
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()
