@@ -83,7 +83,7 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 	}
 
 	logging.INFO("model is saved.")
-	cont.Header("Location", "/model-registrations/"+id.String())
+	cont.Header("Location", "ai-ml-model-registration/v1/model-registrations/"+id.String())
 	cont.JSON(http.StatusCreated, gin.H{
 		"modelInfo": modelInfo,
 	})
