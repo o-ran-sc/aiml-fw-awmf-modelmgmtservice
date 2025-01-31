@@ -305,14 +305,28 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 		})
 		return
 	}
+	existingModelInfo, err := m.iDB.GetModelInfoById(id)
 
-	if id != modelInfo.Id {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "ID in path and body does not match",
+	if err != nil || existingModelInfo.Id == ""{
+		statusCode := http.StatusNotFound
+		logging.ERROR("Error occurred, send status code: ", statusCode)
+		c.JSON(statusCode, gin.H{
+			"code":    statusCode,
+			"message": fmt.Sprintf("model not found with id: %s", id),
+		})
+		return
+	}
+	if existingModelInfo.ModelId.ModelName != modelInfo.ModelId.ModelName || existingModelInfo.ModelId.ModelVersion != modelInfo.ModelId.ModelVersion{
+		statusCode := http.StatusBadRequest
+		logging.ERROR("Error occurred, send status code: ", statusCode)
+		c.JSON(statusCode, gin.H{
+			"code":    statusCode,
+			"message": fmt.Sprintf("model with id: %s have different modelname and modelversion than provided", id),
 		})
 		return
 	}
 
+	modelInfo.Id = id
 	if err := m.iDB.Update(modelInfo); err != nil {
 		logging.ERROR("error in update db", "Error:", err)
 		return
