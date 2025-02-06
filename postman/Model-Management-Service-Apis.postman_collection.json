@@ -1,0 +1,205 @@
+{
+	"info": {
+		"_postman_id": "faabf284-3088-4e15-8b5f-a393f5f9ee4a",
+		"name": "Model-Management-Service-Apis",
+		"description": "The following collection contains the api-endpoint as well as payload for MME service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "39642793"
+	},
+	"item": [
+		{
+			"name": "Register model",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"modelId\": {\r\n        \"modelName\": \"model2\",\r\n        \"modelVersion\" : \"1\"\r\n    },\r\n    \"description\": \"hello world2\",\r\n    \"modelInformation\": {\r\n        \"metadata\": {\r\n            \"author\": \"someone\"\r\n        },\r\n        \"inputDataType\": \"pdcpBytesDl,pdcpBytesUl\",\r\n        \"outputDataType\": \"c, d\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:32006/ai-ml-model-registration/v1/model-registrations/",
+					"host": [
+						"localhost"
+					],
+					"port": "32006",
+					"path": [
+						"ai-ml-model-registration",
+						"v1",
+						"model-registrations",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get model by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:32006/ai-ml-model-registration/v1/model-registrations/c7440921-6a36-4969-869a-33460e8c08e1",
+					"host": [
+						"localhost"
+					],
+					"port": "32006",
+					"path": [
+						"ai-ml-model-registration",
+						"v1",
+						"model-registrations",
+						"c7440921-6a36-4969-869a-33460e8c08e1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get model by modelName and ModelVersion",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:32006/ai-ml-model-discovery/v1/models?model-name=model2&model-version=3",
+					"host": [
+						"localhost"
+					],
+					"port": "32006",
+					"path": [
+						"ai-ml-model-discovery",
+						"v1",
+						"models"
+					],
+					"query": [
+						{
+							"key": "model-name",
+							"value": "model2"
+						},
+						{
+							"key": "model-version",
+							"value": "3"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all models",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:32006/ai-ml-model-discovery/v1/models",
+					"host": [
+						"localhost"
+					],
+					"port": "32006",
+					"path": [
+						"ai-ml-model-discovery",
+						"v1",
+						"models"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update model by id",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"c7440921-6a36-4969-869a-33460e8c08e1\",\r\n    \"description\": \"hello world5\",\r\n    \"modelInformation\": {\r\n        \"metadata\": {\r\n            \"author\": \"someone\"\r\n        },\r\n        \"inputDataType\": \"pdcpBytesDl,pdcpBytesUl\",\r\n        \"outputDataType\": \"c, d\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:32006/ai-ml-model-registration/v1/model-registrations/c7440921-6a36-4969-869a-33460e8c08e1",
+					"host": [
+						"localhost"
+					],
+					"port": "32006",
+					"path": [
+						"ai-ml-model-registration",
+						"v1",
+						"model-registrations",
+						"c7440921-6a36-4969-869a-33460e8c08e1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Artifact Version",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"c7440921-6a36-4969-869a-33460e8c08e1\",\r\n    \"description\": \"hello world5\",\r\n    \"modelInformation\": {\r\n        \"metadata\": {\r\n            \"author\": \"someone\"\r\n        },\r\n        \"inputDataType\": \"pdcpBytesDl,pdcpBytesUl\",\r\n        \"outputDataType\": \"c, d\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:32006/ai-ml-model-registration/v1/model-registrations/updateArtifact/model2/1/1.0.2",
+					"host": [
+						"localhost"
+					],
+					"port": "32006",
+					"path": [
+						"ai-ml-model-registration",
+						"v1",
+						"model-registrations",
+						"updateArtifact",
+						"model2",
+						"1",
+						"1.0.2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete model by id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"modelId\": {\r\n        \"modelName\": \"model1\",\r\n        \"modelVersion\" : \"1\"\r\n    },\r\n    \"description\": \"hello world2\",\r\n    \"modelInformation\": {\r\n        \"metadata\": {\r\n            \"author\": \"someone\"\r\n        },\r\n        \"inputDataType\": \"pdcpBytesDl,pdcpBytesUl\",\r\n        \"outputDataType\": \"c, d\"\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:32006/ai-ml-model-registration/v1/model-registrations/c7440921-6a36-4969-869a-33460e8c08e1",
+					"host": [
+						"localhost"
+					],
+					"port": "32006",
+					"path": [
+						"ai-ml-model-registration",
+						"v1",
+						"model-registrations",
+						"c7440921-6a36-4969-869a-33460e8c08e1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
