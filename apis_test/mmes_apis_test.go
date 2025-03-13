@@ -53,6 +53,38 @@ var registerModelBody = `{
     }
 }`
 
+var invalidRegisterModelBody = `{
+	"id" : "id",
+    "modelId": {
+        "modelName": "model3",
+        "modelVersion" : "2"
+    },
+    "description": "hello world2",
+    "modelInformation": {
+        "metadata": {
+            "author": "someone"
+        },
+        "inputDataType": "pdcpBytesDl,pdcpBytesUl,kpi",
+        "outputDataType": "c, d"
+    }
+`
+
+var invalidRegisterModelBody2 = `{
+	"id" : "id",
+    "modelId": {
+        "modelName": "model3",
+        "modelsion" : "2"
+    },
+    "description": "hello world2",
+    "modelInformation": {
+        "metadata": {
+            "author": "someone"
+        },
+        "inputDataType": "pdcpBytesDl,pdcpBytesUl,kpi",
+        "outputDataType": "c, d"
+    }
+}`
+
 type dbMgrMock struct {
 	mock.Mock
 	core.DBMgr
@@ -109,6 +141,68 @@ func TestRegisterModel(t *testing.T) {
 	req, _ := http.NewRequest("POST", "/ai-ml-model-registration/v1/model-registrations", strings.NewReader(registerModelBody))
 	router.ServeHTTP(w, req)
 	assert.Equal(t, 201, w.Code)
+}
+
+func TestRegisterModelFailInvalidJson(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	iDBMockInst := new(iDBMock)
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/ai-ml-model-registration/v1/model-registrations", strings.NewReader(invalidRegisterModelBody))
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, 400, w.Code)
+	body, _ := io.ReadAll(w.Body)
+
+	assert.Equal(t, `{"code":400,"title":"Bad Request","detail":"The request json is not correct, unexpected EOF"}`, string(body))
+}
+
+func TestRegisterModelFailInvalidRequest(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	iDBMockInst := new(iDBMock)
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/ai-ml-model-registration/v1/model-registrations", strings.NewReader(invalidRegisterModelBody2))
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, 400, w.Code)
+	body, _ := io.ReadAll(w.Body)
+
+	assert.Equal(t, `{"code":400,"title":"Bad Request","detail":"The request json is not correct as it can't be validated, Key: 'ModelRelatedInformation.ModelId.ModelVersion' Error:Field validation for 'ModelVersion' failed on the 'required' tag"}`, string(body))
+}
+
+func TestRegisterModelFailCreateDuplicateModel(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	iDBMockInst := new(iDBMock)
+	iDBMockInst.On("Create", mock.Anything).Return(fmt.Errorf("duplicate key value violates unique constraint \"model_related_informations_pkey\" (SQLSTATE 23505)"))
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/ai-ml-model-registration/v1/model-registrations", strings.NewReader(registerModelBody))
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, 409, w.Code)
+	body, _ := io.ReadAll(w.Body)
+
+	assert.Equal(t, `{"code":409,"title":"model name and version combination already present","detail":"The request json is not correct as , duplicate key value violates unique constraint \"model_related_informations_pkey\" (SQLSTATE 23505)"}`, string(body))
+}
+
+func TestRegisterModelFailCreate(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	iDBMockInst := new(iDBMock)
+	iDBMockInst.On("Create", mock.Anything).Return(fmt.Errorf("db not available"))
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	w := httptest.NewRecorder()
+	req, _ := http.NewRequest("POST", "/ai-ml-model-registration/v1/model-registrations", strings.NewReader(registerModelBody))
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, 500, w.Code)
+	body, _ := io.ReadAll(w.Body)
+
+	assert.Equal(t, `{"code":500,"title":"Internal Server Error","detail":"The model cannot be registered due to , db not available"}`, string(body))
 }
 
 func TestWhenSuccessGetModelInfoList(t *testing.T) {
