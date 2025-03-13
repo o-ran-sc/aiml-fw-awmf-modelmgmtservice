@@ -22,6 +22,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
@@ -51,12 +52,16 @@ func NewMmeApiHandler(dbMgr core.DBMgr, iDB db.IDB) *MmeApiHandler {
 }
 
 func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
+	logging.INFO("welcome to the Register model api")
 
 	var modelInfo models.ModelRelatedInformation
 
 	if err := cont.ShouldBindJSON(&modelInfo); err != nil {
-		cont.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+		fmt.Sprintf("json recieved is not correct, %s", err.Error())
+		cont.JSON(http.StatusBadRequest, models.ProblemDetail{
+			Status: http.StatusBadRequest,
+			Title: "Bad Request",
+			Detail: fmt.Sprintf("The request json is not correct, %s", err.Error()),
 		})
 		return
 	}
@@ -66,8 +71,11 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 
 	validate := validator.New()
 	if err := validate.Struct(modelInfo); err != nil {
-		cont.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
+		fmt.Sprintf("The request json is not correct as it can't be validated, %s", err.Error())
+		cont.JSON(http.StatusBadRequest, models.ProblemDetail{
+			Status: http.StatusBadRequest,
+			Title: "Bad Request",
+			Detail: fmt.Sprintf("The request json is not correct as it can't be validated, %s", err.Error()),
 		})
 		return
 	}
@@ -76,10 +84,21 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 
 	if err := m.iDB.Create(modelInfo); err != nil {
 		logging.ERROR("error", err)
-		cont.JSON(http.StatusBadRequest, gin.H{
-			"Error": err.Error(),
-		})
-		return
+		if strings.Contains(err.Error(), "duplicate key value violates unique constraint \"model_related_informations_pkey\" (SQLSTATE 23505)"){
+			cont.JSON(http.StatusConflict, models.ProblemDetail{
+				Status: http.StatusConflict,
+				Title: "model name and version combination already present",
+				Detail: fmt.Sprintf("The request json is not correct as , %s", err.Error()),
+			})
+			return
+		}else{
+			cont.JSON(http.StatusBadRequest, models.ProblemDetail{
+				Status: http.StatusBadRequest,
+				Title: "Bad Request",
+				Detail: fmt.Sprintf("The request json is not correct as , %s", err.Error()),
+			})
+			return
+		}
 	}
 
 	logging.INFO("model is saved.")
@@ -88,36 +107,6 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 		"modelInfo": modelInfo,
 	})
 
-	// logging.INFO("Creating model...")
-	// bodyBytes, _ := io.ReadAll(cont.Request.Body)
-
-	// var modelInfo models.ModelInfo
-	// //Need to unmarshal JSON to Struct, to access request
-	// //data such as model name, rapp id etc
-	// err := json.Unmarshal(bodyBytes, &modelInfo)
-	// if err != nil || modelInfo.ModelId.ModelName == "" {
-	// 	logging.ERROR("Error in unmarshalling")
-	// 	cont.JSON(http.StatusBadRequest, gin.H{
-	// 		"code":    http.StatusBadRequest,
-	// 		"message": string("Can not parse input data, provide mandatory details"),
-	// 	})
-	// } else {
-	// 	id := uuid.New()
-	// 	modelInfo.Id = id.String()
-	// 	modelInfoBytes, _ := json.Marshal(modelInfo)
-	// 	err := m.dbmgr.CreateBucket(modelInfo.ModelId.ModelName)
-	// 	if err == nil {
-	// 		m.dbmgr.UploadFile(modelInfoBytes, modelInfo.ModelId.ModelName+os.Getenv("INFO_FILE_POSTFIX"), modelInfo.ModelId.ModelName)
-	// 	} else {
-	// 		cont.JSON(http.StatusInternalServerError, gin.H{
-	// 			"code":    http.StatusInternalServerError,
-	// 			"message": err.Error(),
-	// 		})
-	// 	}
-	// 	cont.JSON(http.StatusCreated, gin.H{
-	// 		"modelinfo": modelInfoBytes,
-	// 	})
-	// }
 }
 
 /*
