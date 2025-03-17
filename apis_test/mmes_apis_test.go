@@ -133,6 +133,27 @@ func (i *iDBMock) Delete(id string) (int64, error) {
 	return 1, nil
 }
 
+func (i *iDBMock) GetModelInfoByName(modelName string) ([]models.ModelRelatedInformation, error) {
+	args := i.Called()
+	if _, ok := args.Get(1).(error); !ok {
+		return args.Get(0).([]models.ModelRelatedInformation), nil
+	} else {
+		var emptyModelInfo []models.ModelRelatedInformation
+		return emptyModelInfo, args.Error(1)
+	}
+}
+
+func (i *iDBMock) GetModelInfoByNameAndVer(modelName string, modelVersion string) (*models.ModelRelatedInformation, error) {
+	args := i.Called()
+
+	if _, ok := args.Get(1).(error); !ok {
+		return args.Get(0).(*models.ModelRelatedInformation), nil
+	} else {
+		var emptyModelInfo *models.ModelRelatedInformation
+		return emptyModelInfo, args.Error(1)
+	}
+}
+
 func TestRegisterModel(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 	iDBMockInst := new(iDBMock)
@@ -271,4 +292,155 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	json.Unmarshal(body, &modelInfoListResp)
 
 	assert.Equal(t, 500, responseRecorder.Code)
+}
+
+func TestGetModelInfoParamsInvalid(t *testing.T) {
+	// Setting ENV
+	os.Setenv("LOG_FILE_NAME", "testing")
+
+	// Setting Mock
+	iDBMockInst := new(iDBMock)
+
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-me=qoe2", nil)
+
+	router.ServeHTTP(responseRecorder, req)
+
+	body, _ := io.ReadAll(responseRecorder.Body)
+	fmt.Println(responseRecorder)
+	assert.Equal(t, 400, responseRecorder.Code)
+	assert.Equal(t, `{"status":400,"title":"Bad Request","detail":"Only allowed params are modelname and modelversion"}`, string(body))
+}
+
+func TestGetModelInfoByNameSuccess(t *testing.T) {
+	// Setting ENV
+	os.Setenv("LOG_FILE_NAME", "testing")
+
+	// Setting Mock
+	iDBMockInst := new(iDBMock)
+	iDBMockInst.On("GetModelInfoByName").Return([]models.ModelRelatedInformation{
+		{
+			Id: "1234",
+			ModelId: models.ModelID{
+				ModelName:    "test",
+				ModelVersion: "v1.0",
+			},
+			Description: "this is test modelINfo",
+			ModelInformation: models.ModelInformation{
+				Metadata: models.Metadata{
+					Author: "someone",
+				},
+				InputDataType:  "pdcpBytesDl,pdcpBytesUl,kpi",
+				OutputDataType: "c,d",
+			},
+		},
+	}, nil)
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-name=qoe1", nil)
+
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	body, _ := io.ReadAll(response.Body)
+
+	var modelInfos []models.ModelRelatedInformation
+	logging.INFO("modelinfo", "list:", modelInfos)
+	json.Unmarshal(body, &modelInfos)
+
+	assert.Equal(t, 200, responseRecorder.Code)
+	assert.Equal(t, "1234", modelInfos[0].Id)
+}
+
+func TestGetModelInfoByNameFail(t *testing.T) {
+	// Setting ENV
+	os.Setenv("LOG_FILE_NAME", "testing")
+
+	// Setting Mock
+	iDBMockInst := new(iDBMock)
+	iDBMockInst.On("GetModelInfoByName").Return([]models.ModelRelatedInformation{}, fmt.Errorf("db not available"))
+
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-name=qoe1", nil)
+	router.ServeHTTP(responseRecorder, req)
+
+	body, _ := io.ReadAll(responseRecorder.Body)
+
+	assert.Equal(t, 500, responseRecorder.Code)
+	assert.Equal(t, `{"status":500,"title":"Internal Server Error","detail":"Can't fetch the models due to , db not available"}`, string(body))
+}
+
+func TestGetModelInfoByNameAndVersionSuccess(t *testing.T) {
+	// Setting ENV
+	os.Setenv("LOG_FILE_NAME", "testing")
+
+	iDBMockInst := new(iDBMock)
+
+	modelInfo := models.ModelRelatedInformation{
+		Id: "1234",
+		ModelId: models.ModelID{
+			ModelName:    "test",
+			ModelVersion: "v1.0",
+		},
+		Description: "this is test modelINfo",
+		ModelInformation: models.ModelInformation{
+			Metadata: models.Metadata{
+				Author: "someone",
+			},
+			InputDataType:  "pdcpBytesDl,pdcpBytesUl,kpi",
+			OutputDataType: "c,d",
+		},
+	}
+
+	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&modelInfo, nil)
+
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-name=test&model-version=v1.0", nil)
+
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	body, _ := io.ReadAll(response.Body)
+
+	var modelInfos []models.ModelRelatedInformation
+	logging.INFO("modelinfo", "list:", modelInfos)
+	json.Unmarshal(body, &modelInfos)
+
+	assert.Equal(t, 200, responseRecorder.Code)
+	assert.Equal(t, "1234", modelInfos[0].Id)
+}
+
+func TestGetModelInfoByNameAndVersionFail(t *testing.T) {
+	// Setting ENV
+	os.Setenv("LOG_FILE_NAME", "testing")
+
+	iDBMockInst := new(iDBMock)
+	modelInfo := models.ModelRelatedInformation{}
+	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&modelInfo, fmt.Errorf("db not available"))
+
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-name=test&model-version=v1.0", nil)
+
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	fmt.Println(responseRecorder)
+	body, _ := io.ReadAll(response.Body)
+
+	assert.Equal(t, 500, responseRecorder.Code)
+	assert.Equal(t, `{"status":500,"title":"Internal Server Error","detail":"Can't fetch all the models due to , db not available"}`, string(body))
 }
