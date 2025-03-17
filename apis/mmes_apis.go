@@ -128,8 +128,11 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 
 	for key := range queryParams {
 		if !allowedParams[key] {
-			cont.JSON(http.StatusBadRequest, gin.H{
-				"error": "Only modelName and modelVersion are allowed",
+			logging.ERROR("error:", "Only allowed params are modelname and modelversion")
+			cont.JSON(http.StatusBadRequest, models.ProblemDetail{
+				Status: http.StatusBadRequest,
+				Title: "Bad Request",
+				Detail: fmt.Sprintf("Only allowed params are modelname and modelversion"),
 			})
 			return
 		}
@@ -159,9 +162,10 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 			if err != nil {
 				statusCode := http.StatusInternalServerError
 				logging.ERROR("Error occurred, send status code: ", statusCode)
-				cont.JSON(statusCode, gin.H{
-					"code":    statusCode,
-					"message": "Unexpected Error in server, you can't get model information list",
+				cont.JSON(statusCode, models.ProblemDetail{
+					Status: http.StatusInternalServerError,
+					Title: "Internal Server Error",
+					Detail: fmt.Sprintf("Can't fetch the models due to , %s", err.Error()),
 				})
 				return
 			}
@@ -175,19 +179,20 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 			if err != nil {
 				statusCode := http.StatusInternalServerError
 				logging.ERROR("Error occurred, send status code: ", statusCode)
-				cont.JSON(statusCode, gin.H{
-					"code":    statusCode,
-					"message": "Unexpected Error in server, you can't get model information list",
+				cont.JSON(statusCode, models.ProblemDetail{
+					Status: http.StatusInternalServerError,
+					Title:  "Internal Server Error",
+					Detail: fmt.Sprintf("Can't fetch all the models due to , %s", err.Error()),
 				})
 				return
 			}
 			if modelInfo.ModelId.ModelName != modelName && modelInfo.ModelId.ModelVersion != modelVersion {
 				statusCode := http.StatusNotFound
-				errMessage := fmt.Sprintf("Record not found with modelName: %s and modelVersion: %s", modelName, modelVersion)
 				logging.ERROR("Record not found, send status code: ", statusCode)
-				cont.JSON(statusCode, gin.H{
-					"code":    statusCode,
-					"message": errMessage,
+				cont.JSON(statusCode, models.ProblemDetail{
+					Status: http.StatusInternalServerError,
+					Title:  "Internal Server Error",
+					Detail: fmt.Sprintf("Record not found with modelName: %s and modelVersion: %s", modelName, modelVersion),
 				})
 				return
 			}
