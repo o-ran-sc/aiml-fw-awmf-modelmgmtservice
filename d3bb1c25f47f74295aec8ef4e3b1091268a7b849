@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79b42fdb_4ecf6694",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-04-02T15:42:26Z",
+      "side": 1,
+      "message": "returned string is not used then we could drop the statement.\nInstead we could provide error logging here.",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 62
+      },
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6531f8d9_3baf65b6",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-04-02T15:42:26Z",
+      "side": 1,
+      "message": "returned string is not used then we could drop the statement.\nInstead we could provide error logging here.",
+      "range": {
+        "startLine": 74,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 90
+      },
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c545d089_8fab31c2",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-04-02T15:42:26Z",
+      "side": 1,
+      "message": "Could you check if any error translator available to compare and check, instead string comparision.",
+      "range": {
+        "startLine": 87,
+        "startChar": 5,
+        "endLine": 87,
+        "endChar": 137
+      },
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
