@@ -24,6 +24,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7905470_a96e56df",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2025-04-03T12:07:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "79b42fdb_4ecf6694",
+      "range": {
+        "startLine": 60,
+        "startChar": 2,
+        "endLine": 60,
+        "endChar": 62
+      },
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6531f8d9_3baf65b6",
@@ -47,6 +71,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "59aee8af_0e9e9382",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2025-04-03T12:07:31Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "6531f8d9_3baf65b6",
+      "range": {
+        "startLine": 74,
+        "startChar": 2,
+        "endLine": 74,
+        "endChar": 90
+      },
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c545d089_8fab31c2",
@@ -60,6 +108,30 @@
       "writtenOn": "2025-04-02T15:42:26Z",
       "side": 1,
       "message": "Could you check if any error translator available to compare and check, instead string comparision.",
+      "range": {
+        "startLine": 87,
+        "startChar": 5,
+        "endLine": 87,
+        "endChar": 137
+      },
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5966215_c0ff7b5c",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2025-04-03T12:07:31Z",
+      "side": 1,
+      "message": "okay will search for it!",
+      "parentUuid": "c545d089_8fab31c2",
       "range": {
         "startLine": 87,
         "startChar": 5,
