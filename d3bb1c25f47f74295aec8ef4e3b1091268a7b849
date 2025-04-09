@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "17e5d050_51b4f97e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2025-04-09T14:24:36Z",
+      "side": 1,
+      "message": "Hey @subh.singh@samsung.com, \nupon going through and searching on the topic of error translator I have found a way. \n\nWe have these error translators like \n\"github.com/jackc/pgerrcode\"\n\"github.com/lib/pq\"\n\nto find the error. \n\nThe flow will go like:\n\nerr :\u003d db.Create(record).Error\nif err !\u003d nil {\n\t\tvar pqErr *pq.Error\n\t\tif errors.As(err, \u0026pqErr) {\n\t\t\tif pqErr.Code \u003d\u003d pgerrcode.UniqueViolation {\n\t\t\t//errror msg\n\t\t\tcont.JSON(http.StatusConflict, models.ProblemDetail{})\n\t\t\treturn\n\t\t\t}\n\t\t}",
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79b42fdb_4ecf6694",
         "filename": "apis/mmes_apis.go",
         "patchSetId": 10
