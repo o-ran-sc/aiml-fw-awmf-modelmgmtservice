@@ -36,6 +36,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8337b235_81877a23",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2025-05-09T05:43:01Z",
+      "side": 1,
+      "message": "I have implemented it as per our discussion",
+      "parentUuid": "2274ff84_94f545d3",
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "79b42fdb_4ecf6694",
@@ -167,6 +185,30 @@
       "side": 1,
       "message": "okay will search for it!",
       "parentUuid": "c545d089_8fab31c2",
+      "range": {
+        "startLine": 87,
+        "startChar": 5,
+        "endLine": 87,
+        "endChar": 137
+      },
+      "revId": "d3bb1c25f47f74295aec8ef4e3b1091268a7b849",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bebe82f5_8bba789c",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002075
+      },
+      "writtenOn": "2025-05-09T05:43:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b5966215_c0ff7b5c",
       "range": {
         "startLine": 87,
         "startChar": 5,
