@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "068a2704_e95ba537",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 13
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-09T07:41:37Z",
+      "side": 1,
+      "message": "Issue-ID is missing",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 6
+      },
+      "revId": "cfd41a6274706a9634499a21e8c8f68fd75b0618",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78215baa_2c871fff",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-09T07:41:37Z",
+      "side": 1,
+      "message": "avoid welcome message",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 50
+      },
+      "revId": "cfd41a6274706a9634499a21e8c8f68fd75b0618",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1017dfc1_3ac7d6e7",
+        "filename": "models/ProblemDetail.go",
+        "patchSetId": 13
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-09T07:41:37Z",
+      "side": 1,
+      "message": "Please compare it with R1AP v6.00 structure once.",
+      "range": {
+        "startLine": 21,
+        "startChar": 5,
+        "endLine": 21,
+        "endChar": 19
+      },
+      "revId": "cfd41a6274706a9634499a21e8c8f68fd75b0618",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
