@@ -20,6 +20,7 @@ package core
 import (
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"os"
 
@@ -48,7 +49,7 @@ type DBMgr interface {
 	GetBucketObject(objectName string, bucketName string) BucketObject
 	DeleteBucket(client *s3.S3, objectName string, bucketName string)
 	DeleteBucketObject(client *s3.S3, objectName string, bucketName string) bool
-	UploadFile(dataBytes []byte, file_name string, bucketName string)
+	UploadFile(dataBytes []byte, file_name string, bucketName string) error
 	ListBucket(bucketObjPostfix string) ([]Bucket, error)
 	GetBucketItems(bucketName string)
 }
@@ -107,7 +108,7 @@ func (s3manager *S3Manager) CreateBucket(bucketName string) (err error) {
 			return
 		}
 	}
-	println("Bucket created : ", bucketName)
+	logging.INFO("Bucket created : " + bucketName)
 	return nil
 }
 
@@ -163,19 +164,54 @@ func (s3manager *S3Manager) DeleteBucketObject(client *s3.S3, objectName string,
 	return true
 }
 
-func (s3manager *S3Manager) UploadFile(dataBytes []byte, file_name string, bucketName string) {
+func (s3manager *S3Manager) checkIfBucketExists(bucketName string) (bool, error) {
+	_, err := s3manager.S3Client.HeadBucket(&s3.HeadBucketInput{
+		Bucket: aws.String(bucketName),
+	})
+	if err != nil {
+		// Check if the error means the bucket doesn't exist
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case "NotFound":
+				return false, nil
+			default:
+				return false, fmt.Errorf("error checking bucket: %v", aerr)
+			}
+		}
+		return false, fmt.Errorf("error checking bucket: %v", err)
+	}
+	return true, nil
+}
+
+func (s3manager *S3Manager) UploadFile(dataBytes []byte, file_name string, bucketName string) error {
+
+	doesBucketExist, err := s3manager.checkIfBucketExists(bucketName)
+	if err != nil {
+		logging.DEBUG(fmt.Sprintf("unable to check bucket %s existence, Error : %v", bucketName, err))
+		return fmt.Errorf("unable to check bucket %s existence, Error : %v", bucketName, err)
+	}
+	if !doesBucketExist {
+		logging.INFO("Bucket " + bucketName + " Doesn't Exist, Creating One")
+		if err := s3manager.CreateBucket(bucketName); err != nil {
+			logging.DEBUG(fmt.Sprintf("unable to create bucket for uploading-model, Error : %v", err))
+			return fmt.Errorf("unable to create bucket for uploading-model, Error : %v", err)
+		}
+	}
 
 	dataReader := bytes.NewReader(dataBytes) //bytes.Reader is type of io.ReadSeeker
+
 	params := &s3.PutObjectInput{
 		Bucket: aws.String(bucketName),
 		Key:    aws.String(file_name),
 		Body:   dataReader,
 	}
-	_, err := s3manager.S3Client.PutObject(params)
+	_, err = s3manager.S3Client.PutObject(params)
 	if err != nil {
 		logging.ERROR("Error in uploading file to bucket ", err)
+		return err
 	}
-	logging.INFO("File uploaded to bucket ", bucketName)
+	logging.INFO("File uploaded to bucket " + bucketName)
+	return nil
 }
 
 func (s3manager *S3Manager) ListBucket(bucketObjPostfix string) ([]Bucket, error) {
