@@ -18,11 +18,11 @@ limitations under the License.
 package apis
 
 import (
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
-	"errors"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
@@ -110,7 +110,6 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 		"modelInfo": modelInfo,
 	})
 
-
 }
 
 /*
@@ -131,7 +130,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 			logging.ERROR("error:", "Only allowed params are modelname and modelversion")
 			cont.JSON(http.StatusBadRequest, models.ProblemDetail{
 				Status: http.StatusBadRequest,
-				Title: "Bad Request",
+				Title:  "Bad Request",
 				Detail: fmt.Sprintf("Only allowed params are modelname and modelversion"),
 			})
 			return
@@ -164,7 +163,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				logging.ERROR("Error occurred, send status code: ", statusCode)
 				cont.JSON(statusCode, models.ProblemDetail{
 					Status: http.StatusInternalServerError,
-					Title: "Internal Server Error",
+					Title:  "Internal Server Error",
 					Detail: fmt.Sprintf("Can't fetch the models due to , %s", err.Error()),
 				})
 				return
@@ -259,12 +258,18 @@ func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 	fileHeader, _ := cont.FormFile("file")
 	//TODO : Accept only .zip file for trained model
 	file, _ := fileHeader.Open()
-	//TODO: Handle error response
 	defer file.Close()
 	byteFile, _ := io.ReadAll((file))
 
-	logging.INFO("Uploading model : ", modelName)
-	m.dbmgr.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_POSTFIX"), modelName)
+	logging.INFO("Uploading model : " + modelName)
+	if err := m.dbmgr.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_POSTFIX"), modelName); err != nil {
+		logging.ERROR("Failed to Upload Model : ", err)
+		cont.JSON(http.StatusInternalServerError, gin.H{
+			"code":    http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+		return
+	}
 	cont.JSON(http.StatusOK, gin.H{
 		"code":    http.StatusOK,
 		"message": string("Model uploaded successfully.."),
@@ -305,7 +310,7 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 	}
 	existingModelInfo, err := m.iDB.GetModelInfoById(id)
 
-	if err != nil || existingModelInfo.Id == ""{
+	if err != nil || existingModelInfo.Id == "" {
 		statusCode := http.StatusNotFound
 		logging.ERROR("Error occurred, send status code: ", statusCode)
 		c.JSON(statusCode, gin.H{
@@ -314,7 +319,7 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 		})
 		return
 	}
-	if existingModelInfo.ModelId.ModelName != modelInfo.ModelId.ModelName || existingModelInfo.ModelId.ModelVersion != modelInfo.ModelId.ModelVersion{
+	if existingModelInfo.ModelId.ModelName != modelInfo.ModelId.ModelName || existingModelInfo.ModelId.ModelVersion != modelInfo.ModelId.ModelVersion {
 		statusCode := http.StatusBadRequest
 		logging.ERROR("Error occurred, send status code: ", statusCode)
 		c.JSON(statusCode, gin.H{
