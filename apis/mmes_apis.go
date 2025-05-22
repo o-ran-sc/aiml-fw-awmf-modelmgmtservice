@@ -23,6 +23,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strings"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
@@ -236,7 +237,14 @@ func (m *MmeApiHandler) GetModelInfoByName(cont *gin.Context) {
 	logging.INFO("Get model info by name API ...")
 	modelName := cont.Param("modelName")
 
-	bucketObj := m.dbmgr.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
+	bucketObj, err := m.dbmgr.GetBucketObject(modelName+os.Getenv("INFO_FILE_POSTFIX"), modelName)
+	if err != nil {
+		logging.ERROR("Unable to GetModelInfoByName: Error ", err)
+		cont.JSON(http.StatusInternalServerError, gin.H{
+			"code":    http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
 	modelInfoListResp := models.ModelInfoResponse{
 		Name: modelName,
 		Data: string(bucketObj),
@@ -249,11 +257,14 @@ func (m *MmeApiHandler) GetModelInfoByName(cont *gin.Context) {
 }
 
 // API to upload the trained model in zip format
-// TODO : Model version as input
-
 func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 	logging.INFO("Uploading model API ...")
 	modelName := cont.Param("modelName")
+	modelVersion := cont.Param("modelVersion")
+	artifactVersion := cont.Param("artifactVersion")
+
+	modelKey := fmt.Sprintf("%s_%s_%s", modelName, modelVersion, artifactVersion)
+	modelKey = strings.ToLower(modelKey)
 	//TODO convert multipart.FileHeader to []byted
 	fileHeader, _ := cont.FormFile("file")
 	//TODO : Accept only .zip file for trained model
@@ -261,8 +272,8 @@ func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 	defer file.Close()
 	byteFile, _ := io.ReadAll((file))
 
-	logging.INFO("Uploading model : " + modelName)
-	if err := m.dbmgr.UploadFile(byteFile, modelName+os.Getenv("MODEL_FILE_POSTFIX"), modelName); err != nil {
+	logging.INFO("Uploading model : " + modelKey)
+	if err := m.dbmgr.UploadFile(byteFile, modelKey+os.Getenv("MODEL_FILE_POSTFIX"), modelKey); err != nil {
 		logging.ERROR("Failed to Upload Model : ", err)
 		cont.JSON(http.StatusInternalServerError, gin.H{
 			"code":    http.StatusInternalServerError,
@@ -283,9 +294,21 @@ Input: model name in path params as "modelName"
 func (m *MmeApiHandler) DownloadModel(cont *gin.Context) {
 	logging.INFO("Download model API ...")
 	modelName := cont.Param("modelName")
-	fileName := modelName + os.Getenv("MODEL_FILE_POSTFIX")
-	fileByes := m.dbmgr.GetBucketObject(fileName, modelName)
+	modelVersion := cont.Param("modelVersion")
+	artifactVersion := cont.Param("artifactVersion")
 
+	modelKey := fmt.Sprintf("%s_%s_%s", modelName, modelVersion, artifactVersion)
+	modelKey = strings.ToLower(modelKey)
+
+	fileName := modelKey + os.Getenv("MODEL_FILE_POSTFIX")
+	fileByes, err := m.dbmgr.GetBucketObject(fileName, modelKey)
+	if err != nil {
+		cont.JSON(http.StatusInternalServerError, gin.H{
+			"code":    http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+		return
+	}
 	//Return file in api reponse using byte slice
 	cont.Header("Content-Disposition", "attachment;"+fileName)
 	cont.Header("Content-Type", "application/zip")

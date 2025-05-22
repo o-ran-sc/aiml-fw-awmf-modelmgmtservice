@@ -46,7 +46,7 @@ type S3Manager struct {
 
 type DBMgr interface {
 	CreateBucket(bucketName string) (err error)
-	GetBucketObject(objectName string, bucketName string) BucketObject
+	GetBucketObject(objectName string, bucketName string) (BucketObject, error)
 	DeleteBucket(client *s3.S3, objectName string, bucketName string)
 	DeleteBucketObject(client *s3.S3, objectName string, bucketName string) bool
 	UploadFile(dataBytes []byte, file_name string, bucketName string) error
@@ -115,7 +115,7 @@ func (s3manager *S3Manager) CreateBucket(bucketName string) (err error) {
 // objectName : Name of file/object under given bucket
 // bucketName : Name of s3 bucket
 // TODO: Return error
-func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string) BucketObject {
+func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string) (BucketObject, error) {
 
 	var response []byte
 	getInputs := &s3.GetObjectInput{
@@ -125,15 +125,16 @@ func (s3manager *S3Manager) GetBucketObject(objectName string, bucketName string
 	result, err := s3manager.S3Client.GetObject(getInputs)
 	if err != nil {
 		logging.ERROR("Error, can't get fetch object..")
-		return response
+		return response, err
 	}
 	defer result.Body.Close()
 	logging.INFO("Successfully retrieved object...")
 	response, err = io.ReadAll(result.Body)
 	if err != nil {
 		logging.ERROR("Recived error while reading body:", err)
+		return nil, err
 	}
-	return response
+	return response, nil
 }
 
 func (s3manager *S3Manager) DeleteBucket(client *s3.S3, objectName string, bucketName string) {
@@ -229,7 +230,11 @@ func (s3manager *S3Manager) ListBucket(bucketObjPostfix string) ([]Bucket, error
 			continue
 		}
 
-		bucketObject := s3manager.GetBucketObject(*bucket.Name+bucketObjPostfix, *bucket.Name)
+		bucketObject, err := s3manager.GetBucketObject(*bucket.Name+bucketObjPostfix, *bucket.Name)
+		if err != nil {
+			logging.ERROR("Unable to list bucketname ", *bucket.Name, ": Error : ", err.Error())
+			continue
+		}
 		if len(bucketObject) == 0 {
 			continue
 		}
