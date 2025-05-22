@@ -53,3 +53,8 @@ func WARN(msg string, logParams ...interface{}) {
 func ERROR(msg string, logParams ...interface{}) {
 	Logger.Info(msg, logParams...)
 }
+
+// Prefixes DEBUG for each log message
+func DEBUG(msg string, logParams ...any) {
+	Logger.Debug(msg, logParams...)
+}
