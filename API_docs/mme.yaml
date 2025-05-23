@@ -135,7 +135,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /uploadModel/{modelName}:
+  /uploadModel/{modelName}/{modelVersion}/{artifactVersion}:
     post:
       tags:
         - Model Management
@@ -143,6 +143,16 @@ paths:
       operationId: uploadModel
       parameters:
         - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: modelVersion
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: artifactVersion
           in: path
           required: true
           schema:
@@ -174,7 +184,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /downloadModel/{modelName}/model.zip:
+  /downloadModel/{modelName}/{modelVersion}/{artifactVersion}/model.zip:
     get:
       tags:
         - Model Management
@@ -182,6 +192,16 @@ paths:
       operationId: downloadModel
       parameters:
         - name: modelName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: modelVersion
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: artifactVersion
           in: path
           required: true
           schema:
