@@ -48,6 +48,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e370c2af_3ab150ce",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T11:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb1b1b04_24864447",
+      "range": {
+        "startLine": 276,
+        "startChar": 39,
+        "endLine": 276,
+        "endChar": 81
+      },
+      "revId": "83b72fa7374532df15a6a5ff9fa9b5686290657a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a95bfd73_7d1ad8d2",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "I have compared with MMSDK, and there also model is uploaded using artifactVersion",
       "parentUuid": "a95bfd73_7d1ad8d2",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 49
+      },
+      "revId": "83b72fa7374532df15a6a5ff9fa9b5686290657a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da6439c1_a6ff663d",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T11:18:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "516f1ad3_25382635",
       "range": {
         "startLine": 297,
         "startChar": 0,
