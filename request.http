@@ -61,3 +61,19 @@ Content-Type: application/json
 
 ### delete model info by ID
 DELETE http://{{host}}/model-registrations/a43d1a80-e1c5-4d87-b90f-729736bdd89f
+
+
+### Upload model using multipart/form-data
+### Before Uploading, Make sure you have a "Model.zip" file in the current directory
+POST http://{{host}}/ai-ml-model-registration/v1/uploadModel/testmodel/1/1.0.0
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="Model.zip"
+Content-Type: application/zip
+
+< ./Model.zip
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+### Download model
+GET http://{{host}}/ai-ml-model-registration/v1/downloadModel/testmodel/1/1.0.0/model.zip
