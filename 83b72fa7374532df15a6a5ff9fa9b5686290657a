@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb1f3ea3_3535711e",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T08:17:06Z",
+      "side": 1,
+      "message": "Could you compare mmsdk behavior and implement similarly.",
+      "range": {
+        "startLine": 276,
+        "startChar": 39,
+        "endLine": 276,
+        "endChar": 81
+      },
+      "revId": "83b72fa7374532df15a6a5ff9fa9b5686290657a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a95bfd73_7d1ad8d2",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 5
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T08:17:06Z",
+      "side": 1,
+      "message": "Could you please compare with MMSDK upload model implementation, as per my understanding we should not touch artifactVersion.",
+      "range": {
+        "startLine": 297,
+        "startChar": 0,
+        "endLine": 298,
+        "endChar": 49
+      },
+      "revId": "83b72fa7374532df15a6a5ff9fa9b5686290657a",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
