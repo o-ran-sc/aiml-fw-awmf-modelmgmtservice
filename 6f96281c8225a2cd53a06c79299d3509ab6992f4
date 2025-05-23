@@ -48,6 +48,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4bb5e63_5827f56b",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T07:57:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "411f811b_18c37a11",
+      "range": {
+        "startLine": 188,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 33
+      },
+      "revId": "6f96281c8225a2cd53a06c79299d3509ab6992f4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8456af7_dcce1bda",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "c8456af7_dcce1bda",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 191,
+        "endChar": 87
+      },
+      "revId": "6f96281c8225a2cd53a06c79299d3509ab6992f4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1926e1d5_f6e419d3",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T07:57:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbace93d_ec250e93",
       "range": {
         "startLine": 191,
         "startChar": 0,
@@ -142,6 +190,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff18dad9_18d0d9d4",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T07:57:27Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "94f94345_ad57b96d",
+      "range": {
+        "startLine": 193,
+        "startChar": 5,
+        "endLine": 193,
+        "endChar": 20
+      },
+      "revId": "6f96281c8225a2cd53a06c79299d3509ab6992f4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88ceb5c9_964d890a",
@@ -179,6 +251,30 @@
       "side": 1,
       "message": "Removed",
       "parentUuid": "88ceb5c9_964d890a",
+      "range": {
+        "startLine": 201,
+        "startChar": 0,
+        "endLine": 201,
+        "endChar": 116
+      },
+      "revId": "6f96281c8225a2cd53a06c79299d3509ab6992f4",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af501be2_9f5c34cf",
+        "filename": "core/s3_manager.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-05-23T07:57:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fdc6b9c1_09d69204",
       "range": {
         "startLine": 201,
         "startChar": 0,
