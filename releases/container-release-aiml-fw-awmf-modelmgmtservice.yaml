@@ -1,11 +1,11 @@
 ---
 #Release tag for Model management
 distribution_type: container
-container_release_tag: 3.0.0
+container_release_tag: 4.0.0
 container_pull_registry: nexus3.o-ran-sc.org:10004
 container_push_registry: nexus3.o-ran-sc.org:10002
 project: aiml-fw/awmf/modelmgmtservice
-ref: b9b49db849791deae6e67464dd6b41ddfd4ab8bd
+ref: d80400d850dfaa7bdace7f6546d7382e5f39ddc4
 containers:
   - name: aiml-fw-awmf-modelmgmtservice-docker
-    version: 3.0.0
+    version: 4.0.0
