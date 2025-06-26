@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c197acd3_968f301d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-06-26T12:56:39Z",
+      "side": 1,
+      "message": "Merging the patch, as no committer available.\nNote: @swaraj and @ashish already provided +1 and they are contributor in this repository.",
+      "revId": "332944b9c93d6b31070c883bff74246e3e636ccc",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
