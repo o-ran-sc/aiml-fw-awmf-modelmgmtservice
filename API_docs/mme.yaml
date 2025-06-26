@@ -5,7 +5,7 @@ info:
   version: 1.1.0
 
 servers:
-  - url: http://localhost:8080
+  - url: http://11.0.0.4:32006
     description: Local development server
 
 tags:
@@ -13,7 +13,7 @@ tags:
     description: Endpoints for managing models
 
 paths:
-  /registerModel:
+  /ai-ml-model-registration/v1/model-registrations:
     post:
       tags:
         - Model Management
@@ -24,20 +24,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ModelInfo'
+              $ref: '#/components/schemas/ModelRelatedInformation'
       responses:
         '200':
           description: Model registered successfully and returned object
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelInfo'
+                $ref: '#/components/schemas/ModelRelatedInformation'
         '400':
           description: Invalid request, bad input data
         '500':
           description: Internal Server Error
 
-  /getModelInfo:
+  /ai-ml-model-discovery/v1/models:
     get:
       tags:
         - Model Management
@@ -64,12 +64,12 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ModelInfo'
+                  $ref: '#/components/schemas/ModelRelatedInformation'
         '400':
           description: Invalid query parameters
         '500':
           description: Internal Server Error
-  /modelInfo/{id}:
+  /ai-ml-model-registration/v1/model-registrations/{modelRegistrationId}:
     get:
       tags:
         - Model Management
@@ -87,7 +87,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ModelInfo'
+                $ref: '#/components/schemas/ModelRelatedInformation'
         '404':
           description: Model not found
         '500':
@@ -109,7 +109,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ModelInfo'
+              $ref: '#/components/schemas/ModelRelatedInformation'
       responses:
         '200':
           description: Model updated successfully
@@ -135,7 +135,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /uploadModel/{modelName}/{modelVersion}/{artifactVersion}:
+  /ai-ml-model-registration/v1/uploadModel/{modelName}/{modelVersion}/{artifactVersion}:
     post:
       tags:
         - Model Management
@@ -184,7 +184,7 @@ paths:
         '500':
           description: Internal Server Error
 
-  /downloadModel/{modelName}/{modelVersion}/{artifactVersion}/model.zip:
+  /ai-ml-model-registration/v1/downloadModel/{modelName}/{modelVersion}/{artifactVersion}/model.zip:
     get:
       tags:
         - Model Management
@@ -236,23 +236,30 @@ components:
           type: string
           example: "v1.0"
 
-    ModelSpec:
+    ModelInformation:
       type: object
       properties:
         metadata:
           $ref: '#/components/schemas/Metadata'
+        inputDataType:
+          type: string
+          description: 'Input data type for the model'
+        outputDataType:
+          type: string
+          description: 'Output data type for the model'
 
-    ModelInfo:
+
+    ModelRelatedInformation:
       type: object
       properties:
         id:
           type: string
           example: "123e4567-e89b-12d3-a456-426614174000"
-        model-id:
+        modelId:
           $ref: '#/components/schemas/ModelID'
         description:
           type: string
           example: "This is an example model description."
-        meta-info:
-          $ref: '#/components/schemas/ModelSpec'
+        modelInformation:
+          $ref: '#/components/schemas/ModelInformation'
 
