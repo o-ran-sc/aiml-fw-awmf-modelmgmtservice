@@ -22,16 +22,38 @@ Version history
 | 2023-12-14         | 1.0.0              | Sandeep Jaisawal   | I release          |
 |                    |                    |                    |                    |
 +--------------------+--------------------+--------------------+--------------------+
-
+| 2025-07-03         | 4.0.0              | Swaraj Kumar       | L release          |
+|                    |                    |                    |                    |
++--------------------+--------------------+--------------------+--------------------+
 
 Summary
 =======
 
-The I release of AIMLFW Model Management Service provides basic version of Model Management Service
+The L release of AIMLFW Model Management Service provides external model upload and download functionality. This release also provides Error Handling for responses as per the specification.
 
 
 Release Data
 ============
+
+L Release
+---------
+
++--------------------------------------+-------------------------------------------------------+
+| **Project**                          | AIMLFW Model Management Service                       |
+|                                      |                                                       |
++--------------------------------------+-------------------------------------------------------+
+| **Repo/commit-ID**                   | aiml-fw/awmf/modelmgmtservice                         |
+|                                      | /d80400d850dfaa7bdace7f6546d7382e5f39ddc4             |
++--------------------------------------+-------------------------------------------------------+
+| **Release designation**              | L release                                             |
+|                                      |                                                       |
++--------------------------------------+-------------------------------------------------------+
+| **Release date**                     | 2025-07-03                                            |
+|                                      |                                                       |
++--------------------------------------+-------------------------------------------------------+
+| **Purpose of the delivery**          | external model upload and download functionality      |
+|                                      | Error Handling for responses as per the specification |
++--------------------------------------+-------------------------------------------------------+
 
 I Release
 ---------
