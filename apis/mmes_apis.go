@@ -80,6 +80,7 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 		})
 		return
 	}
+
 	// by default when a model is registered its artifact version is set to 0.0.0
 	modelInfo.ModelId.ArtifactVersion = "0.0.0"
 
@@ -87,21 +88,22 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 		logging.ERROR("error", err)
 		var pqErr *pq.Error
 		if errors.As(err, &pqErr) {
+			// ✅ Gerrit 코멘트 반영: UniqueViolation 시 409 Conflict 반환
 			if pqErr.Code == pgerrcode.UniqueViolation {
 				cont.JSON(http.StatusConflict, models.ProblemDetail{
 					Status: http.StatusConflict,
-					Title:  "model name and version combination already present",
-					Detail: "The request json is not correct as",
-				})
-				return
-			} else {
-				cont.JSON(http.StatusInternalServerError, models.ProblemDetail{
-					Status: http.StatusInternalServerError,
-					Title:  "Bad Request",
-					Detail: "The request json is not correct as",
+					Title:  "Conflict",
+					Detail: "model name and version combination already present",
 				})
 				return
 			}
+			// 다른 DB 오류 처리
+			cont.JSON(http.StatusInternalServerError, models.ProblemDetail{
+				Status: http.StatusInternalServerError,
+				Title:  "Internal Server Error",
+				Detail: fmt.Sprintf("Database error: %s", err.Error()),
+			})
+			return
 		}
 	}
 
@@ -110,17 +112,15 @@ func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 	cont.JSON(http.StatusCreated, gin.H{
 		"modelInfo": modelInfo,
 	})
-
 }
 
 /*
 This API retrieves model info list managed in modelmgmtservice
 */
 func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
-
 	logging.INFO("Get model info ")
 	queryParams := cont.Request.URL.Query()
-	//to check only modelName and modelVersion can be passed.
+	// to check only modelName and modelVersion can be passed.
 	allowedParams := map[string]bool{
 		MODELNAME:    true,
 		MODELVERSION: true,
@@ -142,8 +142,7 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 	modelVersion := cont.Query(MODELVERSION)
 
 	if modelName == "" && modelVersion == "" {
-		//return all modelinfo stored
-
+		// return all modelinfo stored
 		models, err := m.iDB.GetAll()
 		if err != nil {
 			logging.ERROR("error:", err)
@@ -169,10 +168,8 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				})
 				return
 			}
-
 			cont.JSON(http.StatusOK, modelInfos)
 			return
-
 		} else {
 			// get all modelInfo by model name and version
 			modelInfo, err := m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
@@ -190,13 +187,12 @@ func (m *MmeApiHandler) GetModelInfo(cont *gin.Context) {
 				statusCode := http.StatusNotFound
 				logging.ERROR("Record not found, send status code: ", statusCode)
 				cont.JSON(statusCode, models.ProblemDetail{
-					Status: http.StatusInternalServerError,
-					Title:  "Internal Server Error",
+					Status: http.StatusNotFound,
+					Title:  "Not Found",
 					Detail: fmt.Sprintf("Record not found with modelName: %s and modelVersion: %s", modelName, modelVersion),
 				})
 				return
 			}
-
 			response := []models.ModelRelatedInformation{*modelInfo}
 			cont.JSON(http.StatusOK, response)
 			return
@@ -265,7 +261,7 @@ func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 
 	modelKey := fmt.Sprintf("%s_%s_%s", modelName, modelVersion, artifactVersion)
 	exportBucket := strings.ToLower(modelName)
-	//TODO convert multipart.FileHeader to []byted
+	//TODO convert multipart.FileHeader to []byte
 	fileHeader, _ := cont.FormFile("file")
 	//TODO : Accept only .zip file for trained model
 	file, _ := fileHeader.Open()
@@ -309,7 +305,7 @@ func (m *MmeApiHandler) DownloadModel(cont *gin.Context) {
 		})
 		return
 	}
-	//Return file in api reponse using byte slice
+	// Return file in api response using byte slice
 	cont.Header("Content-Disposition", "attachment;"+fileName)
 	cont.Header("Content-Type", "application/zip")
 	cont.Data(http.StatusOK, "application/octet", fileByes)
@@ -342,12 +338,13 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 		})
 		return
 	}
+
 	if existingModelInfo.ModelId.ModelName != modelInfo.ModelId.ModelName || existingModelInfo.ModelId.ModelVersion != modelInfo.ModelId.ModelVersion {
 		statusCode := http.StatusBadRequest
 		logging.ERROR("Error occurred, send status code: ", statusCode)
 		c.JSON(statusCode, gin.H{
 			"code":    statusCode,
-			"message": fmt.Sprintf("model with id: %s have different modelname and modelversion than provided", id),
+			"message": fmt.Sprintf("model with id: %s has different modelName and modelVersion than provided", id),
 		})
 		return
 	}
@@ -380,7 +377,6 @@ func (m *MmeApiHandler) DeleteModel(cont *gin.Context) {
 
 func (m *MmeApiHandler) UpdateArtifact(cont *gin.Context) {
 	logging.INFO("Update artifact version of model")
-	// var modelInfo *models.ModelRelatedInformation
 	modelname := cont.Param("modelname")
 	modelversion := cont.Param("modelversion")
 	artifactversion := cont.Param("artifactversion")
@@ -395,7 +391,7 @@ func (m *MmeApiHandler) UpdateArtifact(cont *gin.Context) {
 	}
 	modelInfo.ModelId.ArtifactVersion = artifactversion
 	if err := m.iDB.Update(*modelInfo); err != nil {
-		logging.ERROR("error in updated db", "error:", err)
+		logging.ERROR("error in update db", "error:", err)
 		return
 	}
 	logging.INFO("model updated")
