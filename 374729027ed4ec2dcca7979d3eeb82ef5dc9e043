@@ -16,6 +16,46 @@
       "message": "LGTM! Thank you for your contribution!",
       "revId": "374729027ed4ec2dcca7979d3eeb82ef5dc9e043",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abf4ca65_31b85ae8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-08-05T11:08:52Z",
+      "side": 1,
+      "message": "Also, please update the  `go.sum`, if we change any dependency as best practice.\nWe have also missed to update `go.sum`, please let me know if any issues.",
+      "revId": "374729027ed4ec2dcca7979d3eeb82ef5dc9e043",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee74bc06_5583c4ce",
+        "filename": "go.mod",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-08-05T11:08:52Z",
+      "side": 1,
+      "message": "I feel this direct change will be difficult to track,\n\nI would suggest use following command to replace any dependency:\n```\ngo mod edit -replace\u003dgolang.org/x/crypto@v0.21.0\u003dgolang.org/x/crypto@v0.44.0\n```\n\nso, it will be much explicit.",
+      "range": {
+        "startLine": 65,
+        "startChar": 1,
+        "endLine": 65,
+        "endChar": 28
+      },
+      "revId": "374729027ed4ec2dcca7979d3eeb82ef5dc9e043",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
