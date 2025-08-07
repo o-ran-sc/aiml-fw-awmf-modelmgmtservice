@@ -33,6 +33,41 @@
       "message": "We could address this change in here : https://gerrit.o-ran-sc.org/r/c/aiml-fw/awmf/modelmgmtservice/+/14784",
       "revId": "30f21a4fe3f67733c52a5f3dbb96788457b1070c",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f1cdb21_daa03058",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2025-08-07T05:32:16Z",
+      "side": 1,
+      "message": "Please see my comment, Subhash. 🙏",
+      "revId": "30f21a4fe3f67733c52a5f3dbb96788457b1070c",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6331f5a_cae7fc7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2025-08-07T05:32:16Z",
+      "side": 1,
+      "message": "Subhash. Let us treat 14785 and 14784 separately, even though both changesets are about the same single file. My rationale is: two different cases have their own motivation - 1) simple indentation, 2) Vulnerability related.\n\nThought?",
+      "parentUuid": "2008968e_b0476434",
+      "revId": "30f21a4fe3f67733c52a5f3dbb96788457b1070c",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
