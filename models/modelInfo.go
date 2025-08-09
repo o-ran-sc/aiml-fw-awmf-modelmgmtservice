@@ -18,23 +18,28 @@ limitations under the License.
 
 package models
 
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
 type Metadata struct {
 	Author string `json:"author" validate:"required"`
 	Owner  string `json:"owner"`
 }
 
-type TargetEnironment struct {
-	PlatformName    string `json:"platformName" validate:"required"`
-	EnvironmentType string `json:"environmentType" validate:"required"`
-	DependencyList  string `json:"dependencyList" validate:"required"`
+type TargetEnvironment struct {
+	ID                        uint   `json:"-" gorm:"primaryKey;autoIncrement"`
+	ModelRelatedInformationID string `json:"-" gorm:"index;"`
+	PlatformName              string `json:"platformName" validate:"required"`
+	EnvironmentType           string `json:"environmentType" validate:"required"`
+	DependencyList            string `json:"dependencyList" validate:"required"`
 }
 
 type ModelInformation struct {
 	Metadata       Metadata `json:"metadata" gorm:"embedded" validate:"required"`
 	InputDataType  string   `json:"inputDataType" validate:"required"`  // this field will be a Comma Separated List
 	OutputDataType string   `json:"outputDataType" validate:"required"` // this field will be a Comma Separated List
-	// TODO: gorm doesn't support list, need to find the right way
-	// TargetEnvironment []TargetEnironment `json:"targetEnvironment" gorm:"embedded"`
 }
 type ModelID struct {
 	ModelName       string `json:"modelName" validate:"required" gorm:"primaryKey"`
@@ -43,14 +48,22 @@ type ModelID struct {
 }
 
 type ModelRelatedInformation struct {
-	Id               string           `json:"id" gorm:"unique"`
-	ModelId          ModelID          `json:"modelId,omitempty" validate:"required" gorm:"embedded;primaryKey"`
-	Description      string           `json:"description" validate:"required"`
-	ModelInformation ModelInformation `json:"modelInformation" validate:"required" gorm:"embedded"`
-	ModelLocation    string           `json:"modelLocation"`
+	Id                 string              `json:"id" gorm:"unique"`
+	ModelId            ModelID             `json:"modelId,omitempty" validate:"required" gorm:"embedded;primaryKey"`
+	Description        string              `json:"description" validate:"required"`
+	ModelInformation   ModelInformation    `json:"modelInformation" validate:"required" gorm:"embedded"`
+	ModelLocation      string              `json:"modelLocation"`
+	TargetEnvironments []TargetEnvironment `json:"targetEnvironment" validate:"dive" gorm:"foreignKey:ModelRelatedInformationID;references:Id;constraint:OnDelete:CASCADE"`
 }
 
 type ModelInfoResponse struct {
 	Name string `json:"name"`
 	Data string `json:"data"`
+}
+
+func (m *ModelRelatedInformation) BeforeCreate(tx *gorm.DB) error {
+	if m.Id == "" {
+		m.Id = uuid.NewString()
+	}
+	return nil
 }

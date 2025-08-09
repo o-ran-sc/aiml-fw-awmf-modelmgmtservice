@@ -34,8 +34,9 @@ func NewModelInfoRepository(db *gorm.DB) *ModelInfoRepository {
 }
 
 func (repo *ModelInfoRepository) Create(modelInfo models.ModelRelatedInformation) error {
-	result := repo.db.Create(modelInfo)
-	return result.Error
+	return repo.db.
+		Session(&gorm.Session{FullSaveAssociations: true}).
+		Create(&modelInfo).Error
 }
 
 func (repo *ModelInfoRepository) GetByID(id string) (*models.ModelRelatedInformation, error) {
@@ -44,7 +45,7 @@ func (repo *ModelInfoRepository) GetByID(id string) (*models.ModelRelatedInforma
 
 func (repo *ModelInfoRepository) GetAll() ([]models.ModelRelatedInformation, error) {
 	var modelInfos []models.ModelRelatedInformation
-	result := repo.db.Find(&modelInfos)
+	result := repo.db.Preload("TargetEnvironments").Find(&modelInfos)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -52,19 +53,25 @@ func (repo *ModelInfoRepository) GetAll() ([]models.ModelRelatedInformation, err
 }
 
 func (repo *ModelInfoRepository) Update(modelInfo models.ModelRelatedInformation) error {
-	if err := repo.db.Save(modelInfo).Error; err != nil {
-		return err
-	}
-	return nil
+	return repo.db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Save(&modelInfo).Error; err != nil {
+			return err
+		}
+
+		return tx.Model(&modelInfo).Association("TargetEnvironments").Replace(modelInfo.TargetEnvironments)
+	})
 }
 
 func (repo *ModelInfoRepository) Delete(id string) (int64, error) {
 	result := repo.db.Delete(&models.ModelRelatedInformation{}, "id = ?", id)
 	return result.RowsAffected, result.Error
 }
+
 func (repo *ModelInfoRepository) GetModelInfoByName(modelName string) ([]models.ModelRelatedInformation, error) {
 	var modelInfos []models.ModelRelatedInformation
-	result := repo.db.Where("model_name = ?", modelName).Find(&modelInfos)
+	result := repo.db.Preload("TargetEnvironments").
+		Where("model_name = ?", modelName).Find(&modelInfos)
+
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -73,7 +80,8 @@ func (repo *ModelInfoRepository) GetModelInfoByName(modelName string) ([]models.
 
 func (repo *ModelInfoRepository) GetModelInfoByNameAndVer(modelName string, modelVersion string) (*models.ModelRelatedInformation, error) {
 	var modelInfo models.ModelRelatedInformation
-	result := repo.db.Where("model_name = ? AND model_version = ?", modelName, modelVersion).Find(&modelInfo)
+	result := repo.db.Preload("TargetEnvironments").
+		Where("model_name = ? AND model_version = ?", modelName, modelVersion).Find(&modelInfo)
 	if result.Error != nil {
 		return nil, result.Error
 	}
@@ -83,7 +91,8 @@ func (repo *ModelInfoRepository) GetModelInfoByNameAndVer(modelName string, mode
 func (repo *ModelInfoRepository) GetModelInfoById(id string) (*models.ModelRelatedInformation, error) {
 	logging.INFO("id is:", id)
 	var modelInfo models.ModelRelatedInformation
-	result := repo.db.Where("id = ?", id).Find(&modelInfo)
+	result := repo.db.Preload("TargetEnvironments").
+		Where("id = ?", id).Find(&modelInfo)
 	if result.Error != nil {
 		return nil, result.Error
 	}
