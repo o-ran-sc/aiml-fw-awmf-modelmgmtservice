@@ -18,24 +18,40 @@ limitations under the License.
 
 package models
 
+import (
+	"github.com/google/uuid"
+	"gorm.io/gorm"
+)
+
 type Metadata struct {
 	Author string `json:"author" validate:"required"`
 	Owner  string `json:"owner"`
 }
 
-type TargetEnironment struct {
-	PlatformName    string `json:"platformName" validate:"required"`
-	EnvironmentType string `json:"environmentType" validate:"required"`
-	DependencyList  string `json:"dependencyList" validate:"required"`
+type TargetEnvironment struct {
+	ID                        string `gorm:"primaryKey" json:"-"`
+	ModelRelatedInformationID string `gorm:"index;not null" json:"-"`
+	PlatformName              string `json:"platformName" validate:"required"`
+	EnvironmentType           string `json:"environmentType" validate:"required"`
+	DependencyList            string `json:"dependencyList" validate:"required"`
+}
+
+func (TargetEnvironment) TableName() string { return "target_environments" }
+
+func (te *TargetEnvironment) BeforeCreate(tx *gorm.DB) error {
+	if te.ID == "" {
+		te.ID = uuid.NewString()
+	}
+	return nil
 }
 
 type ModelInformation struct {
-	Metadata       Metadata `json:"metadata" gorm:"embedded" validate:"required"`
-	InputDataType  string   `json:"inputDataType" validate:"required"`  // this field will be a Comma Separated List
-	OutputDataType string   `json:"outputDataType" validate:"required"` // this field will be a Comma Separated List
-	// TODO: gorm doesn't support list, need to find the right way
-	// TargetEnvironment []TargetEnironment `json:"targetEnvironment" gorm:"embedded"`
+	Metadata          Metadata            `json:"metadata" gorm:"embedded" validate:"required"`
+	InputDataType     string              `json:"inputDataType" validate:"required"`  // this field will be a Comma Separated List
+	OutputDataType    string              `json:"outputDataType" validate:"required"` // this field will be a Comma Separated List
+	TargetEnvironment []TargetEnvironment `json:"targetEnvironment,omitempty" gorm:"-"`
 }
+
 type ModelID struct {
 	ModelName       string `json:"modelName" validate:"required" gorm:"primaryKey"`
 	ModelVersion    string `json:"modelVersion" validate:"required" gorm:"primaryKey"`
@@ -53,4 +69,11 @@ type ModelRelatedInformation struct {
 type ModelInfoResponse struct {
 	Name string `json:"name"`
 	Data string `json:"data"`
+}
+
+func (modelInfo *ModelRelatedInformation) BeforeCreate(tx *gorm.DB) error {
+	if modelInfo.Id == "" {
+		modelInfo.Id = uuid.NewString()
+	}
+	return nil
 }
