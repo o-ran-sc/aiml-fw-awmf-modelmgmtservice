@@ -67,7 +67,15 @@ func main() {
 	}
 
 	// Auto migrate the scheme
-	db.AutoMigrate(&models.ModelRelatedInformation{})
+	err = db.AutoMigrate(
+		&models.ModelRelatedInformation{},
+		&models.TargetEnvironment{},
+	)
+	if err != nil {
+		logging.ERROR("Failed to migrate database", "error", err)
+		os.Exit(-1)
+	}
+
 	repo := modelDB.NewModelInfoRepository(db)
 
 	router := routers.InitRouter(
