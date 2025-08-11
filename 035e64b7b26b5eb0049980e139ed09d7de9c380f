@@ -20,6 +20,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "27209112_0ed191a5",
+        "filename": "db/modelInfoRepository_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-08-11T07:17:30Z",
+      "side": 1,
+      "message": "please fix header as per the license guidelines.",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 33
+      },
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1677c14f_f5145848",
         "filename": "db/modelInfoRepository_test.go",
         "patchSetId": 2
@@ -31,6 +54,29 @@
       "writtenOn": "2025-08-11T01:35:21Z",
       "side": 1,
       "message": "It\u0027s great to see the unit test code here.\nCould you break down into smaller functions rather than keeping everything in a function?",
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d25d05ff_46d72c35",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-08-11T07:17:30Z",
+      "side": 1,
+      "message": "could you please ensure that, in rest response we do not see these new fields.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 58
+      },
       "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
