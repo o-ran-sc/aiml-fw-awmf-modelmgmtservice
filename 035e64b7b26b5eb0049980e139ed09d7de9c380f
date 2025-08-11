@@ -18,6 +18,23 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30ed944c_b7034da0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-08-11T07:18:06Z",
+      "side": 1,
+      "message": "Thank you for bringing maturity to db layer.",
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27209112_0ed191a5",
