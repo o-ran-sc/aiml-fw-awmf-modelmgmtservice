@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bdc9ae34_95039e73",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-08-16T05:23:58Z",
+      "side": 1,
+      "message": "Thanks for the review!\nAs mentioned earlier, my JIRA permission issue is still unresolved, so I submitted this change directly to Gerrit.\nI’ll follow up with the LFX Support Team to get the access issue sorted out. In the meantime, I’ll keep this change focused on code as suggested.\nThank you!",
+      "parentUuid": "bafe5e8b_dc6edfd6",
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "27209112_0ed191a5",
         "filename": "db/modelInfoRepository_test.go",
         "patchSetId": 2
@@ -48,6 +66,30 @@
       "writtenOn": "2025-08-11T07:17:30Z",
       "side": 1,
       "message": "please fix header as per the license guidelines.",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 33
+      },
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05fb54b0_8cb130ab",
+        "filename": "db/modelInfoRepository_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-08-16T05:23:58Z",
+      "side": 1,
+      "message": "Thanks for the review.\nI have a quick question about the license header. According to the Licensing Text guide (https://lf-o-ran-sc.atlassian.net/wiki/spaces/ORAN/pages/14386246/Licensing%2BText), the header uses the format “Copyright [years] [Company]”.\nFor individual contributors, should we put our personal name in place of the company (e.g., “Copyright (c) 2025 Minje Kim”), or should individual contributions omit the header?\nPlease advise before I update this patchset. Thanks!",
+      "parentUuid": "27209112_0ed191a5",
       "range": {
         "startLine": 3,
         "startChar": 14,
