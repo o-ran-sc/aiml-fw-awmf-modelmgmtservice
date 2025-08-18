@@ -53,6 +53,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5db0e326_804f4d16",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2025-08-18T06:03:12Z",
+      "side": 1,
+      "message": "Make sense!",
+      "parentUuid": "bdc9ae34_95039e73",
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27209112_0ed191a5",
@@ -90,6 +108,30 @@
       "side": 1,
       "message": "Thanks for the review.\nI have a quick question about the license header. According to the Licensing Text guide (https://lf-o-ran-sc.atlassian.net/wiki/spaces/ORAN/pages/14386246/Licensing%2BText), the header uses the format “Copyright [years] [Company]”.\nFor individual contributors, should we put our personal name in place of the company (e.g., “Copyright (c) 2025 Minje Kim”), or should individual contributions omit the header?\nPlease advise before I update this patchset. Thanks!",
       "parentUuid": "27209112_0ed191a5",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 33
+      },
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7e3c88e_6f3a080c",
+        "filename": "db/modelInfoRepository_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002137
+      },
+      "writtenOn": "2025-08-18T06:03:12Z",
+      "side": 1,
+      "message": "Please add your name and email to the license header like `Copyright (c) 2025 Minje Kim \u003calswp006@gmail.com\u003e`",
+      "parentUuid": "05fb54b0_8cb130ab",
       "range": {
         "startLine": 3,
         "startChar": 14,
