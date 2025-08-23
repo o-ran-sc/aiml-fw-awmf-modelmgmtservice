@@ -88,6 +88,24 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c5c0a21_cf6dfb49",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-08-23T14:13:28Z",
+      "side": 1,
+      "message": "Changes completed—thank you!",
+      "parentUuid": "94471640_e278afa6",
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "27209112_0ed191a5",
@@ -161,6 +179,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "cfcd0fc3_b8ca5d53",
+        "filename": "db/modelInfoRepository_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-08-23T14:13:28Z",
+      "side": 1,
+      "message": "I’ve updated the license header. Please take another look—thanks for the review!",
+      "parentUuid": "f7e3c88e_6f3a080c",
+      "range": {
+        "startLine": 3,
+        "startChar": 14,
+        "endLine": 3,
+        "endChar": 33
+      },
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1677c14f_f5145848",
         "filename": "db/modelInfoRepository_test.go",
         "patchSetId": 2
@@ -178,6 +220,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3b19b84f_ab63af00",
+        "filename": "db/modelInfoRepository_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-08-23T14:13:28Z",
+      "side": 1,
+      "message": "Per your feedback, I split the test into t.Run subtests.\nTestCRUD_Subtests now covers Create, Read, UpdateReplace, UpdatePartialNil, and Delete. I also added small helpers (newRepo, mkMRI, etc.) to reduce duplication and make failures easier to pinpoint.\n\nPlease take another look—thanks for the review!",
+      "parentUuid": "1677c14f_f5145848",
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d25d05ff_46d72c35",
         "filename": "models/modelInfo.go",
         "patchSetId": 2
@@ -189,6 +249,30 @@
       "writtenOn": "2025-08-11T07:17:30Z",
       "side": 1,
       "message": "could you please ensure that, in rest response we do not see these new fields.",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 58
+      },
+      "revId": "035e64b7b26b5eb0049980e139ed09d7de9c380f",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10b03bb8_a9d7c81a",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-08-23T14:13:28Z",
+      "side": 1,
+      "message": "I’ve updated all fields according to the standard document. Please take another look—thanks for the review!",
+      "parentUuid": "d25d05ff_46d72c35",
       "range": {
         "startLine": 32,
         "startChar": 0,
