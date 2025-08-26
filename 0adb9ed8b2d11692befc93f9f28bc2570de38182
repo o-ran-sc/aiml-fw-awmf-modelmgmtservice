@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8353242b_4843bbcf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-08-26T08:21:32Z",
+      "side": 1,
+      "message": "TargetEnvironment Addition approach seems fine!!",
+      "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
