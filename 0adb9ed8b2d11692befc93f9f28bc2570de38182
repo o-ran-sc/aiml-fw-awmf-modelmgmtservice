@@ -33,6 +33,24 @@
       "message": "All the revisions have been applied. PTAL. @subh.singh@samsung.com",
       "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3af43de_da81193c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-01T09:34:31Z",
+      "side": 1,
+      "message": "Sure , I will discuss the patch with Ashish and we will revert back.",
+      "parentUuid": "f9598376_f78d3e02",
+      "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
