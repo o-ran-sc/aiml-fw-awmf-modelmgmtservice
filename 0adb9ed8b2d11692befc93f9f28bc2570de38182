@@ -51,6 +51,52 @@
       "parentUuid": "f9598376_f78d3e02",
       "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d7cd341_3cd1b73f",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-09-01T11:48:13Z",
+      "side": 1,
+      "message": "Hi,\nI performed a fresh installation of AIMLFW today and tested your patch. While running through the setup, I encountered the following issues:\nA: During the model registration step, \nI used the following cURL command:\n```bash\ncurl --location \u0027localhost:32006/ai-ml-model-registration/v1/model-registrations/\u0027 \\\n--header \u0027Content-Type: application/json\u0027 \\\n--data \u0027{\n    \"modelId\": {\n        \"modelName\": \"test-model-target-env\",\n        \"modelVersion\" : \"1\"\n    },\n    \"description\": \"hello world2\",\n    \"modelInformation\": {\n        \"metadata\": {\n            \"author\": \"someone\"\n        },\n        \"inputDataType\": \"pdcpBytesDl,pdcpBytesUl\",\n        \"outputDataType\": \"c, d\",\n        \"targetEnvironment\": [\n            {\n                \"platformName\": \"abc\",\n                \"environmentType\": \"env\",\n                \"dependencyList\": \"a,b,c\"\n            }\n        ]\n    }\n}\u0027\n\n```\n\nB: Observed error from MME logs:\n```bash\n2025/09/01 10:37:07 /home/app/models/modelInfo.go:86 ERROR: column \"model_related_information_id\" does not exist (SQLSTATE 42703)\n[0.187ms] [rows:0] DELETE FROM target_environments WHERE model_related_information_id \u003d \u00272ea20500-2a7c-4a35-825e-3423e91c873e\u0027\n2025/09/01 10:37:07 /home/app/db/modelInfoRepository.go:37 ERROR: column \"model_related_information_id\" does not exist (SQLSTATE 42703)\n[1.092ms] [rows:1] INSERT INTO \"model_related_informations\" (\"id\",\"model_name\",\"model_version\",\"artifact_version\",\"description\",\"author\",\"owner\",\"input_data_type\",\"output_data_type\",\"model_location\") VALUES (\u00272ea20500-2a7c-4a35-825e-3423e91c873e\u0027,\u0027test-model-target-env\u0027,\u00271\u0027,\u00270.0.0\u0027,\u0027hello world2\u0027,\u0027someone\u0027,\u0027\u0027,\u0027pdcpBytesDl,pdcpBytesUl\u0027,\u0027c, d\u0027,\u0027\u0027)\ntime\u003d2025-09-01T10:37:07.469Z level\u003dINFO source\u003d/home/app/logging/logging.go:54 msg\u003derror app\u003dmmes !BADKEY\u003d\"ERROR: column \\\"model_related_information_id\\\" does not exist (SQLSTATE 42703)\"\ntime\u003d2025-09-01T10:37:07.469Z level\u003dINFO source\u003d/home/app/logging/logging.go:44 msg\u003d\"model is saved.\" app\u003dmmes\n[GIN] 2025/09/01 - 10:37:07 | 201 |    1.622349ms |        10.0.0.7 | POST     \"/ai-ml-model-registration/v1/model-registrations\"\n```\n\n\nC: Analysis of the issue:\nUpon further debugging, I found the root cause:\nIn main.go, `AutoMigrate(\u0026models.TargetEnvironment{})` is being called.\nThis creates the table with only three columns: `platform_name, environment_type, and dependency_list`.\nHowever, the SQL queries highlighted here assume the presence of an additional column, model_related_information_id, which does not exist in the migrated schema.\nAs a result, the registration step fails.\n\nCan you verify on your end, and resolve the issue?",
+      "range": {
+        "startLine": 92,
+        "startChar": 37,
+        "endLine": 92,
+        "endChar": 65
+      },
+      "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec42709_ca2f2e5e",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-09-01T11:48:13Z",
+      "side": 1,
+      "message": "Further, once you make the changes, please validate them using the following APIs:\n1. Model Registration\nValidation: The model should be created successfully and returned in the response.\n```bash\ncurl --location \u0027localhost:32006/ai-ml-model-registration/v1/model-registrations/\u0027 \\\n--header \u0027Content-Type: application/json\u0027 \\\n--data \u0027{\n    \"modelId\": {\n        \"modelName\": \"test-model-target-env\",\n        \"modelVersion\" : \"1\"\n    },\n    \"description\": \"hello world2\",\n    \"modelInformation\": {\n        \"metadata\": {\n            \"author\": \"someone\"\n        },\n        \"inputDataType\": \"pdcpBytesDl,pdcpBytesUl\",\n        \"outputDataType\": \"c, d\",\n        \"targetEnvironment\": [\n            {\n                \"platformName\": \"abc\",\n                \"environmentType\": \"env\",\n                \"dependencyList\": \"a,b,c\"\n            }\n        ]\n    }\n}\u0027\n```\n\n\n2. Get All Models\nValidation: The response should list all models that have been created.\n```bash\ncurl --location \u0027localhost:32006/ai-ml-model-discovery/v1/models\u0027\n```\n\n\n\n3. Get Single Model (by name \u0026 version)\nValidation: The response should include the model registered in Step 1.\n```bash\ncurl --location \u0027localhost:32006/ai-ml-model-discovery/v1/models?model-name\u003dtest-model-target-env\u0026model-version\u003d1\u0027\n```\n\n\n4. Get Single Model (by ID)\nValidation: The response should return the same model created in Step 1.\n```bash\ncurl --location \u0027localhost:32006/ai-ml-model-registration/v1/model-registrations/\u003cMODEL_ID\u003e\u0027\n```\n(Replace \u003cMODEL_ID\u003e with the id returned in Step 1)\n\n\n\n5. Delete Model \u0026 Verify Deletion\nValidation: The model should no longer be retrievable after deletion.\n\n```bash\ncurl --location --request DELETE \u0027localhost:32006/ai-ml-model-registration/v1/model-registrations/\u003cMODEL_ID\u003e\u0027\n\ncurl --location \u0027localhost:32006/ai-ml-model-registration/v1/model-registrations/\u003cMODEL_ID\u003e\u0027\n```",
+      "range": {
+        "startLine": 93,
+        "startChar": 20,
+        "endLine": 93,
+        "endChar": 32
+      },
+      "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
