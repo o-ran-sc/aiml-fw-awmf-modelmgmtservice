@@ -78,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0a058bf1_7d1a728f",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-09-06T00:18:14Z",
+      "side": 1,
+      "message": "Thanks for the review. \n\nTo keep the spec-compliant TargetEnvironment (with only platformName, environmentType, and dependencyList), would it be acceptable to introduce an internal-only DB struct named TargetEnvironmentRow that includes a ModelRelatedInformationID foreign key for persistence (used only by AutoMigrate/CRUD), while leaving the public API schema unchanged?",
+      "parentUuid": "3d7cd341_3cd1b73f",
+      "range": {
+        "startLine": 92,
+        "startChar": 37,
+        "endLine": 92,
+        "endChar": 65
+      },
+      "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cec42709_ca2f2e5e",
         "filename": "models/modelInfo.go",
         "patchSetId": 3
