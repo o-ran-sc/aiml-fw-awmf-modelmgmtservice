@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4da992ee_6d5cc20d",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2025-09-22T09:27:44Z",
+      "side": 1,
+      "message": "Thanks for pointing it out. I will update the API version to 1.0.0 to align with O-RAN.WG2.TS.R1AP-R004-v8.00 specification.",
+      "parentUuid": "59922132_51e060b4",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 16
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "163d902b_71e52acc",
         "filename": "API_docs/mme.yaml",
         "patchSetId": 2
@@ -452,6 +476,30 @@
       "side": 1,
       "message": "Would you like to remove this part and proceed with patch to merge ?",
       "parentUuid": "efbbba4e_c2239a2a",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 376,
+        "endChar": 22
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "276e2eaa_dcc4c6d8",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1002767
+      },
+      "writtenOn": "2025-09-22T09:27:44Z",
+      "side": 1,
+      "message": "Understood, let’s wait until the implementation is ready.",
+      "parentUuid": "f48bd800_501a7bc8",
       "range": {
         "startLine": 376,
         "startChar": 4,
