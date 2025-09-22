@@ -342,6 +342,7 @@ func (m *MmeApiHandler) UpdateModel(c *gin.Context) {
 		})
 		return
 	}
+	
 	if existingModelInfo.ModelId.ModelName != modelInfo.ModelId.ModelName || existingModelInfo.ModelId.ModelVersion != modelInfo.ModelId.ModelVersion {
 		statusCode := http.StatusBadRequest
 		logging.ERROR("Error occurred, send status code: ", statusCode)
