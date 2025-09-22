@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8fe3ba6_a9f506d2",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T08:43:59Z",
+      "side": 1,
+      "message": "Here I need a comment to understand, should we maintain in sync with O-RAN Alliance API reference, or it should be governed by our project.\n\n\nAlso if we take with reference with O-RAN Alliance, we need to check if SCCL license https://lf-o-ran-sc.atlassian.net/wiki/download/attachments/13567981/SCCL_for_code_like_files_v3.pptx?api\u003dv2",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 16
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "163d902b_71e52acc",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T08:43:59Z",
+      "side": 1,
+      "message": "could you please add one more :\n\nif pqErr.Code \u003d\u003d pgerrcode.UniqueViolation {\n\t\t\t\tcont.JSON(http.StatusConflict, models.ProblemDetail{\n\t\t\t\t\tStatus: http.StatusConflict,\n\t\t\t\t\tTitle:  \"model name and version combination already present\",\n\t\t\t\t\tDetail: \"The request json is not correct as\",\n\t\t\t\t})",
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35c4672d_a102198c",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T08:43:59Z",
+      "side": 1,
+      "message": "Any specific reason for this change, as in specification it is referenced as `modelRegistrationId`",
+      "range": {
+        "startLine": 96,
+        "startChar": 52,
+        "endLine": 96,
+        "endChar": 59
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff693ed6_60fd690d",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T08:43:59Z",
+      "side": 1,
+      "message": "let\u0027s synchronize with specification",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 103,
+        "endChar": 23
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f955da2_6bc210d7",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T08:43:59Z",
+      "side": 1,
+      "message": "modelRegistrationId",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 23
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20ba3716_209c5ec8",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T08:43:59Z",
+      "side": 1,
+      "message": "modelRegistrationId",
+      "range": {
+        "startLine": 179,
+        "startChar": 16,
+        "endLine": 179,
+        "endChar": 23
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18438b2a_c7d1b686",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T08:43:59Z",
+      "side": 1,
+      "message": "This option is not yet available over implementation, then let\u0027s wait to merge : https://gerrit.o-ran-sc.org/r/c/aiml-fw/awmf/modelmgmtservice/+/14808",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 376,
+        "endChar": 22
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
