@@ -23,6 +23,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
@@ -250,12 +251,39 @@ func (m *MmeApiHandler) GetModelInfoByName(cont *gin.Context) {
 	})
 }
 
-// API to upload the trained model in zip format
+/*
+* The following API uploads the trained model in zip-format to the provided modelId (modelName, modelVersion, artifactVersion)
+* Note: Model MUST be registered first, and then should be uploaded
+ */
 func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 	logging.INFO("Uploading model API ...")
 	modelName := cont.Param("modelName")
 	modelVersion := cont.Param("modelVersion")
 	artifactVersion := cont.Param("artifactVersion")
+
+	// Confirm if Model with Given ModelId: (ModelName and ModelVersion) is Registered or not:
+	modelInfo, err := m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("Error occurred while getting models: " + strconv.Itoa(statusCode))
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Internal Server Error",
+			Detail: fmt.Sprintf("Can't fetch model with modelName : %s & modelVersion : %s due to , %s", modelName, modelVersion, err.Error()),
+		})
+		return
+	}
+
+	if modelInfo.ModelId.ModelName != modelName && modelInfo.ModelId.ModelVersion != modelVersion {
+		statusCode := http.StatusNotFound
+		logging.ERROR("Record not found, send status code: " + strconv.Itoa(statusCode))
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Model not registered",
+			Detail: fmt.Sprintf("ModelName: %s and modelVersion: %s is not registered, Kindly register it first!", modelName, modelVersion),
+		})
+		return
+	}
 
 	modelKey := fmt.Sprintf("%s_%s_%s", modelName, modelVersion, artifactVersion)
 	exportBucket := strings.ToLower(modelName)
