@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "59922132_51e060b4",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T09:18:03Z",
+      "side": 1,
+      "message": "In publicly available O-RAN.WG2.TS.R1AP-R004-v8.00, I could check version is `1.0.0` (sec A.6.1.2).\n\nPlease let me know if any mistake.",
+      "parentUuid": "c1300efd_6c00c68a",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 16
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "163d902b_71e52acc",
         "filename": "API_docs/mme.yaml",
         "patchSetId": 2
@@ -61,6 +85,24 @@
       "writtenOn": "2025-09-22T08:43:59Z",
       "side": 1,
       "message": "could you please add one more :\n\nif pqErr.Code \u003d\u003d pgerrcode.UniqueViolation {\n\t\t\t\tcont.JSON(http.StatusConflict, models.ProblemDetail{\n\t\t\t\t\tStatus: http.StatusConflict,\n\t\t\t\t\tTitle:  \"model name and version combination already present\",\n\t\t\t\t\tDetail: \"The request json is not correct as\",\n\t\t\t\t})",
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "736221f4_3eb2f150",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T09:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "163d902b_71e52acc",
       "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
@@ -102,6 +144,30 @@
       "side": 1,
       "message": "Updated path parameters and schema references to use modelRegistrationId instead of modelId, in order to be consistent with the specification.",
       "parentUuid": "35c4672d_a102198c",
+      "range": {
+        "startLine": 96,
+        "startChar": 52,
+        "endLine": 96,
+        "endChar": 59
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3511af20_23ef0c7d",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T09:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55f8ecfe_8be86cbe",
       "range": {
         "startLine": 96,
         "startChar": 52,
@@ -159,6 +225,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7fa38c8_ffaae07f",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T09:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32df2b67_7355253e",
+      "range": {
+        "startLine": 103,
+        "startChar": 16,
+        "endLine": 103,
+        "endChar": 23
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7f955da2_6bc210d7",
@@ -196,6 +286,30 @@
       "side": 1,
       "message": "Updated path parameters and schema references to use modelRegistrationId instead of modelId, in order to be consistent with the specification.",
       "parentUuid": "7f955da2_6bc210d7",
+      "range": {
+        "startLine": 135,
+        "startChar": 16,
+        "endLine": 135,
+        "endChar": 23
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ce1dfe9_148ef052",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T09:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c1440ab_17bd47c5",
       "range": {
         "startLine": 135,
         "startChar": 16,
@@ -253,6 +367,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d00865e_90e6feea",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T09:18:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb8fc75f_71ef2919",
+      "range": {
+        "startLine": 179,
+        "startChar": 16,
+        "endLine": 179,
+        "endChar": 23
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18438b2a_c7d1b686",
@@ -290,6 +428,30 @@
       "side": 1,
       "message": "Understood, let’s wait until the implementation is ready.",
       "parentUuid": "18438b2a_c7d1b686",
+      "range": {
+        "startLine": 376,
+        "startChar": 4,
+        "endLine": 376,
+        "endChar": 22
+      },
+      "revId": "b445e93b1bc4a71f435a6c1b705a19b8e7569c16",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f48bd800_501a7bc8",
+        "filename": "API_docs/mme.yaml",
+        "patchSetId": 2
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-22T09:18:03Z",
+      "side": 1,
+      "message": "Would you like to remove this part and proceed with patch to merge ?",
+      "parentUuid": "efbbba4e_c2239a2a",
       "range": {
         "startLine": 376,
         "startChar": 4,
