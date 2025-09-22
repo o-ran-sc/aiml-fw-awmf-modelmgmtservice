@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
   title: Model Management API
-  description: API for managing machine learning models (register, retrieve, update, delete, upload, and download).
-  version: 1.1.0
+  description: API for managing machine learning models (register, retrieve, update, delete, upload, and download)
+  version: 1.0.0
 
 servers:
   - url: http://11.0.0.4:32006
@@ -26,16 +26,37 @@ paths:
             schema:
               $ref: '#/components/schemas/ModelRelatedInformation'
       responses:
-        '200':
+        '201':
           description: Model registered successfully and returned object
+          headers:
+            Location:
+              description: 'Contains the URI of the newly created resource'
+              required: true
+              schema:
+                type: string
+                example: "/ai-ml-model-registration/v1/model-registrations/123e4567-e89b-12d3-a456-426614174000"
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ModelRelatedInformation'
         '400':
           description: Invalid request, bad input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '409':
+          description: Conflict – model name and version combination already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
   /ai-ml-model-discovery/v1/models:
     get:
@@ -47,15 +68,6 @@ paths:
         - name: modelName
           in: query
           description: Model name to search
-          required: false
-          schema:
-            type: string
-        - name: modelVersion
-          in: query
-          description: Model version to search
-          required: false
-          schema:
-            type: string
       responses:
         '200':
           description: A list of models or filtered search results
@@ -67,20 +79,30 @@ paths:
                   $ref: '#/components/schemas/ModelRelatedInformation'
         '400':
           description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+
   /ai-ml-model-registration/v1/model-registrations/{modelRegistrationId}:
     get:
       tags:
         - Model Management
-      summary: Get model info by ID
+      summary: Get model info by modelRegistrationId
       operationId: getModelInfoById
       parameters:
-        - name: id
+        - name: modelRegistrationId
           in: path
           required: true
           schema:
             type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
       responses:
         '200':
           description: Model information
@@ -90,20 +112,29 @@ paths:
                 $ref: '#/components/schemas/ModelRelatedInformation'
         '404':
           description: Model not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
     put:
       tags:
         - Model Management
-      summary: Update model info by ID
+      summary: Update model info by modelRegistrationId
       operationId: updateModel
       parameters:
-        - name: id
+        - name: modelRegistrationId
           in: path
           required: true
           schema:
             type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
       requestBody:
         required: true
         content:
@@ -113,29 +144,58 @@ paths:
       responses:
         '200':
           description: Model updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ModelRelatedInformation'
         '400':
           description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
+        '404':
+          description: Model not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
     delete:
       tags:
         - Model Management
-      summary: Delete a model by ID
+      summary: Delete a model by modelRegistrationId
       operationId: deleteModel
       parameters:
-        - name: id
+        - name: modelRegistrationId
           in: path
           required: true
           schema:
             type: string
+            example: "123e4567-e89b-12d3-a456-426614174000"
       responses:
-        '200':
+        '204':
           description: Model deleted successfully
+        '404':
+          description: Model not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
-  /ai-ml-model-registration/v1/uploadModel/{modelName}/{modelVersion}/{artifactVersion}:
+  /ai-ml-model-registration/v1/uploadModel/{modelName}/{modelVersion}:
     post:
       tags:
         - Model Management
@@ -152,11 +212,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: artifactVersion
-          in: path
-          required: true
-          schema:
-            type: string
       requestBody:
         required: true
         content:
@@ -167,8 +222,10 @@ paths:
                 file:
                   type: string
                   format: binary
+              required:
+                - file
       responses:
-        '200':
+        '201':
           description: Model uploaded successfully
           content:
             application/json:
@@ -177,14 +234,24 @@ paths:
                 properties:
                   code:
                     type: integer
-                    example: 200
+                    example: 201
                   message:
                     type: string
                     example: "Model uploaded successfully."
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
-  /ai-ml-model-registration/v1/downloadModel/{modelName}/{modelVersion}/{artifactVersion}/model.zip:
+  /ai-ml-model-registration/v1/downloadModel/{modelName}/{modelVersion}/model.zip:
     get:
       tags:
         - Model Management
@@ -201,11 +268,6 @@ paths:
           required: true
           schema:
             type: string
-        - name: artifactVersion
-          in: path
-          required: true
-          schema:
-            type: string
       responses:
         '200':
           description: Model downloaded successfully
@@ -214,27 +276,82 @@ paths:
               schema:
                 type: string
                 format: binary
+        '404':
+          description: Model not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
         '500':
           description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetails'
 
 components:
   schemas:
+    ProblemDetails:
+      type: object
+      properties:
+        type:
+          type: string
+          format: uri
+          description: A URI reference that identifies the problem type
+          example: "https://o-ran.org/problems/invalid-model-format"
+          default: "about:blank"
+        title:
+          type: string
+          description: A short, human-readable summary of the problem
+          example: "Invalid Model Format"
+        detail:
+          type: string
+          description: A human-readable explanation specific to this occurrence of the problem
+          example: "The provided model file format is not supported. Expected formats: .pkl, .joblib, .h5"
+        status:
+          type: integer
+          description: The HTTP status code
+          example: 400
+          minimum: 100
+          maximum: 599
+        instance:
+          type: string
+          format: uri
+          description: A URI reference that identifies the specific occurrence of the problem
+          example: "/ai-ml-model-registration/v1/model-registrations/invalid-model-123"
+      required:
+        - type
+        - title
+
     Metadata:
       type: object
       properties:
         author:
           type: string
+          description: "Author of the AI/ML model"
           example: "John Doe"
+        owner:
+          type: string
+          description: "Owner information for model usage regulation"
+          example: "AI Research Team"
+      required:
+        - author
+        - owner
 
-    ModelID:
+    ModelId:
       type: object
       properties:
         modelName:
           type: string
+          description: "Name of the model"
           example: "example-model"
         modelVersion:
           type: string
+          description: "Version of the model"
           example: "v1.0"
+      required:
+        - modelName
+        - modelVersion
 
     ModelInformation:
       type: object
@@ -242,24 +359,46 @@ components:
         metadata:
           $ref: '#/components/schemas/Metadata'
         inputDataType:
-          type: string
-          description: 'Input data type for the model'
+          type: array
+          items:
+            type: string
+          description: 'Supported input data types for the model'
+          example: ["sensor_data", "network_metrics"]
+          minItems: 1
         outputDataType:
-          type: string
-          description: 'Output data type for the model'
-
+          type: array
+          items:
+            type: string
+          description: 'Expected output data types from the model'
+          example: ["prediction_result", "anomaly_score"]
+          minItems: 1
+      required:
+        - metadata
+        - inputDataType
+        - outputDataType
 
     ModelRelatedInformation:
       type: object
       properties:
-        id:
+        modelRegistrationId:
           type: string
+          description: "Unique identifier for the model registration"
           example: "123e4567-e89b-12d3-a456-426614174000"
         modelId:
-          $ref: '#/components/schemas/ModelID'
+          $ref: '#/components/schemas/ModelId'
         description:
           type: string
-          example: "This is an example model description."
+          description: "Description of the AI/ML model"
+          example: "This is an example model for network anomaly detection."
         modelInformation:
           $ref: '#/components/schemas/ModelInformation'
-
+        modelLocation:
+          type: string
+          format: uri
+          description: "Location where the model is stored in the runtime catalogue"
+          example: "https://model-registry.example.com/models/example-model/v1.0"
+      required:
+        - modelRegistrationId
+        - modelId
+        - description
+        - modelInformation
