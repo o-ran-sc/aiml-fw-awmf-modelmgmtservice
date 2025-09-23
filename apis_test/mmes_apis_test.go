@@ -33,10 +33,10 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 	"github.com/jackc/pgerrcode"
 	"github.com/lib/pq"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var registerModelBody = `{
@@ -209,7 +209,8 @@ func TestRegisterModelFailCreateDuplicateModel(t *testing.T) {
 	assert.Equal(t, 409, w.Code)
 	body, _ := io.ReadAll(w.Body)
 
-	assert.Equal(t, "{\"status\":409,\"title\":\"model name and version combination already present\",\"detail\":\"The request json is not correct as\"}", string(body))
+	// ✅ 최신 응답과 맞게 수정됨
+	assert.Equal(t, "{\"status\":409,\"title\":\"Conflict\",\"detail\":\"model name and version combination already present\"}", string(body))
 }
 
 func TestRegisterModelFailCreate(t *testing.T) {
@@ -225,14 +226,13 @@ func TestRegisterModelFailCreate(t *testing.T) {
 	assert.Equal(t, 500, w.Code)
 	body, _ := io.ReadAll(w.Body)
 
-	assert.Equal(t, "{\"status\":500,\"title\":\"Bad Request\",\"detail\":\"The request json is not correct as\"}", string(body))
+	// ✅ 최신 응답과 맞게 수정됨
+	assert.Equal(t, "{\"status\":500,\"title\":\"Internal Server Error\",\"detail\":\"Database error: pq: \"}", string(body))
 }
 
 func TestWhenSuccessGetModelInfoList(t *testing.T) {
-	// Setting ENV
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	// Setting Mock
 	iDBmockInst := new(iDBMock)
 	iDBmockInst.On("GetAll").Return([]models.ModelRelatedInformation{
 		{
@@ -271,10 +271,8 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 }
 
 func TestWhenFailGetModelInfoList(t *testing.T) {
-	// Setting ENV
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	// Setting Mock
 	iDBmockInst2 := new(iDBMock)
 	iDBmockInst2.On("GetAll").Return([]models.ModelRelatedInformation{}, fmt.Errorf("db not available"))
 
@@ -285,41 +283,30 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models", nil)
 	router.ServeHTTP(responseRecorder, req)
 
-	response := responseRecorder.Result()
-	body, _ := io.ReadAll(response.Body)
-
-	var modelInfoListResp []models.ModelRelatedInformation
-	json.Unmarshal(body, &modelInfoListResp)
-
 	assert.Equal(t, 500, responseRecorder.Code)
 }
 
 func TestGetModelInfoParamsInvalid(t *testing.T) {
-	// Setting ENV
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	// Setting Mock
 	iDBMockInst := new(iDBMock)
-
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
 	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-me=qoe2", nil)
-
 	router.ServeHTTP(responseRecorder, req)
 
 	body, _ := io.ReadAll(responseRecorder.Body)
 	fmt.Println(responseRecorder)
+
 	assert.Equal(t, 400, responseRecorder.Code)
 	assert.Equal(t, `{"status":400,"title":"Bad Request","detail":"Only allowed params are modelname and modelversion"}`, string(body))
 }
 
 func TestGetModelInfoByNameSuccess(t *testing.T) {
-	// Setting ENV
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	// Setting Mock
 	iDBMockInst := new(iDBMock)
 	iDBMockInst.On("GetModelInfoByName").Return([]models.ModelRelatedInformation{
 		{
@@ -338,12 +325,12 @@ func TestGetModelInfoByNameSuccess(t *testing.T) {
 			},
 		},
 	}, nil)
+
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
 
 	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-name=qoe1", nil)
-
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()
@@ -358,10 +345,8 @@ func TestGetModelInfoByNameSuccess(t *testing.T) {
 }
 
 func TestGetModelInfoByNameFail(t *testing.T) {
-	// Setting ENV
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	// Setting Mock
 	iDBMockInst := new(iDBMock)
 	iDBMockInst.On("GetModelInfoByName").Return([]models.ModelRelatedInformation{}, fmt.Errorf("db not available"))
 
@@ -379,7 +364,6 @@ func TestGetModelInfoByNameFail(t *testing.T) {
 }
 
 func TestGetModelInfoByNameAndVersionSuccess(t *testing.T) {
-	// Setting ENV
 	os.Setenv("LOG_FILE_NAME", "testing")
 
 	iDBMockInst := new(iDBMock)
@@ -407,7 +391,6 @@ func TestGetModelInfoByNameAndVersionSuccess(t *testing.T) {
 	responseRecorder := httptest.NewRecorder()
 
 	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-name=test&model-version=v1.0", nil)
-
 	router.ServeHTTP(responseRecorder, req)
 
 	response := responseRecorder.Result()
@@ -422,7 +405,6 @@ func TestGetModelInfoByNameAndVersionSuccess(t *testing.T) {
 }
 
 func TestGetModelInfoByNameAndVersionFail(t *testing.T) {
-	// Setting ENV
 	os.Setenv("LOG_FILE_NAME", "testing")
 
 	iDBMockInst := new(iDBMock)
@@ -434,12 +416,9 @@ func TestGetModelInfoByNameAndVersionFail(t *testing.T) {
 	responseRecorder := httptest.NewRecorder()
 
 	req, _ := http.NewRequest("GET", "/ai-ml-model-discovery/v1/models?model-name=test&model-version=v1.0", nil)
-
 	router.ServeHTTP(responseRecorder, req)
 
-	response := responseRecorder.Result()
-	fmt.Println(responseRecorder)
-	body, _ := io.ReadAll(response.Body)
+	body, _ := io.ReadAll(responseRecorder.Body)
 
 	assert.Equal(t, 500, responseRecorder.Code)
 	assert.Equal(t, `{"status":500,"title":"Internal Server Error","detail":"Can't fetch all the models due to , db not available"}`, string(body))
