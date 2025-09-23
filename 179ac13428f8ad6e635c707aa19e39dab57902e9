@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52bf3e9f_cc010369",
+        "filename": "apis_test/mmes_apis_test.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 292,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-09-23T06:30:56Z",
+      "side": 0,
+      "message": "any specific reason to remove ?\n\nThis UT will ensure the response could be unmarshalled. any thoughts ?",
+      "range": {
+        "startLine": 288,
+        "startChar": 1,
+        "endLine": 292,
+        "endChar": 41
+      },
+      "revId": "179ac13428f8ad6e635c707aa19e39dab57902e9",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
