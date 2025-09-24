@@ -28,8 +28,7 @@ import (
 	"testing"
 
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis"
-	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/core"
-	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/apis_test/mme_mocks"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/routers"
@@ -87,76 +86,9 @@ var invalidRegisterModelBody2 = `{
     }
 }`
 
-type dbMgrMock struct {
-	mock.Mock
-	core.DBMgr
-}
-
-func (d *dbMgrMock) CreateBucket(bucketName string) (err error) {
-	args := d.Called(bucketName)
-	return args.Error(0)
-}
-
-func (d *dbMgrMock) UploadFile(dataBytes []byte, file_name string, bucketName string) {
-}
-
-func (d *dbMgrMock) ListBucket(bucketObjPostfix string) ([]core.Bucket, error) {
-	args := d.Called()
-	return args.Get(0).([]core.Bucket), args.Error(1)
-}
-
-type iDBMock struct {
-	mock.Mock
-	db.IDB
-}
-
-func (i *iDBMock) Create(modelInfo models.ModelRelatedInformation) error {
-	args := i.Called(modelInfo)
-	return args.Error(0)
-}
-func (i *iDBMock) GetByID(id string) (*models.ModelRelatedInformation, error) {
-	return nil, nil
-}
-func (i *iDBMock) GetAll() ([]models.ModelRelatedInformation, error) {
-	args := i.Called()
-	if _, ok := args.Get(1).(error); !ok {
-		return args.Get(0).([]models.ModelRelatedInformation), nil
-	} else {
-		var emptyModelInfo []models.ModelRelatedInformation
-		return emptyModelInfo, args.Error(1)
-	}
-}
-func (i *iDBMock) Update(modelInfo models.ModelRelatedInformation) error {
-	return nil
-}
-func (i *iDBMock) Delete(id string) (int64, error) {
-	return 1, nil
-}
-
-func (i *iDBMock) GetModelInfoByName(modelName string) ([]models.ModelRelatedInformation, error) {
-	args := i.Called()
-	if _, ok := args.Get(1).(error); !ok {
-		return args.Get(0).([]models.ModelRelatedInformation), nil
-	} else {
-		var emptyModelInfo []models.ModelRelatedInformation
-		return emptyModelInfo, args.Error(1)
-	}
-}
-
-func (i *iDBMock) GetModelInfoByNameAndVer(modelName string, modelVersion string) (*models.ModelRelatedInformation, error) {
-	args := i.Called()
-
-	if _, ok := args.Get(1).(error); !ok {
-		return args.Get(0).(*models.ModelRelatedInformation), nil
-	} else {
-		var emptyModelInfo *models.ModelRelatedInformation
-		return emptyModelInfo, args.Error(1)
-	}
-}
-
 func TestRegisterModel(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	iDBMockInst.On("Create", mock.Anything).Return(nil)
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
@@ -168,7 +100,7 @@ func TestRegisterModel(t *testing.T) {
 
 func TestRegisterModelFailInvalidJson(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	w := httptest.NewRecorder()
@@ -183,7 +115,7 @@ func TestRegisterModelFailInvalidJson(t *testing.T) {
 
 func TestRegisterModelFailInvalidRequest(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	w := httptest.NewRecorder()
@@ -198,7 +130,7 @@ func TestRegisterModelFailInvalidRequest(t *testing.T) {
 
 func TestRegisterModelFailCreateDuplicateModel(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	iDBMockInst.On("Create", mock.Anything).Return(&pq.Error{Code: pgerrcode.UniqueViolation})
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
@@ -214,7 +146,7 @@ func TestRegisterModelFailCreateDuplicateModel(t *testing.T) {
 
 func TestRegisterModelFailCreate(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	iDBMockInst.On("Create", mock.Anything).Return(&pq.Error{Code: pgerrcode.SQLClientUnableToEstablishSQLConnection})
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
@@ -231,7 +163,7 @@ func TestRegisterModelFailCreate(t *testing.T) {
 func TestWhenSuccessGetModelInfoList(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	iDBmockInst := new(iDBMock)
+	iDBmockInst := new(mme_mocks.IDBMock)
 	iDBmockInst.On("GetAll").Return([]models.ModelRelatedInformation{
 		{
 			Id: "1234",
@@ -271,7 +203,7 @@ func TestWhenSuccessGetModelInfoList(t *testing.T) {
 func TestWhenFailGetModelInfoList(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	iDBmockInst2 := new(iDBMock)
+	iDBmockInst2 := new(mme_mocks.IDBMock)
 	iDBmockInst2.On("GetAll").Return([]models.ModelRelatedInformation{}, fmt.Errorf("db not available"))
 
 	handler := apis.NewMmeApiHandler(nil, iDBmockInst2)
@@ -293,7 +225,7 @@ func TestWhenFailGetModelInfoList(t *testing.T) {
 func TestGetModelInfoParamsInvalid(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
 	router := routers.InitRouter(handler)
 	responseRecorder := httptest.NewRecorder()
@@ -311,7 +243,7 @@ func TestGetModelInfoParamsInvalid(t *testing.T) {
 func TestGetModelInfoByNameSuccess(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	iDBMockInst.On("GetModelInfoByName").Return([]models.ModelRelatedInformation{
 		{
 			Id: "1234",
@@ -351,7 +283,7 @@ func TestGetModelInfoByNameSuccess(t *testing.T) {
 func TestGetModelInfoByNameFail(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	iDBMockInst.On("GetModelInfoByName").Return([]models.ModelRelatedInformation{}, fmt.Errorf("db not available"))
 
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
@@ -370,7 +302,7 @@ func TestGetModelInfoByNameFail(t *testing.T) {
 func TestGetModelInfoByNameAndVersionSuccess(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 
 	modelInfo := models.ModelRelatedInformation{
 		Id: "1234",
@@ -411,7 +343,7 @@ func TestGetModelInfoByNameAndVersionSuccess(t *testing.T) {
 func TestGetModelInfoByNameAndVersionFail(t *testing.T) {
 	os.Setenv("LOG_FILE_NAME", "testing")
 
-	iDBMockInst := new(iDBMock)
+	iDBMockInst := new(mme_mocks.IDBMock)
 	modelInfo := models.ModelRelatedInformation{}
 	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&modelInfo, fmt.Errorf("db not available"))
 
