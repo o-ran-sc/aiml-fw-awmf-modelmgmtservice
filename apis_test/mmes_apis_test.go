@@ -18,9 +18,11 @@ limitations under the License.
 package apis_test
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -362,4 +364,120 @@ func TestGetModelInfoByNameAndVersionFail(t *testing.T) {
 
 	assert.Equal(t, 500, responseRecorder.Code)
 	assert.Equal(t, `{"status":500,"title":"Internal Server Error","detail":"Can't fetch all the models due to , db not available"}`, string(body))
+}
+
+func TestUploadModelSuccess(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	os.Setenv("MODEL_FILE_POSTFIX", ".zip")
+	// Setup Mocks
+	iDBMockInst := new(mme_mocks.IDBMock)
+	modelName := "test-model"
+	modelVersion := "1"
+	modelArtifactVersion := "1.0.0"
+	modelInfo := models.ModelRelatedInformation{
+		ModelId: models.ModelID{
+			ModelName:    modelName,
+			ModelVersion: modelVersion,
+		},
+	}
+	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&modelInfo, nil)
+
+	dbMgrMockInst := new(mme_mocks.DbMgrMock)
+	dbMgrMockInst.On("UploadFile").Return(nil)
+	handler := apis.NewMmeApiHandler(dbMgrMockInst, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	// Creating Model.zip for upload
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile("file", "Model.zip") // Add file field
+	assert.NoError(t, err)
+	_, err = part.Write([]byte("fake zip file content"))
+	assert.NoError(t, err)
+	writer.Close()
+
+	// Upload model
+	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s/%s", modelName, modelVersion, modelArtifactVersion)
+	req := httptest.NewRequest(http.MethodPost, url, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	responseBody, _ := io.ReadAll(response.Body)
+	assert.Equal(t, http.StatusOK, responseRecorder.Code)
+	assert.Equal(t, `{"code":200,"message":"Model uploaded successfully.."}`, string(responseBody))
+}
+
+func TestUploadModelFailureModelNotRegistered(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	os.Setenv("MODEL_FILE_POSTFIX", ".zip")
+	// Setup Mocks
+	iDBMockInst := new(mme_mocks.IDBMock)
+	modelName := "test-model"
+	modelVersion := "1"
+	modelArtifactVersion := "1.0.0"
+	// Returns Empty model, signifying Model is Not registered
+	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&models.ModelRelatedInformation{}, nil)
+	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	// Upload model
+	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s/%s", modelName, modelVersion, modelArtifactVersion)
+	req := httptest.NewRequest(http.MethodPost, url, nil)
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	responseBody, _ := io.ReadAll(response.Body)
+	assert.Equal(t, http.StatusNotFound, responseRecorder.Code)
+	assert.Equal(
+		t,
+		fmt.Sprintf(`{"status":404,"title":"Not Found","detail":"ModelName: %s and modelVersion: %s is not registered, Kindly register it first!"}`, modelName, modelVersion),
+		string(responseBody),
+	)
+}
+
+func TestUploadModelFailureModelUploadFailure(t *testing.T) {
+	os.Setenv("LOG_FILE_NAME", "testing")
+	os.Setenv("MODEL_FILE_POSTFIX", ".zip")
+	// Setup Mocks
+	iDBMockInst := new(mme_mocks.IDBMock)
+	modelName := "test-model"
+	modelVersion := "1"
+	modelArtifactVersion := "1.0.0"
+	modelInfo := models.ModelRelatedInformation{
+		ModelId: models.ModelID{
+			ModelName:    modelName,
+			ModelVersion: modelVersion,
+		},
+	}
+	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&modelInfo, nil)
+
+	dbMgrMockInst := new(mme_mocks.DbMgrMock)
+	// Simulate Model-upload-failure
+	dbMgrMockInst.On("UploadFile").Return(fmt.Errorf("Unable to upload model"))
+	handler := apis.NewMmeApiHandler(dbMgrMockInst, iDBMockInst)
+	router := routers.InitRouter(handler)
+	responseRecorder := httptest.NewRecorder()
+
+	// Creating Model.zip for upload
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	part, err := writer.CreateFormFile("file", "Model.zip") // Add file field
+	assert.NoError(t, err)
+	_, err = part.Write([]byte("fake zip file content"))
+	assert.NoError(t, err)
+	writer.Close()
+
+	// Upload model
+	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s/%s", modelName, modelVersion, modelArtifactVersion)
+	req := httptest.NewRequest(http.MethodPost, url, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	router.ServeHTTP(responseRecorder, req)
+
+	response := responseRecorder.Result()
+	responseBody, _ := io.ReadAll(response.Body)
+	assert.Equal(t, http.StatusInternalServerError, responseRecorder.Code)
+	assert.Equal(t, `{"code":500,"message":"Unable to upload model"}`, string(responseBody))
 }
