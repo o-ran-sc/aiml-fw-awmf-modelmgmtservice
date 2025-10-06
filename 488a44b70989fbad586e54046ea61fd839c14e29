@@ -16,6 +16,29 @@
       "message": "LGTM",
       "revId": "488a44b70989fbad586e54046ea61fd839c14e29",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84778379_315f0b67",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-10-06T10:57:24Z",
+      "side": 1,
+      "message": "Condition \n```\nif modelInfo.ModelId.ModelName !\u003d modelName \u0026\u0026 modelInfo.ModelId.ModelVersion !\u003d modelVersion \n```\nis redundant if the database access layer is designed to clearly indicate \"not found\" either through a specific error or by returning a nil/empty result that can be checked more directly. It makes the code harder to read.",
+      "range": {
+        "startLine": 277,
+        "startChar": 1,
+        "endLine": 277,
+        "endChar": 94
+      },
+      "revId": "488a44b70989fbad586e54046ea61fd839c14e29",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
