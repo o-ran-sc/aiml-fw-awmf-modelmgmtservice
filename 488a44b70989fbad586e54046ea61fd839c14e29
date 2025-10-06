@@ -39,6 +39,30 @@
       },
       "revId": "488a44b70989fbad586e54046ea61fd839c14e29",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bcdabfe9_ec4aae15",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 8
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-10-06T11:32:39Z",
+      "side": 1,
+      "message": "Since, This change will be required in other api-functions too, \nI have created another ticket and will refactor there.\nhttps://lf-o-ran-sc.atlassian.net/browse/AIMLFW-281",
+      "parentUuid": "84778379_315f0b67",
+      "range": {
+        "startLine": 277,
+        "startChar": 1,
+        "endLine": 277,
+        "endChar": 94
+      },
+      "revId": "488a44b70989fbad586e54046ea61fd839c14e29",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
