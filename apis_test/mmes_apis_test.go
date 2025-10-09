@@ -22,6 +22,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"mime/multipart"
 	"net/http"
 	"net/http/httptest"
@@ -376,8 +377,9 @@ func TestUploadModelSuccess(t *testing.T) {
 	modelArtifactVersion := "1.0.0"
 	modelInfo := models.ModelRelatedInformation{
 		ModelId: models.ModelID{
-			ModelName:    modelName,
-			ModelVersion: modelVersion,
+			ModelName:       modelName,
+			ModelVersion:    modelVersion,
+			ArtifactVersion: modelArtifactVersion,
 		},
 	}
 	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&modelInfo, nil)
@@ -398,7 +400,7 @@ func TestUploadModelSuccess(t *testing.T) {
 	writer.Close()
 
 	// Upload model
-	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s/%s", modelName, modelVersion, modelArtifactVersion)
+	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s", modelName, modelVersion)
 	req := httptest.NewRequest(http.MethodPost, url, body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	router.ServeHTTP(responseRecorder, req)
@@ -406,7 +408,22 @@ func TestUploadModelSuccess(t *testing.T) {
 	response := responseRecorder.Result()
 	responseBody, _ := io.ReadAll(response.Body)
 	assert.Equal(t, http.StatusOK, responseRecorder.Code)
-	assert.Equal(t, `{"code":200,"message":"Model uploaded successfully.."}`, string(responseBody))
+	var responseJson map[string]any
+	err = json.Unmarshal(responseBody, &responseJson)
+	if err != nil {
+		t.Errorf("Error to Unmarshal response-body : Error %s", err.Error())
+	}
+
+	newModelInfoStr, err := json.Marshal(responseJson["modelinfo"])
+	if err != nil {
+		t.Errorf("Error to Marshal model-Info : Error %s", err.Error())
+	}
+
+	var newModelInfo models.ModelRelatedInformation
+	if err := json.Unmarshal(newModelInfoStr, &newModelInfo); err != nil {
+		log.Fatal("unmarshal error:", err)
+	}
+	assert.Equal(t, newModelInfo.ModelId.ArtifactVersion, "1.1.0")
 }
 
 func TestUploadModelFailureModelNotRegistered(t *testing.T) {
@@ -416,7 +433,6 @@ func TestUploadModelFailureModelNotRegistered(t *testing.T) {
 	iDBMockInst := new(mme_mocks.IDBMock)
 	modelName := "test-model"
 	modelVersion := "1"
-	modelArtifactVersion := "1.0.0"
 	// Returns Empty model, signifying Model is Not registered
 	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&models.ModelRelatedInformation{}, nil)
 	handler := apis.NewMmeApiHandler(nil, iDBMockInst)
@@ -424,7 +440,7 @@ func TestUploadModelFailureModelNotRegistered(t *testing.T) {
 	responseRecorder := httptest.NewRecorder()
 
 	// Upload model
-	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s/%s", modelName, modelVersion, modelArtifactVersion)
+	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s", modelName, modelVersion)
 	req := httptest.NewRequest(http.MethodPost, url, nil)
 	router.ServeHTTP(responseRecorder, req)
 
@@ -448,8 +464,9 @@ func TestUploadModelFailureModelUploadFailure(t *testing.T) {
 	modelArtifactVersion := "1.0.0"
 	modelInfo := models.ModelRelatedInformation{
 		ModelId: models.ModelID{
-			ModelName:    modelName,
-			ModelVersion: modelVersion,
+			ModelName:       modelName,
+			ModelVersion:    modelVersion,
+			ArtifactVersion: modelArtifactVersion,
 		},
 	}
 	iDBMockInst.On("GetModelInfoByNameAndVer").Return(&modelInfo, nil)
@@ -471,7 +488,7 @@ func TestUploadModelFailureModelUploadFailure(t *testing.T) {
 	writer.Close()
 
 	// Upload model
-	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s/%s", modelName, modelVersion, modelArtifactVersion)
+	url := fmt.Sprintf("/ai-ml-model-registration/v1/uploadModel/%s/%s", modelName, modelVersion)
 	req := httptest.NewRequest(http.MethodPost, url, body)
 	req.Header.Set("Content-Type", writer.FormDataContentType())
 	router.ServeHTTP(responseRecorder, req)
