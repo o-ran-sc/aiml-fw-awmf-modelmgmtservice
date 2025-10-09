@@ -30,6 +30,7 @@ import (
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/db"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/logging"
 	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/models"
+	"gerrit.o-ran-sc.org/r/aiml-fw/awmf/modelmgmtservice/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -259,7 +260,6 @@ func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 	logging.INFO("Uploading model API ...")
 	modelName := cont.Param("modelName")
 	modelVersion := cont.Param("modelVersion")
-	artifactVersion := cont.Param("artifactVersion")
 
 	// Confirm if Model with Given ModelId: (ModelName and ModelVersion) is Registered or not:
 	modelInfo, err := m.iDB.GetModelInfoByNameAndVer(modelName, modelVersion)
@@ -285,27 +285,105 @@ func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 		return
 	}
 
+	// Read the uploaded File
+	fileHeader, err := cont.FormFile("file")
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("failed to read form file: %v", err)
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Internal Server Error",
+			Detail: fmt.Sprintf("Can't read form file| Error: %s", err.Error()),
+		})
+		return
+	}
+
+	// Validate that file has .zip extension
+	if !strings.HasSuffix(strings.ToLower(fileHeader.Filename), ".zip") {
+		statusCode := http.StatusUnsupportedMediaType
+		logging.ERROR("invalid file type: %s", fileHeader.Filename)
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Unsupported Media Type",
+			Detail: fmt.Sprintf("invalid file type: %s, Only .zip files are allowed", fileHeader.Filename),
+		})
+		return
+	}
+
+	file, err := fileHeader.Open()
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("failed to open uploaded file: %s", err.Error())
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Internal Server Error",
+			Detail: fmt.Sprintf("failed to open uploaded file: %s", err.Error()),
+		})
+		return
+	}
+	defer file.Close()
+
+	byteFile, err := io.ReadAll(file)
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("Error reading file content: %s", err.Error())
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Internal Server Error",
+			Detail: fmt.Sprintf("Error reading file content: %s", err.Error()),
+		})
+		return
+	}
+
+	artifactVersion := modelInfo.ModelId.ArtifactVersion
 	modelKey := fmt.Sprintf("%s_%s_%s", modelName, modelVersion, artifactVersion)
 	exportBucket := strings.ToLower(modelName)
-	//TODO convert multipart.FileHeader to []byte
-	fileHeader, _ := cont.FormFile("file")
-	//TODO : Accept only .zip file for trained model
-	file, _ := fileHeader.Open()
-	defer file.Close()
-	byteFile, _ := io.ReadAll((file))
+	// Update the Artifact-Version
+	newArtifactVersion, err := utils.IncrementArtifactVersion(artifactVersion)
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("Unable to get newArtifactVersion: %s", err.Error())
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Internal Server Error",
+			Detail: fmt.Sprintf("Unable to get newArtifactVersion: %s", err.Error()),
+		})
+		return
+	}
+	modelInfo.ModelId.ArtifactVersion = newArtifactVersion
+	if err := m.iDB.Update(*modelInfo); err != nil {
+		statusCode := http.StatusInternalServerError
+		logging.ERROR("Unable to update newArtifactVersion: %s", err.Error())
+		cont.JSON(statusCode, models.ProblemDetail{
+			Status: statusCode,
+			Title:  "Internal Server Error",
+			Detail: fmt.Sprintf("Unable to update newArtifactVersion: %s", err.Error()),
+		})
+		return
+	}
 
+	// Upload the file to s3-bucket
 	logging.INFO("Uploading model : " + modelKey)
 	if err := m.dbmgr.UploadFile(byteFile, modelKey+os.Getenv("MODEL_FILE_POSTFIX"), exportBucket); err != nil {
-		logging.ERROR("Failed to Upload Model : ", err)
+		// Model failed to update: Rollback artifact version to old-one
+		logging.ERROR(fmt.Sprintf("Failed to Upload Model : %s, Rolling back to previous artifact-version : %s", err.Error(), artifactVersion))
+		modelInfo.ModelId.ArtifactVersion = artifactVersion
+		if err := m.iDB.Update(*modelInfo); err != nil {
+			logging.ERROR("Unable to rollback to old-artifactVersion: %s", err.Error())
+		}
+
 		cont.JSON(http.StatusInternalServerError, gin.H{
 			"code":    http.StatusInternalServerError,
 			"message": err.Error(),
 		})
 		return
 	}
+
+	logging.INFO("model updated")
 	cont.JSON(http.StatusOK, gin.H{
-		"code":    http.StatusOK,
-		"message": string("Model uploaded successfully.."),
+		"code":      http.StatusOK,
+		"message":   string("Model uploaded successfully.."),
+		"modelinfo": modelInfo,
 	})
 }
 
@@ -401,6 +479,7 @@ func (m *MmeApiHandler) DeleteModel(cont *gin.Context) {
 	cont.JSON(http.StatusNoContent, nil)
 }
 
+// Deprecated: use the new API reference: UploadModel.
 func (m *MmeApiHandler) UpdateArtifact(cont *gin.Context) {
 	logging.INFO("Update artifact version of model")
 	modelname := cont.Param("modelname")
