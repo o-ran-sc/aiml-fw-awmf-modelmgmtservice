@@ -198,6 +198,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8b4c4d58_6203cd93",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1002769
+      },
+      "writtenOn": "2025-10-10T17:43:16Z",
+      "side": 1,
+      "message": "Thanks a lot for the detailed review, Ashish!\n\nI’ve updated the patch per your suggestion—no separate TargetEnvironmentRow; I extended the existing TargetEnvironment with internal‐only ID and ModelRelatedInformationID (both json:\"-\"), so the public API remains unchanged. CRUD tests pass, and AutoMigrate creates the 5-column target_environments table.\n\nOne migration question: existing deployments may already have target_environments rows without id / model_related_information_id. How would you prefer we handle this?\n  - add the two columns and populate model_related_information_id (I can provide DDL/backfill script, plus optional FK/index).\n  - move legacy rows to a read-only _orphan table and keep only new rows in the main table.\n  - No legacy data\n\nThanks again for the thorough feedback!",
+      "parentUuid": "42e609c3_f181a59b",
+      "range": {
+        "startLine": 92,
+        "startChar": 37,
+        "endLine": 92,
+        "endChar": 65
+      },
+      "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cec42709_ca2f2e5e",
         "filename": "models/modelInfo.go",
         "patchSetId": 3
