@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c7016b0_5bccfa8b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2025-10-13T00:38:19Z",
+      "side": 1,
+      "message": "Let us merge the patch as it is and then will keep improving the topic as a separate PR.",
+      "revId": "f2e9f825e0e7fe3d2f8139ac080060bfdf37abfd",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}

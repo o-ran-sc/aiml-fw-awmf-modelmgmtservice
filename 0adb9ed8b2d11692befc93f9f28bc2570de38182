@@ -220,6 +220,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1758905_5d62ba88",
+        "filename": "models/modelInfo.go",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000065
+      },
+      "writtenOn": "2025-10-13T00:38:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b4c4d58_6203cd93",
+      "range": {
+        "startLine": 92,
+        "startChar": 37,
+        "endLine": 92,
+        "endChar": 65
+      },
+      "revId": "0adb9ed8b2d11692befc93f9f28bc2570de38182",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cec42709_ca2f2e5e",
