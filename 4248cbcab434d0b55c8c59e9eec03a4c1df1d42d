@@ -16,6 +16,23 @@
       "message": "I have validated it, It works fine!\n\nThanks Minje Kim for your efforts.",
       "revId": "4248cbcab434d0b55c8c59e9eec03a4c1df1d42d",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04306fc3_ac52b6f0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-10-13T10:12:59Z",
+      "side": 1,
+      "message": "Thank you @Minje Kim, thank you for this contribution. This patch address many stuffs 😊",
+      "revId": "4248cbcab434d0b55c8c59e9eec03a4c1df1d42d",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ],
   "submitRequirementResults": [
