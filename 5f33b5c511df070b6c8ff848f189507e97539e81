@@ -22,6 +22,30 @@
       },
       "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ceaf4f1_d368c17d",
+        "filename": "utils/utils.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-10-13T07:08:23Z",
+      "side": 1,
+      "message": "When you register the model for the first time at `MME`, the artifact version is set to 0.0.0.\nReference: https://github.com/o-ran-sc/aiml-fw-awmf-modelmgmtservice/blob/master/apis/mmes_apis.go#L86\n\nThe code you shared is used to determine whether the training request is for an `initial training or a retraining`.\nReference: https://gerrit.o-ran-sc.org/r/gitweb?p\u003daiml-fw/awmf/tm.git;a\u003dblob;f\u003dtrainingmgr/trainingmgr_main.py;h\u003d0b1157b68f68f8d8b72921b5e3e70204adcfd3b4;hb\u003dHEAD#l186\n\nLet me know, If I understood you query correctly!",
+      "parentUuid": "ab3029f2_8c4ba27b",
+      "range": {
+        "startLine": 44,
+        "startChar": 4,
+        "endLine": 44,
+        "endChar": 30
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
