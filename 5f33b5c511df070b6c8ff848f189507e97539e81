@@ -3,6 +3,98 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "618cd8c6_14fea993",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-10-15T11:28:38Z",
+      "side": 1,
+      "message": "I noticed that the model was already uploaded to the object storage and wasn’t rolled back despite the error.",
+      "range": {
+        "startLine": 356,
+        "startChar": 2,
+        "endLine": 363,
+        "endChar": 8
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59f20fbb_c1a2df4c",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-10-15T11:28:38Z",
+      "side": 1,
+      "message": "I noticed that the model was already uploaded to the object storage and wasn’t rolled back despite the error.",
+      "range": {
+        "startLine": 367,
+        "startChar": 2,
+        "endLine": 373,
+        "endChar": 4
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e84f33e_929c9743",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-10-15T11:28:38Z",
+      "side": 1,
+      "message": "modify it to :\n\n// Depricated: new api reference e.g. UploadModel",
+      "range": {
+        "startLine": 476,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 14
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c5ccb60_b40393cd",
+        "filename": "apis_test/mmes_apis_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-10-15T11:28:38Z",
+      "side": 1,
+      "message": "what is ArtifactVersion is not passed.",
+      "range": {
+        "startLine": 469,
+        "startChar": 3,
+        "endLine": 469,
+        "endChar": 41
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7120a5e0_ea2fa89f",
         "filename": "routers/router.go",
         "patchSetId": 2
