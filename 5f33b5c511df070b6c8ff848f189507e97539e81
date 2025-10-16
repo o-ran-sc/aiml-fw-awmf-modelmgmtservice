@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8d0cae32_138c38b9",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 363,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-10-16T19:14:57Z",
+      "side": 1,
+      "message": "I have moved the artifact version update (increment) to occur `before` the model upload. \nThis prevents scenarios where the model gets uploaded successfully, but subsequent steps fail. \nNow, since the model upload happens at the very end, if the upload fails, the artifact version is rolled back to its previous value. Refer-Lines: 369-373",
+      "parentUuid": "618cd8c6_14fea993",
+      "range": {
+        "startLine": 356,
+        "startChar": 2,
+        "endLine": 363,
+        "endChar": 8
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "59f20fbb_c1a2df4c",
         "filename": "apis/mmes_apis.go",
         "patchSetId": 2
@@ -37,6 +61,30 @@
       "writtenOn": "2025-10-15T11:28:38Z",
       "side": 1,
       "message": "I noticed that the model was already uploaded to the object storage and wasn’t rolled back despite the error.",
+      "range": {
+        "startLine": 367,
+        "startChar": 2,
+        "endLine": 373,
+        "endChar": 4
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b5a03d_228396f2",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-10-16T19:14:57Z",
+      "side": 1,
+      "message": "Same reply as previous",
+      "parentUuid": "59f20fbb_c1a2df4c",
       "range": {
         "startLine": 367,
         "startChar": 2,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "55d7e155_bb15b651",
+        "filename": "apis/mmes_apis.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 476,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-10-16T19:14:57Z",
+      "side": 1,
+      "message": "Provided",
+      "parentUuid": "7e84f33e_929c9743",
+      "range": {
+        "startLine": 476,
+        "startChar": 0,
+        "endLine": 476,
+        "endChar": 14
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c5ccb60_b40393cd",
         "filename": "apis_test/mmes_apis_test.go",
         "patchSetId": 2
@@ -95,6 +167,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d3a4b284_70396fe5",
+        "filename": "apis_test/mmes_apis_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-10-16T19:14:57Z",
+      "side": 1,
+      "message": "This `ArtifactVersion` is a part of the output of mocked-function `GetModelInfoByNameAndVer`, whose job is to take modelName and modelVersion as input and provide ModelRelatedInformation as output.",
+      "parentUuid": "1c5ccb60_b40393cd",
+      "range": {
+        "startLine": 469,
+        "startChar": 3,
+        "endLine": 469,
+        "endChar": 41
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c30a5ca7_35460f71",
         "filename": "routers/router.go",
         "patchSetId": 2
@@ -106,6 +202,30 @@
       "writtenOn": "2025-10-15T11:41:01Z",
       "side": 1,
       "message": "give a help topic for alternative.",
+      "range": {
+        "startLine": 32,
+        "startChar": 116,
+        "endLine": 32,
+        "endChar": 130
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1581cdb8_0705b101",
+        "filename": "routers/router.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-10-16T19:14:57Z",
+      "side": 1,
+      "message": "Provided",
+      "parentUuid": "c30a5ca7_35460f71",
       "range": {
         "startLine": 32,
         "startChar": 116,
