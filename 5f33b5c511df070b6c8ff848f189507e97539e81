@@ -261,6 +261,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "830ac7c6_2d56ce02",
+        "filename": "apis_test/mmes_apis_test.go",
+        "patchSetId": 2
+      },
+      "lineNbr": 469,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-10-17T05:43:22Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d3a4b284_70396fe5",
+      "range": {
+        "startLine": 469,
+        "startChar": 3,
+        "endLine": 469,
+        "endChar": 41
+      },
+      "revId": "5f33b5c511df070b6c8ff848f189507e97539e81",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c30a5ca7_35460f71",
