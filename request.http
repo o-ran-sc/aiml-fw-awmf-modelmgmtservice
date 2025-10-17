@@ -2,7 +2,7 @@
 @host = x.x.x.x:32006
 
 ### registraton
-POST http://{{host}}/model-registrations
+POST http://{{host}}/ai-ml-model-registration/v1/model-registrations
 Content-Type: application/json
 
 { 
@@ -65,7 +65,7 @@ DELETE http://{{host}}/model-registrations/a43d1a80-e1c5-4d87-b90f-729736bdd89f
 
 ### Upload model using multipart/form-data
 ### Before Uploading, Make sure you have a "Model.zip" file in the current directory
-POST http://{{host}}/ai-ml-model-registration/v1/uploadModel/testmodel/1/1.0.0
+POST http://{{host}}/ai-ml-model-registration/v1/uploadModel/TestModel1/v1.0
 Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
 ------WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -76,4 +76,4 @@ Content-Type: application/zip
 ------WebKitFormBoundary7MA4YWxkTrZu0gW--
 
 ### Download model
-GET http://{{host}}/ai-ml-model-registration/v1/downloadModel/testmodel/1/1.0.0/model.zip
+GET http://{{host}}/ai-ml-model-registration/v1/downloadModel/TestModel1/v1.0/1.0.0/model.zip

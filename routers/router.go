@@ -29,12 +29,12 @@ func InitRouter(handler *apis.MmeApiHandler) *gin.Engine {
 	api := r.Group("/ai-ml-model-registration/v1")
 	{
 		api.POST("/model-registrations", handler.RegisterModel)
-		api.POST("/model-registrations/updateArtifact/:modelname/:modelversion/:artifactversion", handler.UpdateArtifact)
+		api.POST("/model-registrations/updateArtifact/:modelname/:modelversion/:artifactversion", handler.UpdateArtifact) // Deprecated: use the new API reference: /uploadModel/:modelName/:modelVersion.
 		api.GET("/model-registrations/:modelRegistrationId", handler.GetModelInfoById)
 		api.PUT("/model-registrations/:modelRegistrationId", handler.UpdateModel)
 		api.DELETE("/model-registrations/:modelRegistrationId", handler.DeleteModel)
 		api.GET("/getModelInfo/:modelName", handler.GetModelInfoByName)
-		api.POST("/uploadModel/:modelName/:modelVersion/:artifactVersion", handler.UploadModel)
+		api.POST("/uploadModel/:modelName/:modelVersion", handler.UploadModel)
 		api.GET("/downloadModel/:modelName/:modelVersion/:artifactVersion/model.zip", handler.DownloadModel)
 	}
 	// As per R1-AP v6
