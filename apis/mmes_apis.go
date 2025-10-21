@@ -336,8 +336,6 @@ func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 	}
 
 	artifactVersion := modelInfo.ModelId.ArtifactVersion
-	modelKey := fmt.Sprintf("%s_%s_%s", modelName, modelVersion, artifactVersion)
-	exportBucket := strings.ToLower(modelName)
 	// Update the Artifact-Version
 	newArtifactVersion, err := utils.IncrementArtifactVersion(artifactVersion)
 	if err != nil {
@@ -350,6 +348,9 @@ func (m *MmeApiHandler) UploadModel(cont *gin.Context) {
 		})
 		return
 	}
+	modelKey := fmt.Sprintf("%s_%s_%s", modelName, modelVersion, newArtifactVersion)
+	exportBucket := strings.ToLower(modelName)
+
 	modelInfo.ModelId.ArtifactVersion = newArtifactVersion
 	if err := m.iDB.Update(*modelInfo); err != nil {
 		statusCode := http.StatusInternalServerError
