@@ -18,6 +18,7 @@ limitations under the License.
 package main
 
 import (
+	"database/sql"
 	"fmt"
 	"net/http"
 	"os"
@@ -43,6 +44,41 @@ func main() {
 	configManager := config.GetConfigManager()
 	logging.INFO("config mgr prepared", "configmgr", configManager)
 	// setup the database connection
+
+	// Step 1: Connect to the default 'postgres' database
+	defaultDSN := fmt.Sprintf(
+		"host=%s user=%s password=%s dbname=postgres port=%s sslmode=disable",
+		configManager.DB.PG_HOST,
+		configManager.DB.PG_USER,
+		configManager.DB.PG_PASSWORD,
+		configManager.DB.PG_PORT,
+	)
+
+	defaultDB, err := sql.Open("postgres", defaultDSN)
+	if err != nil {
+		logging.INFO(fmt.Sprintf("Failed to connect to default database: %v", err))
+	}
+	defer defaultDB.Close()
+
+	// Step 2: Check if target database exists
+	var exists bool
+	checkQuery := fmt.Sprintf("SELECT EXISTS(SELECT 1 FROM pg_database WHERE datname = '%s')", configManager.DB.PG_DBNAME)
+	err = defaultDB.QueryRow(checkQuery).Scan(&exists)
+	if err != nil {
+		logging.INFO(fmt.Sprintf("Failed to check database existence: %v", err))
+	}
+
+	// Step 3: Create database if missing
+	if !exists {
+		createQuery := fmt.Sprintf("CREATE DATABASE %s", configManager.DB.PG_DBNAME)
+		_, err = defaultDB.Exec(createQuery)
+		if err != nil {
+			logging.INFO(fmt.Sprintf("Failed to create database %s: %v", configManager.DB.PG_DBNAME, err))
+		}
+		logging.INFO(fmt.Sprintf("Database '%s' created successfully.", configManager.DB.PG_DBNAME))
+	} else {
+		logging.INFO(fmt.Sprintf("Database '%s' already exists.", configManager.DB.PG_DBNAME))
+	}
 
 	// connection string
 	DSN := fmt.Sprintf(
