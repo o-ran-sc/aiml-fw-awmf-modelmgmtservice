@@ -1,0 +1,185 @@
+name: Run MME Component Tests
+
+on:
+  workflow_dispatch:
+    inputs:
+      GERRIT_BRANCH:
+        description: "Branch that change is against"
+        required: true
+        type: string
+      GERRIT_CHANGE_ID:
+        description: "The ID for the change"
+        required: true
+        type: string
+      GERRIT_CHANGE_NUMBER:
+        description: "The Gerrit number"
+        required: true
+        type: string
+      GERRIT_CHANGE_URL:
+        description: "URL to the change"
+        required: true
+        type: string
+      GERRIT_EVENT_TYPE:
+        description: "Type of Gerrit event"
+        required: true
+        type: string
+      GERRIT_PATCHSET_NUMBER:
+        description: "The patch number for the change"
+        required: true
+        type: string
+      GERRIT_PATCHSET_REVISION:
+        description: "The revision sha"
+        required: true
+        type: string
+      GERRIT_PROJECT:
+        description: "Project in Gerrit"
+        required: true
+        type: string
+      GERRIT_REFSPEC:
+        description: "Gerrit refspec of change"
+        required: true
+        type: string
+
+concurrency:
+  # yamllint disable-line rule:line-length
+  group: gerrit-verify-${{ github.workflow }}-${{ github.event.inputs.GERRIT_CHANGE_ID || github.run_id }}
+  cancel-in-progress: true
+
+permissions: read-all
+  
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clear votes
+        uses: lfit/gerrit-review-action@v0.4
+        with:
+          host: ${{ vars.GERRIT_SERVER }}
+          username: ${{ vars.GERRIT_SSH_USER }}
+          key: ${{ secrets.GERRIT_SSH_PRIVKEY }}
+          known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
+          gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
+          gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
+          vote-type: clear
+      - name: Allow replication
+        run: sleep 10s
+
+  component-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clone dep repo
+        run: git clone https://github.com/o-ran-sc/aiml-fw-aimlfw-dep.git
+
+      - name: Build Docker image
+        run: |
+          docker build -t modelmgmtservice:latest .
+
+      - name: Create KinD cluster
+        uses: helm/kind-action@v1.8.0
+        with:
+          cluster_name: ci-sample
+
+      - name: Wait for nodes ready
+        run: kubectl wait --for=condition=Ready nodes --all --timeout=120s
+      
+      - name: Setup helm
+        run: |
+          cd aiml-fw-aimlfw-dep
+          ./bin/install_common_templates_to_helm.sh
+      
+      - name: Load Docker image into KinD
+        run: kind load docker-image modelmgmtservice:latest --name ci-sample
+      
+      - name: create traininghost namespace
+        run: kubectl create namespace traininghost
+
+      - name: Install PostgreSQL database (tm-db)
+        run: |
+          echo "Installing PostgreSQL (tm-db) in namespace traininghost..."
+          helm repo add bitnami https://charts.bitnami.com/bitnami
+          helm repo update
+          
+          helm install tm-db bitnami/postgresql \
+            --set image.repository="bitnamilegacy/postgresql" \
+            --set image.tag="17.6.0" \
+            --set global.security.allowInsecureImages=true \
+            --set auth.postgresPassword=postgres \
+            --set primary.persistence.enabled=false \
+            --namespace traininghost
+
+          echo "Waiting for PostgreSQL pod to be ready..."
+          kubectl wait --for=condition=Ready pod -l app.kubernetes.io/name=postgresql -n traininghost --timeout=300s
+
+          echo "PostgreSQL installation complete."
+          kubectl get pods -n traininghost -l app.kubernetes.io/name=postgresql
+      
+      - name: Mock secrets for modelmgmtService
+        run: |
+          set -euo pipefail
+          NAMESPACE=traininghost
+
+          echo "Creating namespace if missing..."
+          kubectl create namespace $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+
+          echo "Creating mock secret: leofs-secret"
+          kubectl create secret generic leofs-secret \
+            --from-literal=password="dummy-s3-secret-key" \
+            -n $NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+
+      - name: install mme
+        run: |
+          cd aiml-fw-aimlfw-dep
+          helm dep up helm/modelmgmtservice
+          helm install mme helm/modelmgmtservice -f RECIPE_EXAMPLE/example_recipe_local_images_oran_latest.yaml
+
+      - name: Wait for mme pod ready
+        run: |
+          set -euo pipefail
+          NAMESPACE=traininghost
+
+          echo "Checking pod status before waiting..."
+          kubectl get pods -n $NAMESPACE -o wide || true
+
+          echo "Describing any non-running pods (pre-check)..."
+          kubectl get pods -n $NAMESPACE --no-headers | awk '$3 != "Running" {print $1}' | \
+            xargs -r -I {} kubectl describe pod {} -n $NAMESPACE || true
+
+          echo "Waiting for all pods in namespace '$NAMESPACE' to be Ready (max 300s)..."
+          if ! kubectl wait --for=condition=Ready pod --namespace $NAMESPACE --all --timeout=300s; then
+            echo "Timeout waiting for pods. Dumping debug info..."
+            echo "Current pod states:"
+            kubectl get pods -n $NAMESPACE -o wide || true
+            echo "Recent events:"
+            kubectl get events -n $NAMESPACE --sort-by=.lastTimestamp | tail -n 20 || true
+            exit 1
+          fi
+
+          echo "All pods in '$NAMESPACE' are Ready."
+          echo "Final pod status:"
+          kubectl get pods -n $NAMESPACE -o wide
+
+      - name: list mme pod
+        run: kubectl get pods -n traininghost
+
+  vote:
+    if: ${{ always() }}
+    # yamllint enable rule:line-length
+    needs: [prepare, component-test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: technote-space/workflow-conclusion-action@v3
+      - name: Set vote
+        uses: lfit/gerrit-review-action@v0.4
+        with:
+          host: ${{ vars.GERRIT_SERVER }}
+          username: ${{ vars.GERRIT_SSH_USER }}
+          key: ${{ secrets.GERRIT_SSH_PRIVKEY }}
+          known_hosts: ${{ vars.GERRIT_KNOWN_HOSTS }}
+          gerrit-change-number: ${{ inputs.GERRIT_CHANGE_NUMBER }}
+          gerrit-patchset-number: ${{ inputs.GERRIT_PATCHSET_NUMBER }}
+          vote-type: ${{ env.WORKFLOW_CONCLUSION }}
