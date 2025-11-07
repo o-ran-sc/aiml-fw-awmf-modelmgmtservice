@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e51a1e6_55c65f1f",
+        "filename": ".github/workflows/run_component_testing.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-11-07T05:29:13Z",
+      "side": 1,
+      "message": "Removed the unused variables",
+      "parentUuid": "636618b8_24b89955",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 48
+      },
+      "revId": "d9edfd5e612c0e2587d650dd17d0eeba35cf18bf",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac0f3c20_6f6c616b",
         "filename": ".github/workflows/run_component_testing.yaml",
         "patchSetId": 3
@@ -37,6 +61,30 @@
       "writtenOn": "2025-11-06T18:25:08Z",
       "side": 1,
       "message": "test cases files are not available so test will fail.",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 83
+      },
+      "revId": "d9edfd5e612c0e2587d650dd17d0eeba35cf18bf",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42c64215_57d23893",
+        "filename": ".github/workflows/run_component_testing.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-11-07T05:29:13Z",
+      "side": 1,
+      "message": "I have commented out the pytest run line.",
+      "parentUuid": "ac0f3c20_6f6c616b",
       "range": {
         "startLine": 182,
         "startChar": 0,
