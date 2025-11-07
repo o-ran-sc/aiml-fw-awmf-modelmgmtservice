@@ -72,8 +72,15 @@ jobs:
     timeout-minutes: 20
     
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Gerrit checkout
+        # yamllint disable-line rule:line-length
+        uses: lfreleng-actions/checkout-gerrit-change-action@54d751e8bd167bc91f7d665dabe33fae87aaaa63 # v0.9
+        with:
+          gerrit-refspec: ${{ inputs.GERRIT_REFSPEC }}
+          gerrit-project: ${{ inputs.GERRIT_PROJECT }}
+          gerrit-url: ${{ vars.GERRIT_URL }}
+          delay: "0s"
+          ref: refs/heads/${{ inputs.GERRIT_BRANCH }}
 
       - name: Clone dep repo
         run: git clone https://github.com/o-ran-sc/aiml-fw-aimlfw-dep.git
