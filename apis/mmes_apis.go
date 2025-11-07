@@ -58,7 +58,7 @@ func NewMmeApiHandler(dbMgr core.DBMgr, iDB db.IDB) *MmeApiHandler {
 
 func (m *MmeApiHandler) RegisterModel(cont *gin.Context) {
 	logging.INFO("registering model info")
-
+	// ABCD
 	var modelInfo models.ModelRelatedInformation
 
 	if err := cont.ShouldBindJSON(&modelInfo); err != nil {
