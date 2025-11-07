@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e4c3dc0c_a1f30e19",
+        "filename": ".github/workflows/run_component_testing.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-11-07T06:24:57Z",
+      "side": 1,
+      "message": "I think this will fail the flow as we dint run the pytest so there wont be any pytest_report.html.\n\nI would suggest to remove this two steps:\n- Upload Test Report\n- run regression test",
+      "range": {
+        "startLine": 176,
+        "startChar": 6,
+        "endLine": 180,
+        "endChar": 34
+      },
+      "revId": "5fd1ec4c4fd8ef00f482acf2c060789494e62eb1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    }
+  ]
+}
