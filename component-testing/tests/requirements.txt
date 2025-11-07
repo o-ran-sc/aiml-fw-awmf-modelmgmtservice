@@ -1,3 +1,6 @@
+<<<<<<< PATCH SET (a62cff Update Github_workflow to run component-tests)
+requests
+=======
 # ==================================================================================
 #
 #       Copyright (c) 2025 Samsung Electronics Co., Ltd. All Rights Reserved.
@@ -15,5 +18,6 @@
 #   limitations under the License.
 #
 # ==================================================================================
+>>>>>>> BASE      (fe1b42 Add Intial Smoke Tests for MME)
 pytest
 pytest-html

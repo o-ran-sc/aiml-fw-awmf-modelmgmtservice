@@ -175,6 +175,24 @@ jobs:
 
       - name: list mme pod
         run: kubectl get pods -n traininghost
+      
+      - name: run regression test
+        run: |
+          cd $GITHUB_WORKSPACE
+          pip install -r component-testing/tests/requirements.txt
+
+          kubectl port-forward svc/mme-modelmgmtservice -n traininghost  32007:8082 & PF_PID=$!
+          sleep 1
+          python3 -m pytest component-testing/tests/ --maxfail=1 --disable-warnings -q --html=pytest_report.html
+
+          # Stop port-forwarding
+          kill $PF_PID
+      
+      - name: Upload Test Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-report
+          path: pytest_report.html
 
   vote:
     if: ${{ always() }}
