@@ -22,6 +22,30 @@
       },
       "revId": "5fd1ec4c4fd8ef00f482acf2c060789494e62eb1",
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40b80c1d_6068340c",
+        "filename": ".github/workflows/run_component_testing.yaml",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1001948
+      },
+      "writtenOn": "2025-11-07T06:33:05Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "e4c3dc0c_a1f30e19",
+      "range": {
+        "startLine": 176,
+        "startChar": 6,
+        "endLine": 180,
+        "endChar": 34
+      },
+      "revId": "5fd1ec4c4fd8ef00f482acf2c060789494e62eb1",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     }
   ]
 }
