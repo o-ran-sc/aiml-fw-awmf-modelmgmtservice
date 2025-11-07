@@ -1,5 +1,7 @@
-name: Run MME Component Tests
+---
+name: Gerrit Verify
 
+# yamllint disable-line rule:truthy
 on:
   workflow_dispatch:
     inputs:
@@ -65,6 +67,7 @@ jobs:
         run: sleep 10s
 
   component-test:
+    needs: prepare
     runs-on: ubuntu-latest
     timeout-minutes: 20
     
