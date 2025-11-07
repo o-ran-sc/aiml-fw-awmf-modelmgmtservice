@@ -48,6 +48,30 @@
       "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "207fc8f1_b1c6fb69",
+        "filename": ".github/workflows/run_component_testing.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-11-07T06:42:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e51a1e6_55c65f1f",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 48
+      },
+      "revId": "d9edfd5e612c0e2587d650dd17d0eeba35cf18bf",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac0f3c20_6f6c616b",
@@ -85,6 +109,30 @@
       "side": 1,
       "message": "I have commented out the pytest run line.",
       "parentUuid": "ac0f3c20_6f6c616b",
+      "range": {
+        "startLine": 182,
+        "startChar": 0,
+        "endLine": 188,
+        "endChar": 83
+      },
+      "revId": "d9edfd5e612c0e2587d650dd17d0eeba35cf18bf",
+      "serverId": "84e4e190-e623-4c37-9eda-58b1937c1b53"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f77a56c0_b14689a4",
+        "filename": ".github/workflows/run_component_testing.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000475
+      },
+      "writtenOn": "2025-11-07T06:42:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "42c64215_57d23893",
       "range": {
         "startLine": 182,
         "startChar": 0,
