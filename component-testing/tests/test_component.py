@@ -114,7 +114,6 @@ def test_registered_model_deletion():
     expected_message = "record not found"
     r = requests.get(url=retrieval_url)
     response_dict = r.json()
-    response_dict = r.json()
     assert r.status_code == 500, f"Model Retrieval by id (after deletion) didn't returned 500, but returned {r.status_code}"
     assert response_dict.get("message") == expected_message, "message(in response) submitted and retrieved doesn't match"
     
@@ -127,3 +126,68 @@ def test_registered_model_deletion_when_model_not_present():
     deletion_url = f"{BASE_URL}/ai-ml-model-registration/v1/model-registrations/{model_id}"
     r = requests.delete(url=deletion_url)
     assert r.status_code == 204, f"Model Deletion by id didn't returned 204, but returned {r.status_code}"
+
+def test_registered_model_updation():
+    '''
+        The following test verifies how model-updatation happens.
+        The steps include registering the model, retrieving it, updating it, and then attempting to retrieve it again, which should return updated-modelinfo.
+    '''
+    # Submit the Model-registraion job
+    modelName = "test-model-updataion"
+    modelVersion = "10001"
+    model_id = submit_model_registration(modelName, modelVersion)
+    
+    # Check job Status through id
+    retrieval_url = f"{BASE_URL}/ai-ml-model-registration/v1/model-registrations/{model_id}"
+    r = requests.get(url=retrieval_url)
+    response_dict = r.json()
+    assert r.status_code == 200, f"Model Retrieval by id didn't returned 200, but returned {r.status_code}"
+    assert response_dict.get("id") == model_id, "model_id submitted and retrieved doesn't match"
+    
+    # Update Model
+    updation_url = f"{BASE_URL}/ai-ml-model-registration/v1/model-registrations/{model_id}"
+    update_payload = {
+        "id": model_id, # Needs to be same
+        "modelId": {
+            "modelName": modelName, # Needs to be same
+            "modelVersion" : modelVersion, # Needs to be same
+            'artifactVersion': ''
+        },
+        "description": "new-hello world",
+        "modelInformation": {
+            "metadata": {
+                "author": "new-someone",
+                "owner": ''
+            },
+            "inputDataType": "new-pdcpBytesDl,pdcpBytesUl",
+            "outputDataType": "new-c, d",
+            "targetEnvironment": [
+                {
+                    "platformName": "abc",
+                    "environmentType": "env",
+                    "dependencyList": "a,b,c"
+                }
+            ]
+        },
+        "modelLocation": ''
+    }
+    
+    r = requests.put(url=updation_url, json=update_payload)
+    assert r.status_code == 200, f"Model Updation by id didn't returned 200, but returned {r.status_code}"
+    
+    # Verify Model-Updataion
+    retrieval_url = f"{BASE_URL}/ai-ml-model-registration/v1/model-registrations/{model_id}"
+    r = requests.get(url=retrieval_url)
+    response_dict = r.json()
+    assert r.status_code == 200, f"Model Retrieval by id (after updation) didn't returned 200, but returned {r.status_code}"
+    assert response_dict == update_payload, f"payload retrieved doesn't match with the updated one\nRetrived: {response_dict}\nExpected : {update_payload}"
+    
+def test_registered_model_updation_when_model_not_present():
+    '''
+        The following test verifies how model-updation happens when the model is not registered/present
+    '''
+    model_id = "invalid"
+    # Update Model 
+    updation_url = f"{BASE_URL}/ai-ml-model-registration/v1/model-registrations/{model_id}"
+    r = requests.put(url=updation_url, json={})
+    assert r.status_code == 404, f"Model Updation by id didn't returned 404, but returned {r.status_code}"
